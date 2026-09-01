@@ -321,11 +321,25 @@ function itemActionStatRow(item) {
 
 function inventoryAttributeRows(item) {
   if(!isEquipableItem(item)||typeof itemAttributes!=="function")return "";
-  const rows=itemAttributes(item).map(attribute=>{
+  const cost=typeof itemReforgeCost==="function"?itemReforgeCost(item):0;
+  const rows=itemAttributes(item).map((attribute,index)=>{
     const suffix=["radiationResistance","critChance","accuracy","evasion"].includes(attribute.key)?"%":"";
-    return `<div><span>${profileStatLabel(attribute.key)}</span><b>+${attribute.value}${suffix}</b></div>`;
+    const price=cost===0?t("profile.itemPopup.reforgeFree"):`₴ ${cost}`;
+    return `<div class="item-reforge-row">
+      <span>${profileStatLabel(attribute.key)}</span>
+      <b>+${attribute.value}${suffix}</b>
+      <button class="item-reforge-button" data-inventory-reforge="${index}" type="button">↻ ${price}</button>
+    </div>`;
   }).join("");
-  return rows?`<div class="inventory-detail-stats inventory-attribute-stats">${rows}</div>`:"";
+  if(!rows)return "";
+  return `<section class="item-reforge-panel inventory-reforge-panel">
+    <div class="item-reforge-head">
+      <strong>${t("profile.itemPopup.reforgeTitle")}</strong>
+      <small>${cost===0?t("profile.itemPopup.reforgeFirstFree"):t("profile.itemPopup.reforgeChance")}</small>
+    </div>
+    <div class="inventory-detail-stats inventory-attribute-stats">${rows}</div>
+    <p>${t("profile.itemPopup.reforgeHint")}</p>
+  </section>`;
 }
 
 function renderInventoryDetails(item) {
@@ -379,6 +393,24 @@ function renderInventoryDetails(item) {
       </div>
     </div>
   `;
+
+  details.querySelectorAll("[data-inventory-reforge]").forEach(button=>{
+    button.onclick=()=>{
+      const index=Number(button.dataset.inventoryReforge);
+      const result=reforgeItemAttribute(item,index);
+      if(!result.ok){
+        if(result.reason==="money")toast(t("profile.itemPopup.reforgeNotEnoughMoney"));
+        return;
+      }
+      const oldLabel=profileStatLabel(result.oldKey);
+      const newLabel=profileStatLabel(result.newKey);
+      toast(result.changed
+        ?t("profile.itemPopup.reforgeChanged",{old:oldLabel,new:newLabel})
+        :t("profile.itemPopup.reforgeSame",{stat:oldLabel}));
+      if(typeof syncHud==="function")syncHud();
+      refreshInventoryView(false);
+    };
+  });
 
   const equip=document.getElementById("inventoryEquipItem");
   if(equip){

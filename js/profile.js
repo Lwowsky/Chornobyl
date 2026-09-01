@@ -185,9 +185,13 @@ function profileItemStatRows(item,preview=null){
       </div>`;
     }
 
-    return `<div class="profile-item-popover-stat">
+    const attributeIndex=itemAttributeKeys(item).indexOf(key);
+    const reforgeCost=typeof itemReforgeCost==="function"?itemReforgeCost(item):0;
+    const reforgePrice=reforgeCost===0?t("profile.itemPopup.reforgeFree"):`₴ ${reforgeCost}`;
+    return `<div class="profile-item-popover-stat item-reforge-row">
       <span>${profileStatLabel(key)}</span>
       <b>+${currentValue}${suffix}</b>
+      <button class="item-reforge-button" data-profile-reforge="${attributeIndex}" type="button">↻ ${reforgePrice}</button>
     </div>`;
   }).join("");
 }
@@ -467,9 +471,13 @@ function renderProfileItemPopoverBody(item,popover,mode,slot){
 
     <p class="profile-item-popover-description">${t(`itemDescriptions.${item.id}`)}</p>
 
-    <div class="profile-item-popover-section">
-      <strong>${t("profile.itemPopup.currentStats")}</strong>
+    <div class="profile-item-popover-section item-reforge-panel">
+      <div class="item-reforge-head">
+        <strong>${t("profile.itemPopup.currentStats")}</strong>
+        <small>${itemReforgeCost(item)===0?t("profile.itemPopup.reforgeFirstFree"):t("profile.itemPopup.reforgeChance")}</small>
+      </div>
       <div class="profile-item-popover-stats">${effectiveStats?profileItemStatRows(item):`<div class="profile-item-popover-empty">${t("profile.itemPopup.noStats")}</div>`}</div>
+      <p class="item-reforge-hint">${t("profile.itemPopup.reforgeHint")}</p>
     </div>
 
     ${next?profileNextUpgradeSummary(item):`<div class="profile-item-max-note">${t("profile.itemPopup.maxedHint")}</div>`}
@@ -484,6 +492,36 @@ function renderProfileItemPopoverBody(item,popover,mode,slot){
       <button class="profile-popup-action tertiary" data-profile-popup-close-action type="button">${t("profile.itemPopup.close")}</button>
     </div>
   </div>`;
+
+  body.querySelectorAll("[data-profile-reforge]").forEach(button=>{
+    button.onclick=()=>{
+      const index=Number(button.dataset.profileReforge);
+      const result=reforgeItemAttribute(item,index);
+      if(!result.ok){
+        if(result.reason==="money")toast(t("profile.itemPopup.reforgeNotEnoughMoney"));
+        return;
+      }
+      const oldLabel=profileStatLabel(result.oldKey);
+      const newLabel=profileStatLabel(result.newKey);
+      toast(result.changed
+        ?t("profile.itemPopup.reforgeChanged",{old:oldLabel,new:newLabel})
+        :t("profile.itemPopup.reforgeSame",{stat:oldLabel}));
+      if(typeof syncHud==="function")syncHud();
+      renderProfileItemPopoverBody(item,popover,mode,slot);
+      normalizeAvatarState();
+      renderProfileEquipmentSlots();
+      renderProfileStats();
+      renderProfileEquipmentSummary();
+      renderProfileCharacter();
+      renderProfileOwnedGear();
+      const anchor=document.querySelector(
+        mode==="equipped"
+          ? `[data-equipment-slot="${CSS.escape(slot)}"]`
+          : `[data-inventory-grid-item="${CSS.escape(inventoryEntryKey(item))}"]`
+      );
+      if(anchor)positionProfileItemPopover(anchor,popover);
+    };
+  });
 
   const upgrade=body.querySelector("[data-profile-popup-upgrade]");
   if(upgrade&&!upgrade.disabled){

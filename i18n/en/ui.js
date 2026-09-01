@@ -125,11 +125,11 @@ registerTranslations('en', {
       "description": "Short answers to common questions about the current version of the game.",
       "items": {
         "q": "How do items work?",
-        "a": "Each piece of equipment is a separate item instance. It has its own rarity, upgrade level, and two random attributes."
+        "a": "Each piece of equipment is a separate item instance. It has its own rarity, upgrade level, and a set of random attributes whose count depends on rarity."
       },
       "attributes": {
         "q": "How many attributes can equipment have?",
-        "a": "Exactly two. They are always different. Rarity and +level determine the item's overall power tier, while the two attributes determine its specialization."
+        "a": "The count depends on rarity: common — 2, uncommon — 3, rare — 4, epic — 5, legendary — 7. The same attribute cannot appear twice on one item."
       },
       "rarityBalance": {
         "q": "Why is higher-rarity gear stronger now?",
@@ -540,8 +540,16 @@ registerTranslations('en', {
       "maxed": "Maximum Upgrade",
       "maxedHint": "This legendary item has already reached its maximum level.",
       "primaryStat": "Primary Stat",
-      "attributes": "2 Random Attributes",
-      "currentStats": "Stats"
+      "attributes": "Random Attributes by Rarity",
+      "currentStats": "Stats",
+      "reforgeTitle": "Attribute Reforging",
+      "reforgeFree": "Free",
+      "reforgeFirstFree": "First reforge on this item is free",
+      "reforgeChance": "50% keep / 50% change",
+      "reforgeHint": "The selected attribute has a 50% chance to stay the same and a 50% chance to change into another attribute that is not already on this item. Duplicate attributes cannot appear on one item.",
+      "reforgeNotEnoughMoney": "Not enough money to reforge this item.",
+      "reforgeChanged": "Reforge: {old} → {new}",
+      "reforgeSame": "Reforge: {stat} stayed unchanged."
     },
     "statisticsData": {
       "locations": "Locations unlocked",

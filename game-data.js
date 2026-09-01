@@ -1,6 +1,6 @@
 const GAME_META = {
   brandKey: "mainMenu.title",
-  version: "0.60"
+  version: "0.62"
 };
 
 

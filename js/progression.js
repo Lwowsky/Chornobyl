@@ -65,6 +65,17 @@ const ITEM_RARITY_ATTRIBUTE_COUNTS = Object.freeze({
 });
 const ITEM_UPGRADE_STAT_STEP = 0.02;
 
+// v0.62 — equipment attribute reforging. The first attempt on each item is
+// free; later attempts have a fixed money cost based only on item rarity.
+const ITEM_REFORGE_COST = Object.freeze({
+  common:50,
+  uncommon:100,
+  rare:250,
+  epic:500,
+  legendary:1000
+});
+const ITEM_REFORGE_KEEP_CHANCE = 0.50;
+
 function itemRarityAttributeCount(rarityId="common"){
   return ITEM_RARITY_ATTRIBUTE_COUNTS[rarityId]||ITEM_RARITY_ATTRIBUTE_COUNTS.common;
 }
@@ -116,6 +127,61 @@ function itemAttributes(item){
   return itemAttributeKeys(item).map(key=>({key,value:itemEffectiveAttributeValue(key,rarityId,upgradeLevel)}));
 }
 
+function itemReforgeCount(item){
+  return ensureItemProgression(item)?.reforgeCount||0;
+}
+
+function itemReforgeCost(item){
+  if(itemReforgeCount(item)===0)return 0;
+  return ITEM_REFORGE_COST[itemRarityId(item)]||ITEM_REFORGE_COST.common;
+}
+
+function itemReforgeAlternativeKeys(item,attributeIndex){
+  const progress=ensureItemProgression(item);
+  if(!progress)return [];
+  const index=Math.floor(Number(attributeIndex));
+  if(index<0||index>=progress.attributes.length)return [];
+  const currentKey=progress.attributes[index];
+  const occupied=new Set(progress.attributes.filter((_,i)=>i!==index));
+  return ITEM_ATTRIBUTE_KEYS.filter(key=>key!==currentKey&&!occupied.has(key));
+}
+
+function canAffordItemReforge(item){
+  return (Number(state.money)||0)>=itemReforgeCost(item);
+}
+
+function reforgeItemAttribute(item,attributeIndex){
+  const progress=ensureItemProgression(item);
+  if(!progress)return {ok:false,reason:'invalid'};
+
+  const index=Math.floor(Number(attributeIndex));
+  if(index<0||index>=progress.attributes.length)return {ok:false,reason:'invalid'};
+
+  const cost=itemReforgeCost(item);
+  if((Number(state.money)||0)<cost)return {ok:false,reason:'money',cost};
+
+  const oldKey=progress.attributes[index];
+  const alternatives=itemReforgeAlternativeKeys(item,index);
+  const keepCurrent=Math.random()<ITEM_REFORGE_KEEP_CHANCE||!alternatives.length;
+  const newKey=keepCurrent?oldKey:sample(alternatives);
+
+  if(cost>0)state.money=Math.max(0,(Number(state.money)||0)-cost);
+  progress.reforgeCount=(progress.reforgeCount||0)+1;
+  progress.attributes[index]=newKey;
+
+  if(typeof dailyTrack==='function')dailyTrack('craft',1);
+  saveState();
+
+  return {
+    ok:true,
+    changed:newKey!==oldKey,
+    oldKey,
+    newKey,
+    cost,
+    reforgeCount:progress.reforgeCount
+  };
+}
+
 function normalizeItemProgressionState() {
   if (!state.itemProgression || typeof state.itemProgression !== "object") state.itemProgression = {};
   if (!state.upgradePity || typeof state.upgradePity !== "object") state.upgradePity = {};
@@ -164,7 +230,8 @@ function ensureItemProgression(itemOrId) {
     state.itemProgression[key]={
       rarity:catalogItemRarityId(item),
       upgradeLevel:catalogItemUpgradeLevel(item),
-      attributes:generateItemAttributes()
+      attributes:generateItemAttributes(),
+      reforgeCount:0
     };
   }
 
@@ -176,6 +243,7 @@ function ensureItemProgression(itemOrId) {
     itemRarityAttributeCount(stored.rarity),
     Array.isArray(stored.attributes)?stored.attributes:[]
   );
+  stored.reforgeCount=Math.max(0,Math.floor(Number(stored.reforgeCount)||0));
   stored.balanceVersion=4;
 
   if(!Number.isFinite(state.upgradePity[key]))state.upgradePity[key]=0;
