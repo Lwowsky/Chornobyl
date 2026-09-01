@@ -1,0 +1,562 @@
+/* PROFILE V5 — compact game layout */
+.profile-game-layout{
+  display:grid;
+  grid-template-columns:minmax(580px,1fr) minmax(330px,390px);
+  gap:12px;
+  align-items:start;
+}
+
+.profile-side-column{
+  min-width:0;
+}
+
+.profile-stats-panel{
+  padding:12px;
+}
+
+.profile-stat-card{
+  padding:8px 9px;
+  border:1px solid #343326;
+  border-radius:7px;
+  background:linear-gradient(180deg,#11140f,#0c0e0b);
+}
+
+.profile-stat-row span{
+  color:#b0a990;
+  font-size:9px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.035em;
+}
+
+.profile-stat-row b{
+  color:#eee6cd;
+  font-size:11px;
+}
+
+.profile-stat-row b.positive{color:#9ed675}
+
+.profile-stat-meter{
+  height:5px;
+  margin-top:7px;
+  overflow:hidden;
+  border:1px solid #292a21;
+  border-radius:99px;
+  background:#070806;
+}
+
+.profile-stat-meter i{
+  display:block;
+  height:100%;
+  min-width:2px;
+  border-radius:inherit;
+  background:linear-gradient(90deg,#9e7822,#d0a841);
+}
+
+.profile-stat-maxHp .profile-stat-meter i{background:linear-gradient(90deg,#9e2e29,#df554b)}
+.profile-stat-maxProtection .profile-stat-meter i{background:linear-gradient(90deg,#4d873f,#87c767)}
+.profile-stat-radiationResistance .profile-stat-meter i{background:linear-gradient(90deg,#8c7a22,#d3ba3d)}
+.profile-stat-maxEnergy .profile-stat-meter i{background:linear-gradient(90deg,#1e6e91,#47b6dc)}
+.profile-stat-maxWeight .profile-stat-meter i{background:linear-gradient(90deg,#8a6b27,#d9ac45)}
+
+.profile-bag-panel{
+  margin-top:0;
+  padding:12px;
+}
+
+.profile-bag-tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:5px;
+  margin-bottom:9px;
+}
+
+.profile-bag-tab{
+  min-height:34px;
+  padding:6px 8px;
+  border:1px solid #3c3829;
+  border-radius:6px;
+  background:#0d0f0c;
+  color:#8f8873;
+  font-size:9px;
+  font-weight:800;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+
+.profile-bag-tab.active{
+  border-color:#8d671b;
+  background:linear-gradient(180deg,#3a290d,#191207);
+  color:#efb53a;
+}
+
+.profile-resource-icon{
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:42px;
+  margin:0 auto;
+  font-size:25px;
+}
+
+/* Empty equipment reads as an inactive placeholder, not equipped gear. */
+.profile-equipment-slot.empty .equipment-placeholder-image{
+  opacity:.30;
+  filter:grayscale(.85) brightness(.52) contrast(1.06) saturate(.35);
+}
+
+.profile-equipment-slot.empty:hover .equipment-placeholder-image,
+.profile-equipment-slot.empty.active .equipment-placeholder-image{
+  opacity:.58;
+  filter:grayscale(.55) brightness(.72) contrast(1.08) saturate(.55);
+  transform:scale(1.015);
+}
+
+/* Picker uses the existing popover shell and item-card visual language. */
+.profile-slot-picker{
+  width:310px;
+}
+
+.profile-slot-picker-head{
+  padding-right:28px;
+  margin-bottom:9px;
+}
+
+.profile-slot-picker-head span{
+  color:#8b8269;
+  font-size:8px;
+  text-transform:uppercase;
+}
+
+.profile-slot-picker-head h3{
+  margin:2px 0 0;
+}
+
+.profile-slot-picker-list{
+  display:grid;
+  gap:5px;
+  max-height:315px;
+  overflow:auto;
+}
+
+.profile-slot-picker-item{
+  display:grid;
+  grid-template-columns:52px 1fr auto;
+  gap:8px;
+  align-items:center;
+  width:100%;
+  padding:6px;
+  border:1px solid #3a372a;
+  border-radius:6px;
+  background:#0e100c;
+  color:#d8d0b5;
+  text-align:left;
+  cursor:pointer;
+}
+
+.profile-slot-picker-item:hover{
+  border-color:var(--rarity-color,#82672b);
+  background:#151811;
+}
+
+.profile-slot-picker-item .profile-owned-item-icon{
+  width:48px;
+  height:48px;
+  margin:0;
+}
+
+.profile-slot-picker-item .profile-owned-item-icon img{
+  width:48px;
+  height:48px;
+  object-fit:cover;
+}
+
+.profile-slot-picker-copy strong,
+.profile-slot-picker-copy small{
+  display:block;
+}
+
+.profile-slot-picker-copy strong{
+  font-size:10px;
+}
+
+.profile-slot-picker-copy small{
+  margin-top:3px;
+  font-size:8px;
+}
+
+.profile-slot-picker-item>b{
+  color:var(--rarity-color,#d8d0b5);
+  font-size:11px;
+}
+
+/* PROFILE V8 — paged 3x3 bag */
+.profile-bag-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  max-height:none;
+  overflow:visible;
+}
+.profile-bag-pager{
+  display:grid;
+  grid-template-columns:42px 1fr 42px;
+  gap:7px;
+  align-items:center;
+  margin-top:9px;
+}
+.profile-bag-pager[hidden]{display:none}
+.profile-bag-pager button{
+  min-height:36px;
+  border:1px solid #5d4b20;
+  border-radius:6px;
+  background:#11130e;
+  color:#e3b33e;
+  font-size:23px;
+  cursor:pointer;
+}
+.profile-bag-pager button:disabled{opacity:.28;cursor:default}
+.profile-bag-pager span{
+  color:#aaa187;
+  font-size:10px;
+  text-align:center;
+}
+
+
+/* PROFILE V10 — character stats below + full bag column */
+.profile-main-column{
+  display:grid;
+  gap:10px;
+  min-width:0;
+}
+
+.profile-stats-below-character{
+  margin:0;
+  padding:11px 12px 12px;
+  border:1px solid #403a29;
+  border-radius:8px;
+  background:linear-gradient(180deg,#10130e,#0b0d0a);
+}
+
+.profile-stats-below-character h2{
+  margin:0 0 9px;
+  color:#e9dfc8;
+  font-size:15px;
+}
+
+.profile-stats-below-character .profile-stat-list{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+}
+
+.profile-stats-below-character .profile-stat-card{
+  min-height:48px;
+  padding:8px 9px;
+  border:1px solid #343326;
+  border-radius:6px;
+  background:#0d100c;
+}
+
+.profile-stats-below-character .profile-stat-row{
+  display:grid;
+  gap:4px;
+}
+
+.profile-stats-below-character .profile-stat-row span{
+  color:#8f8873;
+  font-size:8px;
+  white-space:normal;
+}
+
+.profile-stats-below-character .profile-stat-row b{
+  color:#eee4c9;
+  font-size:14px;
+}
+
+.profile-stats-below-character .profile-stat-row b em{
+  color:#85ce6f;
+  font-size:9px;
+}
+
+.profile-bag-panel{
+  min-height:100%;
+}
+
+.profile-side-column .profile-bag-panel{
+  position:relative;
+  height:auto;
+}
+
+
+/* RPG TOOLTIP V10 */
+.profile-rpg-tooltip{
+  width:min(420px,calc(100% - 16px));
+  border-width:1px;
+  background:
+    linear-gradient(180deg,rgba(29,31,24,.98),rgba(10,12,9,.99));
+}
+
+.profile-rpg-tooltip .profile-item-popover-main{
+  display:grid;
+  gap:10px;
+}
+
+.profile-rpg-tooltip .profile-item-popover-item{
+  display:grid;
+  grid-template-columns:76px 1fr;
+  gap:12px;
+  align-items:center;
+  padding-bottom:10px;
+  border-bottom:1px solid #342f20;
+}
+
+.profile-rpg-tooltip .profile-item-popover-icon{
+  width:76px;
+  height:76px;
+}
+
+.profile-rpg-tooltip .profile-item-popover-icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-item-tooltip-title h3{
+  margin:3px 0 5px;
+  font-size:19px;
+  line-height:1.12;
+}
+
+.profile-rpg-tooltip .profile-item-popover-description{
+  margin:0;
+  color:#a79f88;
+  font-size:10px;
+  line-height:1.45;
+}
+
+.profile-rpg-tooltip .profile-item-popover-meta{
+  gap:7px;
+}
+
+.profile-rpg-tooltip .profile-item-popover-meta>div{
+  padding:8px;
+  border:1px solid #322f24;
+  border-radius:6px;
+  background:#0d100c;
+}
+
+.profile-rpg-tooltip .profile-item-popover-section{
+  margin:0;
+  padding-top:0;
+  border-top:0;
+}
+
+.profile-rpg-tooltip .profile-item-popover-section>strong{
+  display:block;
+  margin-bottom:7px;
+  color:#b8a66f;
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+
+/* Next level header */
+.profile-next-upgrade{
+  margin-top:0;
+  padding:10px;
+  border:1px solid #52431f;
+  border-radius:7px;
+  background:linear-gradient(180deg,#15170f,#0c0e0a);
+}
+
+.profile-next-upgrade-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+  padding-bottom:9px;
+  border-bottom:1px solid #332f22;
+}
+
+.profile-next-upgrade-head small{
+  display:block;
+  margin-bottom:5px;
+  color:#8f866e;
+  font-size:8px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+
+.profile-next-upgrade-head strong{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-items:center;
+  font-size:9px;
+}
+
+.profile-next-upgrade-head strong i{
+  color:#81765b;
+  font-style:normal;
+}
+
+.profile-next-upgrade-head>b{
+  min-width:54px;
+  padding:8px 7px;
+  border:1px solid #7a5d1c;
+  border-radius:7px;
+  background:#241a07;
+  color:#efbc38;
+  font-size:17px;
+  text-align:center;
+}
+
+/* Each stat owns its labels, so values always sit below the correct heading. */
+.profile-item-comparison{
+  display:grid;
+  gap:6px;
+  margin-top:8px;
+}
+
+.profile-item-compare-card{
+  padding:8px;
+  border:1px solid #2e2d24;
+  border-radius:6px;
+  background:#0b0e0a;
+}
+
+.profile-item-compare-card>strong{
+  display:block;
+  margin-bottom:7px;
+  color:#b7ad91;
+  font-size:9px;
+}
+
+.profile-item-compare-values{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:6px;
+}
+
+.profile-item-compare-values>div{
+  min-width:0;
+  padding:6px 7px;
+  border-radius:5px;
+  background:#12140f;
+}
+
+.profile-item-compare-values small{
+  display:block;
+  margin-bottom:4px;
+  color:#74705f;
+  font-size:7px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+}
+
+.profile-item-compare-values b{
+  display:block;
+  color:#ddd4ba;
+  font-size:11px;
+  white-space:nowrap;
+}
+
+.profile-item-compare-values b.next{
+  color:#eee4c7;
+}
+
+.profile-item-compare-values b.gain{
+  color:#83d06b;
+}
+
+.profile-item-compare-values b.unchanged{
+  color:#77715f;
+  font-size:8px;
+  white-space:normal;
+}
+
+/* Upgrade confirmation keeps the same comparison component. */
+.profile-upgrade-preview{
+  display:grid;
+  gap:9px;
+}
+
+.profile-upgrade-arrow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:7px;
+  padding:8px;
+  border:1px solid #363225;
+  border-radius:6px;
+  background:#0c0f0b;
+}
+
+.profile-upgrade-preview .profile-upgrade-stats{
+  display:grid;
+  gap:6px;
+}
+
+.profile-upgrade-materials,
+.profile-upgrade-chance{
+  margin:0;
+}
+
+.profile-upgrade-chance{
+  padding:9px;
+}
+
+.profile-upgrade-rule{
+  margin:0;
+}
+
+.profile-rpg-tooltip .profile-item-popover-actions{
+  gap:7px;
+  margin-top:1px;
+}
+
+@media(max-width:1100px){
+  .profile-game-layout{
+    grid-template-columns:1fr;
+  }
+
+  .profile-side-column{
+    width:100%;
+  }
+
+  .profile-side-column .profile-bag-grid{
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+}
+
+@media(max-width:760px){
+  .profile-stats-below-character .profile-stat-list{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
+  .profile-side-column .profile-bag-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+
+@media(max-width:480px){
+  .profile-rpg-tooltip{
+    width:min(390px,calc(100vw - 20px));
+  }
+
+  .profile-item-compare-values{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .profile-item-compare-values>div:last-child{
+    grid-column:1/-1;
+  }
+
+  .profile-stats-below-character .profile-stat-list{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+

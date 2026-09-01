@@ -1,0 +1,512 @@
+/* v0.22 — field contracts and resource refinement */
+.field-contracts,.resource-refinement{display:grid;gap:12px}.resource-refinement{margin-top:22px;padding-top:18px;border-top:1px solid #3d3828}
+.field-contract-capacity{padding:8px 11px;border:1px solid #61502d;border-radius:8px;background:#15160f;color:#d6b867;font-size:11px;font-weight:800}
+.field-contract-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.field-contract-card{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid #49412d;border-radius:10px;background:linear-gradient(145deg,#191b15,#0e100c)}.field-contract-card.active{border-color:#5d542f}.field-contract-card.ready{border-color:#57723d;box-shadow:inset 0 0 18px #29401f26}.field-contract-icon{display:grid;place-items:center;width:50px;height:50px;border:1px solid #5a5136;border-radius:9px;background:#10120d;font-size:25px}.field-contract-copy{min-width:0}.field-contract-copy h3{margin:4px 0;color:#e2d7bf;font-size:14px}.field-contract-copy p{margin:0 0 5px;color:#918a78;font-size:10px;line-height:1.45}.field-contract-copy small{display:block;color:#bda86d;font-size:9px;line-height:1.4}.field-contract-meta{display:flex;justify-content:space-between;gap:8px;color:#817866;font-size:8px;text-transform:uppercase;letter-spacing:.06em}.field-contract-meta b{color:#c4a954}.field-contract-timer{display:inline-block;margin-top:7px;color:#d8b55b;font-variant-numeric:tabular-nums}.field-contract-action{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.field-contract-action button,.refinement-card button{min-height:34px;padding:0 11px;border:1px solid #796126;border-radius:7px;background:#2a281b;color:#e7d4a1;font-size:9px;font-weight:900}.field-contract-action button.ready{border-color:#648546;background:#20331a;color:#bce599}.field-contract-action span{color:#77705f;font-size:9px}.refinement-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.refinement-card{display:grid;grid-template-columns:minmax(130px,.7fr) minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border:1px solid #49412d;border-radius:9px;background:#12140f}.refinement-card>div>span{color:#8d8269;font-size:8px;text-transform:uppercase}.refinement-card h3{margin:3px 0 0;color:#ddd2b9;font-size:13px}.refinement-cost{display:flex;flex-wrap:wrap;gap:5px}.refinement-cost span{padding:4px 6px;border-radius:5px;background:#1d2018;color:#a7a08d;font-size:8.5px}.refinement-cost span.enough{color:#9fca85}.refinement-cost span.missing{color:#c07b69}.refinement-card button:disabled{opacity:.35;cursor:not-allowed}
+@media(max-width:900px){.field-contract-grid,.refinement-grid{grid-template-columns:1fr}}
+@media(max-width:600px){.field-contract-card{grid-template-columns:42px minmax(0,1fr)}.field-contract-icon{width:40px;height:40px;font-size:20px}.field-contract-action{grid-column:2;align-items:stretch}.field-contract-action button{width:100%}.refinement-card{grid-template-columns:1fr}.refinement-card button{width:100%}}
+
+/* =========================================================
+   BUNKER / STORAGE / DECONTAMINATION — Survival Update v0.30
+   ========================================================= */
+.trade-tabs{grid-template-columns:repeat(6,1fr)}
+.bunker-storage-summary{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px
+}
+.bunker-storage-summary>div{
+  display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;
+  padding:13px 15px;border:1px solid #4a4027;border-radius:9px;background:#0b0d09
+}
+.bunker-storage-summary span{color:#958d79;font-size:11px;font-weight:800;text-transform:uppercase}
+.bunker-storage-summary b{color:#dfb34d;font-size:21px}
+.bunker-storage-summary small{grid-column:1/-1;color:#7e7766;font-size:10px}
+.bunker-storage-summary .unlimited{border-color:#4b5c31}
+.bunker-storage-summary .unlimited b{color:#8fc863;font-size:28px}
+.bunker-storage-columns{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.bunker-storage-columns>section{min-width:0}
+.bunker-storage-list{display:flex;flex-direction:column;gap:7px;max-height:560px;overflow:auto;padding-right:3px}
+.bunker-storage-row{
+  display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:10px;align-items:center;
+  padding:9px 10px;border:1px solid #403922;border-radius:8px;background:#0d0f0b
+}
+.bunker-storage-row.rarity-uncommon{border-color:#315a31}
+.bunker-storage-row.rarity-rare{border-color:#2e4e6a}
+.bunker-storage-row.rarity-epic{border-color:#563c6e}
+.bunker-storage-row.rarity-legendary{border-color:#6c4c22}
+.bunker-storage-copy{min-width:0;display:flex;flex-direction:column;gap:3px}
+.bunker-storage-copy>b{color:#ded4bf;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bunker-storage-copy small{color:#7f7868;font-size:10px}
+.bunker-storage-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.bunker-storage-actions button,
+.backpack-upgrade-card button,
+.bunker-recovery-actions button{
+  min-height:34px;padding:0 11px;border:1px solid #755d2d;border-radius:6px;
+  background:linear-gradient(180deg,#5c4518,#35270e);color:#ead28f;font-weight:800;cursor:pointer
+}
+.bunker-storage-actions button.secondary{border-color:#4b4533;background:#15160f;color:#aaa18d}
+.bunker-storage-actions button:disabled,
+.backpack-upgrade-card button:disabled,
+.bunker-recovery-actions button:disabled{opacity:.35;cursor:not-allowed}
+.bunker-storage-note{
+  margin-top:12px;padding:10px 12px;border:1px dashed #4b432e;border-radius:8px;
+  background:#0a0c09;color:#918a78;font-size:10px;line-height:1.45
+}
+
+.backpack-upgrade-panel{margin-bottom:20px}
+.bunker-tier-badge{padding:7px 11px;border:1px solid #66542c;border-radius:7px;background:#18140d;color:#e2b64a;font-weight:900}
+.backpack-upgrade-card{
+  display:grid;grid-template-columns:minmax(190px,1fr) auto minmax(190px,1fr) minmax(220px,1.15fr) auto;
+  gap:12px;align-items:center;padding:13px;border:1px solid #4a4027;border-radius:9px;background:#0b0d09
+}
+.backpack-upgrade-current{display:grid;grid-template-columns:44px 1fr;gap:9px;align-items:center}
+.backpack-upgrade-current>span{display:grid;place-items:center;width:42px;height:42px;border:1px solid #4b432d;border-radius:7px;background:#090a07;font-size:23px}
+.backpack-upgrade-current b{display:block;color:#d8cfba;font-size:13px}
+.backpack-upgrade-current small{display:block;margin-top:3px;color:#817a69;font-size:10px}
+.backpack-upgrade-current.next b{color:#8fc863}
+.backpack-upgrade-arrow{color:#a98b45;font-size:22px}
+.backpack-upgrade-cost{display:flex;flex-wrap:wrap;gap:5px}
+.backpack-upgrade-cost span{padding:5px 7px;border:1px solid #403922;border-radius:5px;background:#080a07;font-size:9px}
+.backpack-upgrade-cost .enough{color:#86bd68;border-color:#354d2c}
+.backpack-upgrade-cost .missing{color:#c57664;border-color:#59372e}
+.backpack-max{grid-column:3/-1;color:#8fc863;text-align:center}
+
+.bunker-recovery-screen{max-width:860px;margin:0 auto}
+.bunker-recovery-hero{
+  display:grid;grid-template-columns:84px minmax(0,1fr) auto;gap:16px;align-items:center;
+  padding:18px;border:1px solid #554826;border-radius:11px;background:linear-gradient(180deg,#17180f,#0b0d09)
+}
+.bunker-recovery-hero.active{border-color:#77702d;box-shadow:0 0 28px #a7851620}
+.bunker-recovery-icon{display:grid;place-items:center;width:78px;height:78px;border:1px solid #65551f;border-radius:50%;background:#0b0d08;color:#d5b43d;font-size:39px}
+.bunker-recovery-copy span{color:#a58c3f;font-size:9px;font-weight:900;letter-spacing:.12em}
+.bunker-recovery-copy h2{margin:4px 0 6px;color:#e4dbc7;font-size:22px}
+.bunker-recovery-copy p{margin:0;color:#8f8877;font-size:11px;line-height:1.55}
+.bunker-recovery-rad{display:flex;align-items:baseline;gap:3px;min-width:112px;justify-content:center;padding:10px;border:1px solid #514321;border-radius:8px;background:#080a07}
+.bunker-recovery-rad small{display:block;color:#8c8267;font-size:8px;margin-right:5px}
+.bunker-recovery-rad b{font-size:30px;color:#c5a63c}
+.bunker-recovery-rad span{color:#756f60;font-size:11px}
+.bunker-recovery-rad.severity-light b{color:#d1ad3f}.bunker-recovery-rad.severity-medium b{color:#d78a38}.bunker-recovery-rad.severity-severe b,.bunker-recovery-rad.severity-critical b{color:#d1533f}
+.bunker-recovery-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+.bunker-recovery-stats>div{display:flex;flex-direction:column;gap:4px;padding:11px;border:1px solid #403922;border-radius:8px;background:#0b0d09}
+.bunker-recovery-stats span{color:#807969;font-size:9px}.bunker-recovery-stats b{color:#d6ccb7;font-size:14px}
+.bunker-recovery-warning{padding:11px 13px;border:1px dashed #574b2c;border-radius:8px;background:#100f0a;color:#a49a83;font-size:10px;line-height:1.45}
+.bunker-recovery-actions{display:flex;justify-content:flex-end;margin-top:12px}
+.bunker-recovery-actions .danger{border-color:#6e392f;background:linear-gradient(180deg,#5b2b22,#321712);color:#e6a597}
+
+@media(max-width:980px){
+  .trade-tabs{grid-template-columns:repeat(3,1fr)}
+  .bunker-storage-columns{grid-template-columns:1fr}
+  .backpack-upgrade-card{grid-template-columns:1fr auto 1fr}
+  .backpack-upgrade-cost{grid-column:1/3}
+  .backpack-upgrade-card button{grid-column:3}
+  .bunker-recovery-stats{grid-template-columns:1fr 1fr}
+}
+@media(max-width:650px){
+  .trade-tabs{grid-template-columns:repeat(2,1fr)}
+  .bunker-storage-summary{grid-template-columns:1fr}
+  .bunker-storage-row{grid-template-columns:44px minmax(0,1fr)}
+  .bunker-storage-actions{grid-column:2;justify-content:flex-start}
+  .backpack-upgrade-card{grid-template-columns:1fr}
+  .backpack-upgrade-arrow{transform:rotate(90deg);justify-self:center}
+  .backpack-upgrade-cost,.backpack-upgrade-card button,.backpack-max{grid-column:auto}
+  .bunker-recovery-hero{grid-template-columns:64px minmax(0,1fr)}
+  .bunker-recovery-icon{width:58px;height:58px;font-size:28px}
+  .bunker-recovery-rad{grid-column:1/-1;justify-self:stretch}
+  .bunker-recovery-stats{grid-template-columns:1fr 1fr}
+}
+
+
+/* =========================================================
+   BUNKER & CONTRACTS UPDATE v0.33
+   ========================================================= */
+.trade-card{overflow:visible}
+.trade-card-art{background:linear-gradient(180deg,#0d100d,#080a08)}
+.trade-compare{display:grid;gap:3px;margin-top:7px;padding-top:7px;border-top:1px solid #302d20}
+.trade-compare>b{color:#9d947f;font-size:8.5px;line-height:1.35}
+.trade-compare>small{color:#77705f;font-size:8.5px;line-height:1.4}
+.trade-compare>span{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:5px;align-items:center;font-size:8px}
+.trade-compare em{overflow:hidden;color:#7e786a;font-style:normal;text-overflow:ellipsis;white-space:nowrap}
+.trade-compare strong{color:#aca38f;font-weight:700}.trade-compare i{min-width:38px;text-align:right;font-style:normal;font-weight:900}
+.trade-compare .up i{color:#75c66b}.trade-compare .down i{color:#d16c5e}.trade-compare .same i{color:#817a6c}
+.trade-locked-sale{display:grid;place-items:center;min-height:34px;padding:0 10px;border:1px solid #51472f;border-radius:6px;background:#12130e;color:#9d927a;font-size:9px;font-weight:800}
+
+.field-contracts-tab{padding-top:2px}
+.field-contract-rarity-legend{display:flex;flex-wrap:wrap;gap:6px;margin:-3px 0 4px}
+.contract-rarity-chip{padding:4px 8px;border:1px solid #454236;border-radius:999px;background:#0d100c;font-size:8px;font-weight:900;text-transform:uppercase}
+.contract-rarity-chip.rarity-common{color:#c9c9c9;border-color:#575757}.contract-rarity-chip.rarity-uncommon{color:#70d56a;border-color:#315a31}.contract-rarity-chip.rarity-rare{color:#5c9dff;border-color:#2e4e6a}.contract-rarity-chip.rarity-epic{color:#b56cff;border-color:#563c6e}.contract-rarity-chip.rarity-legendary{color:#f0a72f;border-color:#6c4c22}
+.field-contract-card.rarity-common{border-color:#56564f}.field-contract-card.rarity-uncommon{border-color:#315a31;box-shadow:inset 0 0 18px #315a311c}.field-contract-card.rarity-rare{border-color:#2e4e6a;box-shadow:inset 0 0 18px #2e4e6a1c}.field-contract-card.rarity-epic{border-color:#563c6e;box-shadow:inset 0 0 20px #563c6e21}.field-contract-card.rarity-legendary{border-color:#806029;box-shadow:inset 0 0 22px #8a5b2026,0 0 10px #c68b2212}
+.field-contract-quality{display:flex;align-items:center;gap:6px;margin-top:5px}.field-contract-quality small{color:#6f695d!important;font-size:7.5px!important;text-transform:uppercase;letter-spacing:.06em}
+.field-contract-action button.reroll{border-color:#4d4a35;background:#171811;color:#b9ae91}.field-contract-action button.reroll:hover{border-color:#7c6736;color:#e3c56e}
+
+.backpack-upgrade-current .backpack-frame{position:relative;width:54px;height:54px;border-width:2px;border-style:solid;border-radius:10px;font-size:27px;box-shadow:inset 0 0 18px var(--bag-glow),0 0 12px var(--bag-glow);background:radial-gradient(circle,var(--bag-glow),#080a07 66%);color:var(--bag-color)}
+.backpack-upgrade-current{grid-template-columns:58px 1fr}.backpack-upgrade-current b{color:var(--bag-color,#d8cfba)}
+.backpack-grade-common{--bag-color:#d2d2cf;--bag-glow:#cfcfcf18}.backpack-grade-uncommon{--bag-color:#72d66d;--bag-glow:#70d56a26}.backpack-grade-rare{--bag-color:#65a7ff;--bag-glow:#5c9dff2b}.backpack-grade-epic{--bag-color:#bd78ff;--bag-glow:#b56cff30}.backpack-grade-legendary{--bag-color:#f0ad34;--bag-glow:#f0a72f36}.backpack-grade-red{--bag-color:#ef5b4e;--bag-glow:#e83d303d}
+.backpack-grade-common .backpack-frame{border-color:#8b8b86}.backpack-grade-uncommon .backpack-frame{border-color:#4a9c46}.backpack-grade-rare .backpack-frame{border-color:#4279b7}.backpack-grade-epic .backpack-frame{border-color:#8050a7}.backpack-grade-legendary .backpack-frame{border-color:#b47b21}.backpack-grade-red .backpack-frame{border-color:#d33b31;box-shadow:inset 0 0 24px #e83d3040,0 0 18px #e83d304a}
+
+.bunker-storage-tools{display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px}.bunker-storage-tools label{display:flex;align-items:center;gap:6px;min-width:220px;padding:0 10px;border:1px solid #403922;border-radius:7px;background:#0b0d09}.bunker-storage-tools input{width:100%;height:34px;border:0;outline:0;background:transparent;color:#d6cdb8}.bunker-storage-tools button{min-height:36px;padding:0 11px;border:1px solid #51462b;border-radius:7px;background:#15160f;color:#b9ad90;font-weight:800}
+
+@media(max-width:700px){.trade-card-art{height:132px}.bunker-storage-tools{flex-direction:column}.bunker-storage-tools label{min-width:0}.field-contract-grid{grid-template-columns:1fr}}
+
+/* =========================================================
+   BUNKER & CONTRACTS UPDATE v0.34
+   ========================================================= */
+/* Shop art gets an extra safe area so framed square assets never touch/crop at card edges. */
+.trade-card-art{padding:12px}
+.trade-card-art img{
+  width:auto;
+  height:auto;
+  max-width:82%;
+  max-height:82%;
+  object-fit:contain;
+  object-position:center;
+  transform:none;
+}
+
+/* Contract dossier + quality floor. */
+.field-contract-stats{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:7px;
+  margin:0 0 10px;
+}
+.field-contract-stats>div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  padding:8px 10px;
+  border:1px solid #403922;
+  border-radius:7px;
+  background:#0d0f0b;
+}
+.field-contract-stats span{color:#817a69;font-size:8px;text-transform:uppercase;letter-spacing:.05em}
+.field-contract-stats b{color:#d8b45a;font-size:12px;white-space:nowrap}
+.field-contract-floor{display:block!important;margin-top:5px;color:#8eaa78!important;font-size:8px!important}
+.field-contract-history{margin-top:18px;padding-top:14px;border-top:1px solid #383424}
+.field-contract-history-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.field-contract-history-row{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px;
+  padding:8px 10px;
+  border:1px solid #454238;
+  border-radius:7px;
+  background:#0d0f0b;
+}
+.field-contract-history-row.rarity-uncommon{border-color:#315a31}.field-contract-history-row.rarity-rare{border-color:#2e4e6a}.field-contract-history-row.rarity-epic{border-color:#563c6e}.field-contract-history-row.rarity-legendary{border-color:#806029}
+.field-contract-history-row b{min-width:0;overflow:hidden;color:#cfc5af;font-size:10px;text-overflow:ellipsis;white-space:nowrap}
+.field-contract-history-row small{color:#9d8d63;font-size:8.5px;white-space:nowrap}
+
+/* Exactly five rows per storage page; navigation replaces long internal scrollbars. */
+.bunker-storage-list{max-height:none;overflow:visible;padding-right:0}
+.bunker-storage-pager{
+  display:grid;
+  grid-template-columns:42px minmax(70px,auto) 42px;
+  justify-content:center;
+  align-items:center;
+  gap:7px;
+  margin-top:9px;
+}
+.bunker-storage-pager button{
+  width:42px;
+  height:32px;
+  border:1px solid #5c4d2c;
+  border-radius:7px;
+  background:linear-gradient(180deg,#2b2415,#17130d);
+  color:#dfbd68;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+}
+.bunker-storage-pager button:disabled{opacity:.28;cursor:not-allowed}
+.bunker-storage-pager span{
+  min-width:70px;
+  text-align:center;
+  color:#a79b81;
+  font-size:9px;
+  font-weight:900;
+}
+
+@media(max-width:700px){
+  .trade-card-art img{max-width:78%;max-height:78%}
+  .field-contract-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .field-contract-history-list{grid-template-columns:1fr}
+  .field-contract-history-row{grid-template-columns:auto minmax(0,1fr)}
+  .field-contract-history-row small{grid-column:2;white-space:normal}
+}
+
+/* =========================================================
+   DAILY TASKS & CONTRACT REWARDS v0.35
+   ========================================================= */
+.quest-tabs{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+  margin:0 0 14px;
+  padding:5px;
+  border:1px solid #403824;
+  border-radius:10px;
+  background:#0b0d09;
+}
+.quest-tabs button{
+  min-height:42px;
+  border:1px solid transparent;
+  border-radius:7px;
+  background:transparent;
+  color:#8f8877;
+  font-weight:900;
+  cursor:pointer;
+}
+.quest-tabs button.active{
+  border-color:#725b25;
+  background:linear-gradient(180deg,#302718,#17140d);
+  color:#e2b64a;
+  box-shadow:inset 0 0 16px #b4821718;
+}
+.daily-quests-panel{display:grid;gap:12px}
+.daily-quests-heading{
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+  align-items:center;
+  padding:16px 18px;
+  border:1px solid #584827;
+  border-radius:11px;
+  background:linear-gradient(135deg,#181b14,#0c0e0a);
+}
+.daily-quests-heading>div:first-child>span,.daily-all-bonus>div>span{
+  color:#b89237;font-size:9px;font-weight:900;letter-spacing:.13em;text-transform:uppercase
+}
+.daily-quests-heading h2{margin:4px 0;color:#eee3ca;font-size:24px}
+.daily-quests-heading p,.daily-all-bonus p{margin:0;color:#918a78;font-size:10.5px;line-height:1.45}
+.daily-reset{min-width:120px;padding:9px 12px;border:1px solid #4a3d23;border-radius:8px;background:#090b08;text-align:center}
+.daily-reset small{display:block;color:#807763;font-size:8px;text-transform:uppercase}
+.daily-reset b{display:block;margin-top:3px;color:#dfb34d;font-size:17px}
+.daily-quests-progress{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border:1px solid #363322;border-radius:8px;background:#0c0e0a;color:#8f8774;font-size:10px}
+.daily-quests-progress b{color:#e0b449;font-size:14px}
+.daily-quest-list{display:grid;gap:9px}
+.daily-quest-card{
+  display:grid;
+  grid-template-columns:58px minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  padding:12px;
+  border:1px solid #403d31;
+  border-radius:10px;
+  background:linear-gradient(180deg,#11140f,#0b0d09);
+}
+.daily-quest-card.ready{border-color:#6d602f;box-shadow:inset 0 0 16px #bc8c1b12}
+.daily-quest-card.claimed{border-color:#355832;background:linear-gradient(180deg,#111a10,#0b100a)}
+.daily-quest-icon{display:grid;place-items:center;width:54px;height:54px;border:1px solid #51462a;border-radius:9px;background:#080a07;font-size:26px}
+.daily-quest-copy{min-width:0}
+.daily-quest-title{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.daily-quest-title h3{margin:0;color:#e6dcc7;font-size:15px}
+.daily-quest-title b{color:#d8b44e;font-size:12px;white-space:nowrap}
+.daily-quest-copy>p{margin:4px 0 7px;color:#888171;font-size:10px;line-height:1.4}
+.daily-progress-bar{position:relative;height:12px;overflow:hidden;border:1px solid #413a27;border-radius:6px;background:#050604;box-shadow:inset 0 1px 4px #000}
+.daily-progress-bar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#78601f,#d3a83b)}
+.daily-progress-bar span{position:absolute;inset:0;display:grid;place-items:center;color:#f1e7d3;font-size:7px;font-weight:900;text-shadow:0 1px 2px #000}
+.daily-quest-action{min-width:116px;display:flex;justify-content:flex-end}
+.daily-quest-action button,.daily-all-bonus button{
+  min-height:36px;padding:0 13px;border:1px solid #705821;border-radius:7px;background:linear-gradient(180deg,#6a4c16,#3c2a0d);color:#efd079;font-weight:900;cursor:pointer
+}
+.daily-quest-action button:disabled,.daily-all-bonus button:disabled{opacity:.3;cursor:not-allowed}
+.daily-claimed{color:#87c66c;font-size:10px;font-weight:900;white-space:nowrap}
+.daily-reward-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.daily-reward-grid.compact .daily-reward-tile{min-height:34px;padding:4px 6px}
+.daily-reward-tile{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:5px;align-items:center;min-width:125px;padding:5px 7px;border:1px solid #393526;border-radius:7px;background:#090b08}
+.daily-reward-art{display:grid;place-items:center;width:27px;height:27px;overflow:hidden;border-radius:5px;background:#070806}
+.daily-reward-art img{width:100%;height:100%;object-fit:contain}
+.daily-reward-symbol{display:grid;place-items:center;width:27px;height:27px;border-radius:50%;border:1px solid #5e4c25;color:#e1b44c;font-size:15px;font-weight:900}
+.daily-reward-tile b{overflow:hidden;color:#bdb39f;font-size:8px;text-overflow:ellipsis;white-space:nowrap}
+.daily-reward-tile small{color:#d6aa42;font-size:8px;white-space:nowrap}
+.daily-all-bonus{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(260px,.8fr) auto;
+  gap:14px;
+  align-items:center;
+  padding:14px 16px;
+  border:1px solid #51431f;
+  border-radius:10px;
+  background:linear-gradient(135deg,#1b1710,#0c0e0a);
+}
+.daily-all-bonus.ready{border-color:#88702b;box-shadow:0 0 18px #b98a1d16,inset 0 0 18px #a4791712}
+.daily-all-bonus.claimed{border-color:#355832;background:#10180f}
+.daily-all-bonus h3{margin:4px 0;color:#e9ddc5;font-size:16px}
+.daily-all-bonus .daily-reward-grid{margin:0}
+
+.field-contract-card[data-field-contract-details]{cursor:pointer;transition:transform .14s ease,border-color .14s ease,box-shadow .14s ease}
+.field-contract-card[data-field-contract-details]:hover{transform:translateY(-1px);box-shadow:0 8px 20px #00000028,inset 0 0 18px #b9921810}
+.field-contract-card[data-field-contract-details]:focus-visible{outline:2px solid #bd9230;outline-offset:2px}
+.field-contract-open-hint{display:block!important;margin-top:6px;color:#c6a656!important;font-size:8.5px!important;font-weight:900}
+.field-contract-reward-summary{display:block!important}
+.contract-reward-overlay{position:fixed;inset:0;z-index:180;display:grid;place-items:center;padding:18px;background:#020302cf;backdrop-filter:blur(6px)}
+.contract-reward-modal{position:relative;width:min(760px,100%);max-height:min(720px,calc(100vh - 36px));overflow:auto;padding:22px;border:1px solid #5a5036;border-radius:14px;background:linear-gradient(180deg,#171a14,#090b08);box-shadow:0 24px 70px #000,inset 0 0 28px #0000004f}
+.contract-reward-modal.rarity-uncommon{border-color:#3b7138}.contract-reward-modal.rarity-rare{border-color:#365f86}.contract-reward-modal.rarity-epic{border-color:#684884}.contract-reward-modal.rarity-legendary{border-color:#9b7127;box-shadow:0 24px 70px #000,0 0 28px #c38a1d25,inset 0 0 28px #0000004f}
+.contract-reward-close{position:absolute;right:10px;top:10px;width:34px;height:34px;border:1px solid #514936;border-radius:8px;background:#0a0c09;color:#bdb39d;font-size:21px;cursor:pointer}
+.contract-reward-heading>span{color:#b4923d;font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+.contract-reward-heading h2{margin:5px 42px 6px 0;color:#eee3ca;font-size:26px}
+.contract-reward-heading p{margin:8px 0 0;color:#918977;font-size:10px;line-height:1.5}
+.contract-reward-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;margin-top:17px}
+.contract-reward-tile{display:grid;grid-template-rows:94px auto auto;gap:5px;min-width:0;padding:9px;border:1px solid #3d3829;border-radius:9px;background:#0b0d09;text-align:center}
+.contract-reward-tile.rarity-uncommon{border-color:#315a31}.contract-reward-tile.rarity-rare{border-color:#2e4e6a}.contract-reward-tile.rarity-epic{border-color:#563c6e}.contract-reward-tile.rarity-legendary{border-color:#806029}
+.contract-reward-art{display:grid;place-items:center;overflow:hidden;border-radius:7px;background:#070806}
+.contract-reward-art img{width:86%;height:86%;object-fit:contain}
+.contract-reward-symbol{display:grid;place-items:center;height:94px;border:1px solid #4c4127;border-radius:50%;color:#e0b449;font-size:42px;font-weight:900;background:radial-gradient(circle,#7c591b2a,#080a07 70%)}
+.contract-reward-tile b{overflow:hidden;color:#d9cfba;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+.contract-reward-tile small{color:#d5aa42;font-size:9px;font-weight:900}
+.contract-reward-ok{display:block;min-width:140px;min-height:40px;margin:18px auto 0;border:1px solid #745b23;border-radius:8px;background:linear-gradient(180deg,#6a4c16,#3c2a0d);color:#efd079;font-weight:900;cursor:pointer}
+
+@media(max-width:700px){
+  .daily-quests-heading{align-items:flex-start}.daily-reset{min-width:100px}
+  .daily-quest-card{grid-template-columns:48px minmax(0,1fr)}
+  .daily-quest-icon{width:44px;height:44px;font-size:22px}
+  .daily-quest-action{grid-column:2;min-width:0;justify-content:flex-start}
+  .daily-all-bonus{grid-template-columns:1fr}
+  .daily-all-bonus .daily-reward-grid{margin-top:4px}
+  .contract-reward-modal{padding:18px 12px}
+  .contract-reward-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:430px){
+  .daily-quests-heading{display:grid;grid-template-columns:1fr auto;gap:8px;padding:12px}
+  .daily-quests-heading h2{font-size:19px}.daily-quests-heading p{grid-column:1/-1}
+  .daily-reset{min-width:84px;padding:7px}.daily-reset b{font-size:14px}
+  .daily-quest-card{gap:8px;padding:9px}
+  .daily-quest-title h3{font-size:12px}.daily-quest-copy>p{font-size:8.5px}
+  .daily-reward-grid{gap:4px}.daily-reward-tile{min-width:105px;grid-template-columns:24px minmax(0,1fr) auto;padding:4px}.daily-reward-art,.daily-reward-symbol{width:23px;height:23px}
+  .contract-reward-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.contract-reward-tile{grid-template-rows:72px auto auto;padding:6px}.contract-reward-symbol{height:72px;font-size:32px}
+}
+
+
+/* =========================================================
+   FIELD CONTRACT REWARD ART v0.36 — never crop framed icons
+   ========================================================= */
+.contract-reward-art{
+  box-sizing:border-box;
+  padding:8px;
+  overflow:hidden;
+}
+.contract-reward-art img{
+  display:block;
+  width:72%!important;
+  height:72%!important;
+  max-width:72%!important;
+  max-height:72%!important;
+  margin:auto;
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:none!important;
+}
+@media(max-width:700px){
+  .contract-reward-art{padding:7px}
+  .contract-reward-art img{width:66%!important;height:66%!important;max-width:66%!important;max-height:66%!important}
+}
+@media(max-width:430px){
+  .contract-reward-tile{grid-template-rows:68px auto auto}
+  .contract-reward-art{padding:8px}
+  .contract-reward-art img{width:58%!important;height:58%!important;max-width:58%!important;max-height:58%!important}
+}
+
+/* =========================================================
+   v0.37 — mobile contract rewards + progressive contract slots
+   ========================================================= */
+.field-contract-card.locked{
+  cursor:not-allowed;
+  border-style:dashed;
+  border-color:#454238;
+  background:linear-gradient(145deg,#12140f,#090b08);
+  opacity:.72;
+  box-shadow:inset 0 0 24px #00000042;
+}
+.field-contract-icon img{width:100%;height:100%;object-fit:contain;padding:5px}
+.backpack-frame img{width:100%;height:100%;object-fit:contain;padding:5px}
+.field-contract-card.locked .field-contract-icon{
+  border-color:#4b4638;
+  color:#8f8775;
+  filter:grayscale(1);
+}
+.field-contract-card.locked .field-contract-meta b{color:#8d846f}
+.field-contract-card.locked h3{color:#b7ae9b}
+.field-contract-card.locked p{color:#766f61}
+.field-contract-unlock-progress{
+  display:inline-block!important;
+  margin-top:7px;
+  padding:4px 7px;
+  border:1px solid #4b4431;
+  border-radius:6px;
+  color:#b6a36d!important;
+  background:#0b0d09;
+  font-size:8.5px!important;
+  font-weight:800;
+}
+
+@media(max-width:430px){
+  .contract-reward-tile{
+    grid-template-rows:58px auto auto!important;
+    min-width:0;
+    padding:6px!important;
+  }
+  .contract-reward-art{
+    width:100%;
+    height:58px;
+    min-height:58px;
+    padding:5px!important;
+    overflow:hidden!important;
+  }
+  .contract-reward-art img{
+    width:auto!important;
+    height:auto!important;
+    max-width:42px!important;
+    max-height:42px!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    margin:auto!important;
+  }
+  .contract-reward-symbol{
+    height:58px!important;
+    font-size:28px!important;
+  }
+  .contract-reward-tile b{
+    font-size:10px;
+    line-height:1.2;
+  }
+}
+
+@media(max-width:360px){
+  .contract-reward-grid{gap:5px!important}
+  .contract-reward-tile{grid-template-rows:52px auto auto!important;padding:5px!important}
+  .contract-reward-art{height:52px;min-height:52px;padding:4px!important}
+  .contract-reward-art img{max-width:36px!important;max-height:36px!important}
+  .contract-reward-symbol{height:52px!important;font-size:25px!important}
+}
+
+.expedition-icon.boss-icon-art img{
+  object-fit:cover;
+}
+.expedition-boss-placeholder .boss-placeholder-icon{
+  width:86px;
+  height:86px;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  border-radius:14px;
+  border:1px solid #8d352c;
+  background:#080907;
+}
+.expedition-boss-placeholder .boss-placeholder-icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+
+.item-salvage{margin-top:20px}
+.salvage-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.salvage-card{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px;border:1px solid #49412d;border-radius:9px;background:#12140f}
+.salvage-card.rarity-common{border-color:#56564f}.salvage-card.rarity-uncommon{border-color:#315a31;box-shadow:inset 0 0 18px #315a311c}.salvage-card.rarity-rare{border-color:#2e4e6a;box-shadow:inset 0 0 18px #2e4e6a1c}.salvage-card.rarity-epic{border-color:#563c6e;box-shadow:inset 0 0 20px #563c6e21}.salvage-card.rarity-legendary{border-color:#806029;box-shadow:inset 0 0 22px #8a5b2026,0 0 10px #c68b2212}
+.salvage-art{display:grid;place-items:center;width:50px;height:50px;border:1px solid #5a5136;border-radius:9px;background:#10120d;font-size:24px}.salvage-art img{max-width:100%;max-height:100%;object-fit:contain}
+.salvage-copy{min-width:0}.salvage-copy h3{margin:4px 0;color:#e2d7bf;font-size:14px}.salvage-meta{display:flex;align-items:center;gap:6px;color:#817866;font-size:8px;text-transform:uppercase;letter-spacing:.06em}
+.salvage-rewards{display:flex;flex-wrap:wrap;gap:5px}.salvage-rewards span{padding:4px 6px;border-radius:5px;background:#1d2018;color:#9fca85;font-size:8.5px}
+.salvage-card button{min-height:34px;padding:0 11px;border:1px solid #796126;border-radius:7px;background:#2a281b;color:#e7d4a1;font-size:9px;font-weight:900}
+.salvage-card.locked{opacity:.8}
+@media(max-width:600px){.salvage-grid{grid-template-columns:1fr}.salvage-card{grid-template-columns:42px minmax(0,1fr)}.salvage-art{width:40px;height:40px;font-size:20px}.salvage-card button,.salvage-card .trade-locked-sale{grid-column:2;width:100%}}
