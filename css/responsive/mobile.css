@@ -1,0 +1,139 @@
+@media (max-width: 767px) {
+  :root {
+    --hud-avatar-size: 56px;
+    --bottom-nav-height: 72px;
+  }
+
+  .game-shell {
+    width: 100%;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .top-hud {
+    gap: 6px;
+    padding-inline: 6px;
+  }
+
+  .world-screen {
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .screen-header h1 { font-size: 21px; }
+  .screen-time { font-size: 8px; }
+  .location-card { left: 9px; top: 9px; max-width: min(75%, 278px); }
+  .objective-card { left: 9px; right: 9px; bottom: 9px; }
+}
+
+@media (min-width: 430px) and (max-width: 699px) {
+  :root {
+    --hud-avatar-size: 48px;
+  }
+
+  .top-hud {
+    grid-template-columns: clamp(144px, 35vw, 180px) minmax(0, 1fr) clamp(82px, 20vw, 100px);
+    gap: 4px;
+    padding-inline: 4px;
+  }
+
+  .player-card {
+    gap: 6px;
+    padding: 5px;
+  }
+
+  .player-copy > strong { font-size: 14px; }
+  .player-level-row { font-size: 9px; }
+  .xp-meter { height: 11px; }
+  .xp-meter b { font-size: 7px; }
+
+  .resource-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3px;
+    padding: 3px;
+  }
+
+  .resource-card {
+    grid-template-columns: 18px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1px 3px;
+    padding: 3px;
+  }
+
+  .resource-icon {
+    grid-row: 1 / 3;
+    width: 18px;
+    height: 18px;
+  }
+
+  .resource-name {
+    font-size: 6px;
+    line-height: 1;
+  }
+
+  .resource-meter {
+    width: 100%;
+    height: 10px;
+  }
+
+  .resource-meter b { font-size: 6px; }
+
+  .money-card {
+    min-width: 0;
+    padding-inline: 4px;
+  }
+
+  .money-card strong { font-size: 16px; }
+  .money-symbol { font-size: 13px; }
+}
+
+@media (max-width: 429.98px) {
+  .top-hud {
+    grid-template-columns: minmax(0, 13fr) minmax(0, 7fr);
+    grid-template-rows: auto auto;
+    gap: 6px;
+  }
+
+  .player-card {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 72px;
+  }
+
+  .money-card {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    min-height: 72px;
+    justify-content: center;
+    padding-inline: 8px;
+  }
+
+  .money-card strong { font-size: 18px; }
+
+  .resource-grid {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .resource-card {
+    grid-template-columns: 20px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 2px 4px;
+    padding: 4px;
+  }
+
+  .resource-icon {
+    grid-row: 1 / 3;
+    width: 20px;
+    height: 20px;
+  }
+
+  .resource-name { font-size: 7px; }
+  .resource-meter { width: 100%; height: 11px; }
+  .resource-meter b { font-size: 6.5px; }
+}

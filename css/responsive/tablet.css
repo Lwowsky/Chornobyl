@@ -1,0 +1,14 @@
+@media (min-width: 768px) and (max-width: 1023px) {
+  body {
+    display: grid;
+    place-items: center;
+    padding: 12px;
+  }
+
+  .game-shell {
+    width: min(calc(100vw - 24px), var(--app-tablet-max-width));
+    height: calc(100dvh - 24px);
+    border: 1px solid rgba(216, 167, 51, 0.22);
+    border-radius: 16px;
+  }
+}

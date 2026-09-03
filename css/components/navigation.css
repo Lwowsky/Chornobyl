@@ -1,0 +1,60 @@
+.bottom-nav {
+  position: relative;
+  z-index: 20;
+  min-height: var(--bottom-nav-height);
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  padding: 0 5px max(5px, env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(13, 16, 12, 0.99), rgba(5, 7, 5, 0.995));
+  border-top: 1px solid rgba(216, 167, 51, 0.22);
+  box-shadow: 0 -14px 28px rgba(0,0,0,0.34);
+}
+
+.nav-button {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  padding: 8px 2px 6px;
+  color: #777970;
+  cursor: default;
+  border-inline: 1px solid rgba(255,255,255,0.025);
+}
+
+.nav-button.is-active {
+  color: var(--color-gold-bright);
+  background:
+    radial-gradient(circle at 50% 0%, rgba(216, 167, 51, 0.18), transparent 58%),
+    linear-gradient(180deg, rgba(216,167,51,0.08), transparent);
+}
+
+.nav-button.is-active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16%;
+  right: 16%;
+  height: 2px;
+  background: var(--color-gold-bright);
+  box-shadow: 0 0 12px rgba(242,191,69,0.7);
+}
+
+.nav-button__icon {
+  width: 31px;
+  height: 31px;
+  opacity: 0.58;
+  filter: saturate(0.45);
+}
+.nav-button__icon img { width: 100%; height: 100%; object-fit: contain; }
+.nav-button.is-active .nav-button__icon { opacity: 1; filter: none; }
+.nav-button > span:last-child {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 9px;
+  line-height: 1;
+  text-align: center;
+}

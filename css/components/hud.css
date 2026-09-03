@@ -1,0 +1,188 @@
+.top-hud {
+  position: relative;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: clamp(150px, 22vw, 280px) minmax(0, 1fr) clamp(90px, 11vw, 132px);
+  align-items: stretch;
+  gap: 7px;
+  padding: max(8px, env(safe-area-inset-top)) 8px 8px;
+  background: linear-gradient(180deg, rgba(15, 19, 14, 0.985), rgba(9, 12, 9, 0.97));
+  border-bottom: 1px solid var(--color-border-soft);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.24);
+}
+
+.top-hud::after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  left: 12px;
+  right: 12px;
+  bottom: 0;
+  background: var(--line-metal);
+  opacity: 0.45;
+}
+
+.player-card,
+.money-card,
+.resource-grid {
+  border: 1px solid rgba(126, 120, 86, 0.24);
+  border-radius: var(--radius-sm);
+  background: linear-gradient(180deg, rgba(22, 27, 20, 0.96), rgba(11, 14, 10, 0.96));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.025);
+}
+
+.player-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: var(--hud-avatar-size) minmax(0, 1fr);
+  align-items: center;
+  gap: 9px;
+  padding: 7px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+}
+
+.player-card:hover,
+.player-card:focus-visible {
+  outline: none;
+  border-color: rgba(216, 167, 51, 0.58);
+  background: linear-gradient(180deg, rgba(33, 34, 19, 0.98), rgba(13, 15, 10, 0.98));
+}
+
+.player-card:active { transform: scale(0.992); }
+
+.player-avatar {
+  position: relative;
+  width: var(--hud-avatar-size);
+  aspect-ratio: 1;
+  overflow: visible;
+  border-radius: 9px;
+  border: 1px solid rgba(216, 167, 51, 0.65);
+  box-shadow: 0 0 20px rgba(216, 167, 51, 0.12);
+}
+
+.player-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.player-level-badge {
+  position: absolute;
+  left: -5px;
+  bottom: -5px;
+  min-width: 24px;
+  height: 24px;
+  padding-inline: 6px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--color-gold);
+  background: #11150f;
+  color: var(--color-gold-bright);
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.6);
+}
+
+.player-copy { min-width: 0; display: grid; gap: 3px; }
+.player-copy > strong {
+  color: var(--color-gold-bright);
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-level-row { color: var(--color-text-muted); font-size: 10px; }
+.player-level-row b { color: var(--color-text); }
+
+.xp-meter,
+.resource-meter {
+  position: relative;
+  overflow: hidden;
+  display: block;
+  height: 12px;
+  border: 1px solid rgba(131, 112, 59, 0.38);
+  border-radius: 4px;
+  background: #050706;
+}
+
+.xp-meter i,
+.resource-meter i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  transition: width 300ms ease;
+}
+.xp-meter i { background: linear-gradient(90deg, #8e5d09, var(--color-gold-bright)); }
+.xp-meter b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 8px;
+  color: white;
+  text-shadow: 0 1px 2px #000;
+}
+
+.resource-grid {
+  padding: 6px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+}
+
+.resource-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 24px auto minmax(44px, 1fr);
+  align-items: center;
+  gap: 4px;
+  padding: 4px 5px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.045);
+  background: rgba(0,0,0,0.16);
+}
+
+.resource-icon { width: 24px; height: 24px; }
+.resource-icon img { width: 100%; height: 100%; object-fit: contain; }
+.resource-name {
+  font-family: var(--font-display);
+  font-size: 8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #c9c4b6;
+}
+.resource-meter i { background: var(--color-gold); }
+.resource-card--hp .resource-meter i { background: linear-gradient(90deg, #982e2a, var(--color-danger-bright)); }
+.resource-card--energy .resource-meter i { background: linear-gradient(90deg, #176f93, var(--color-energy-bright)); }
+.resource-card--radiation .resource-meter i { background: linear-gradient(90deg, #9f7c18, #efcc44); }
+.resource-card--bag .resource-meter i { background: linear-gradient(90deg, #8e6206, #ffbf21); }
+.resource-meter b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  white-space: nowrap;
+  font-size: 7px;
+  color: white;
+  text-shadow: 0 1px 2px #000;
+}
+
+.money-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-inline: 10px;
+  color: var(--color-gold-bright);
+}
+.money-symbol { font-weight: 900; }
+.money-card strong { font-size: 18px; }

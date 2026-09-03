@@ -1,0 +1,151 @@
+@media (min-width: 1024px) {
+  body {
+    display: grid;
+    place-items: center;
+    padding: 14px 22px;
+  }
+
+  .game-shell {
+    width: min(calc(100vw - 44px), var(--app-desktop-max-width));
+    height: min(calc(100dvh - 28px), var(--app-desktop-max-height));
+    border: 1px solid rgba(216, 167, 51, 0.24);
+    border-radius: 18px;
+  }
+
+  .top-hud {
+    gap: 10px;
+    padding: 10px 12px;
+  }
+
+  .player-card {
+    gap: 12px;
+    padding: 9px 10px;
+  }
+
+  .player-copy > strong {
+    font-size: 20px;
+  }
+
+  .player-level-row {
+    font-size: 11px;
+  }
+
+  .xp-meter {
+    height: 15px;
+  }
+
+  .xp-meter b {
+    font-size: 9px;
+  }
+
+  .resource-grid {
+    padding: 8px;
+    gap: 7px;
+  }
+
+  .resource-card {
+    grid-template-columns: 32px 58px minmax(90px, 1fr);
+    gap: 7px;
+    padding: 6px 8px;
+  }
+
+  .resource-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .resource-name {
+    font-size: 10px;
+  }
+
+  .resource-meter {
+    height: 15px;
+  }
+
+  .resource-meter b {
+    font-size: 9px;
+  }
+
+  .money-card {
+    min-height: auto;
+  }
+
+  .money-card strong {
+    font-size: 27px;
+  }
+
+  .money-symbol {
+    font-size: 20px;
+  }
+
+  .world-screen {
+    gap: 10px;
+    padding: 14px 18px 12px;
+  }
+
+  .screen-header h1 {
+    font-size: 34px;
+  }
+
+  .screen-kicker,
+  .screen-time {
+    font-size: 10px;
+  }
+
+  .map-stage {
+    border-radius: 16px;
+  }
+
+  .location-card {
+    top: 18px;
+    left: 18px;
+    max-width: 390px;
+    padding: 18px;
+  }
+
+  .location-card h2 {
+    font-size: 28px;
+  }
+
+  .location-card p {
+    font-size: 12px;
+  }
+
+  .location-card__meta {
+    font-size: 10px;
+  }
+
+  .objective-card {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    padding: 14px 16px;
+  }
+
+  .objective-card strong {
+    font-size: 17px;
+  }
+
+  .objective-card p {
+    font-size: 11px;
+  }
+
+  .bottom-nav {
+    min-height: 86px;
+    padding-inline: 8px;
+  }
+
+  .nav-button {
+    gap: 6px;
+    padding-top: 10px;
+  }
+
+  .nav-button__icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .nav-button > span:last-child {
+    font-size: 11px;
+  }
+}

@@ -1,0 +1,80 @@
+:root {
+  /* Fonts */
+  --font-ui: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+  --font-display: "Arial Narrow", "Segoe UI", system-ui, sans-serif;
+
+  /* Base colors */
+  --color-black: #050605;
+  --color-void: #080a08;
+  --color-bg: #0b0e0b;
+  --color-panel: #10140f;
+  --color-panel-2: #151a13;
+  --color-metal: #20251f;
+  --color-border: #32392d;
+  --color-border-soft: rgba(215, 169, 55, 0.18);
+
+  /* Brand accents */
+  --color-gold: #d8a733;
+  --color-gold-bright: #f2bf45;
+  --color-amber: #ffad21;
+  --color-radiation: #d6c74a;
+  --color-danger: #c63d35;
+  --color-danger-bright: #f04a3e;
+  --color-energy: #2497c5;
+  --color-energy-bright: #48c5f2;
+  --color-success: #7aa948;
+
+  /* Text */
+  --color-text: #e9e4d8;
+  --color-text-strong: #fff8e8;
+  --color-text-muted: #918f84;
+  --color-text-dim: #65685f;
+
+  /* Shape / effects */
+  --radius-xs: 6px;
+  --radius-sm: 9px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-panel: 0 18px 40px rgba(0, 0, 0, 0.44);
+  --shadow-gold: 0 0 26px rgba(216, 167, 51, 0.12);
+  --line-metal: linear-gradient(90deg, transparent, rgba(216, 167, 51, 0.5), transparent);
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  /* App sizing */
+  --app-desktop-max-width: 1280px;
+  --app-desktop-max-height: 960px;
+  --app-tablet-max-width: 920px;
+  --hud-avatar-size: 68px;
+  --bottom-nav-height: 78px;
+
+  /* Fixed profile design canvas. On small screens the whole dialog scales uniformly. */
+  --profile-dialog-width: 520px;
+  --profile-dialog-height: 740px;
+  --profile-scale: 1;
+  --profile-hero-width: 330px;
+  --profile-hero-height: 495px;
+  --profile-bottom-panel-height: 112px;
+
+  /* Future layered hero canvas */
+  --hero-canvas-width: 768;
+  --hero-canvas-height: 1024;
+
+  /* Profile equipment geometry */
+  --profile-equipment-slot-size: 56px;
+  --profile-ammo-slot-size: 42px;
+  --profile-equipment-gap: 10px;
+  --profile-loadout-gap: 14px;
+  --profile-slot-label-size: 7.5px;
+  --profile-ammo-label-size: 6.5px;
+
+  /* Motion */
+  --transition-fast: 150ms ease;
+  --transition-ui: 220ms ease;
+}

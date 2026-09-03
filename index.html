@@ -1,636 +1,271 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#11130f" />
-  <title data-i18n="meta.title"></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0c09">
+  <title data-i18n="meta.title">THE 1037 SIGNAL</title>
   <link rel="icon" href="favicon.ico" sizes="any">
 
-  <link rel="stylesheet" href="css/variables.css" />
-  <link rel="stylesheet" href="css/base.css?v=0.62" />
-  <link rel="stylesheet" href="css/components.css?v=0.62" />
-  <link rel="stylesheet" href="css/hud.css?v=0.62" />
-  <link rel="stylesheet" href="css/navigation.css" />
-  <link rel="stylesheet" href="css/modules/screens-core.css?v=0.62" />
-  <link rel="stylesheet" href="css/modules/expeditions.css?v=0.62" />
-  <link rel="stylesheet" href="css/modules/bunker.css" />
-  <link rel="stylesheet" href="css/map.css?v=0.62" />
-  <link rel="stylesheet" href="css/inventory.css" />
-  <link rel="stylesheet" href="css/profile/core.css">
-  <link rel="stylesheet" href="css/profile/layout.css">
-  <link rel="stylesheet" href="css/profile/details.css">
-  <link rel="stylesheet" href="css/responsive.css?v=0.62" />
+  <!-- Design tokens: colors, fonts, spacing -->
+  <link rel="stylesheet" href="css/core/variables.css">
+  <!-- Global styles only -->
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Layout -->
+  <link rel="stylesheet" href="css/layout/app-shell.css">
+  <!-- Components -->
+  <link rel="stylesheet" href="css/components/hud.css">
+  <link rel="stylesheet" href="css/components/navigation.css">
+  <link rel="stylesheet" href="css/components/profile-modal.css">
+  <!-- Current screen -->
+  <link rel="stylesheet" href="css/screens/world.css">
+  <!-- Responsive layers -->
+  <link rel="stylesheet" href="css/responsive/mobile.css">
+  <link rel="stylesheet" href="css/responsive/mobile-small.css">
+  <link rel="stylesheet" href="css/responsive/tablet.css">
+  <link rel="stylesheet" href="css/responsive/desktop.css">
 </head>
 <body>
-  <div id="app">
-    <header class="hud">
-  <section class="hud-player-card">
-    <div class="hud-avatar"><img src="assets/stalker-avatar.webp" alt=""></div>
-    <div class="hud-player-info">
-      <strong id="hudNickname"></strong>
-      <span class="hud-level-row"><span data-i18n="hud.level"></span> <b id="hudLevel">1</b></span>
-      <div class="hud-xp"><i id="hudXpBar"></i><span id="hudXpText">0 / 1000</span></div>
-    </div>
-  </section>
+  <div class="ambient-background" aria-hidden="true"></div>
 
-  <section class="hud-status-card">
-    <div class="hud-stat hud-stat-hp">
-      <span class="hud-stat-icon"><img src="assets/hud-hp.webp" alt=""></span>
-      <span class="hud-stat-name">HP</span>
-      <div class="hud-meter"><i id="hpBar" class="hud-fill hp"></i><b id="hpText" class="hud-meter-value">100/100</b></div>
-      <small id="hpRecoveryText" class="hud-stat-mod"><span class="hud-stat-mod-full"></span><span class="hud-stat-mod-compact" aria-hidden="true"></span></small>
-    </div>
-    <div class="hud-stat hud-stat-energy">
-      <span class="hud-stat-icon"><img src="assets/hud-energy.webp" alt=""></span>
-      <span class="hud-stat-name" data-i18n="hud.energy"></span>
-      <div class="hud-meter"><i id="energyBar" class="hud-fill energy"></i><b id="energyText" class="hud-meter-value">100/100</b></div>
-      <small id="energyRecoveryText" class="hud-stat-mod"><span class="hud-stat-mod-full"></span><span class="hud-stat-mod-compact" aria-hidden="true"></span></small>
-    </div>
-    <div class="hud-stat hud-stat-radiation">
-      <span class="hud-stat-icon"><img src="assets/hud-radiation.webp" alt=""></span>
-      <span class="hud-stat-name" data-i18n="hud.radiation"></span>
-      <div class="hud-meter"><i id="radBar" class="hud-fill radiation"></i><b id="radText" class="hud-meter-value">0/100</b></div>
-      <small id="radStatusText" class="hud-stat-mod radiation-mod"></small>
-    </div>
-    <div class="hud-stat hud-stat-bag">
-      <span class="hud-stat-icon"><img src="assets/nav/inventory.webp" alt=""></span>
-      <span class="hud-stat-name" data-i18n="hud.bag"></span>
-      <div class="hud-meter"><i id="bagBar" class="hud-fill weight"></i><b id="bagText" class="hud-meter-value">0/20</b></div>
-    </div>
-  </section>
+  <div id="gameApp" class="game-shell">
+    <header class="top-hud" aria-label="Панель героя">
+      <button class="player-card" id="profileAvatarButton" type="button" data-i18n-aria-label="profile.open">
+        <span class="player-avatar">
+          <img src="assets/stalker-avatar.webp" alt="">
+          <span class="player-level-badge" id="playerLevelBadge">5</span>
+        </span>
+        <span class="player-copy">
+          <strong id="hudNickname">Test</strong>
+          <span class="player-level-row"><span data-i18n="hud.level">Рівень</span> <b id="hudLevel">5</b></span>
+          <span class="xp-meter" aria-label="Досвід">
+            <i id="hudXpBar"></i>
+            <b id="hudXpText">130 / 240</b>
+          </span>
+        </span>
+      </button>
 
-  <section class="hud-meta-card hud-money-only">
-    <div class="hud-money"><span>₴</span><b id="moneyText">650</b></div>
-  </section>
-</header>
+      <section class="resource-grid" aria-label="Ресурси героя">
+        <article class="resource-card resource-card--hp">
+          <span class="resource-icon"><img src="assets/hud-hp.webp" alt=""></span>
+          <span class="resource-name" data-i18n="hud.hp">HP</span>
+          <span class="resource-meter"><i id="hpBar"></i><b id="hpText">74/74</b></span>
+        </article>
 
-    <main id="screen" class="screen"></main>
+        <article class="resource-card resource-card--energy">
+          <span class="resource-icon"><img src="assets/hud-energy.webp" alt=""></span>
+          <span class="resource-name" data-i18n="hud.energy">Енергія</span>
+          <span class="resource-meter"><i id="energyBar"></i><b id="energyText">108/108</b></span>
+        </article>
 
-    <nav class="bottom-nav">
-      <button data-route="world" class="nav-btn active" type="button">
-        <span class="nav-icon"><img src="assets/nav/map.webp" alt=""></span>
-        <small data-i18n="nav.map"></small>
+        <article class="resource-card resource-card--radiation">
+          <span class="resource-icon"><img src="assets/hud-radiation.webp" alt=""></span>
+          <span class="resource-name" data-i18n="hud.radiation">Радіація</span>
+          <span class="resource-meter"><i id="radiationBar"></i><b id="radiationText">14/100</b></span>
+        </article>
+
+        <article class="resource-card resource-card--bag">
+          <span class="resource-icon"><img src="assets/nav/inventory.webp" alt=""></span>
+          <span class="resource-name" data-i18n="hud.bag">Вага</span>
+          <span class="resource-meter"><i id="bagBar"></i><b id="bagText">40/40 кг</b></span>
+        </article>
+      </section>
+
+      <div class="money-card" aria-label="Гроші">
+        <span class="money-symbol">₴</span>
+        <strong id="moneyText">1196</strong>
+      </div>
+    </header>
+
+    <main class="game-main" id="screen">
+      <section class="world-screen" aria-labelledby="worldTitle">
+        <header class="screen-header">
+          <div>
+            <span class="screen-kicker" data-i18n="world.kicker">ПОТОЧНА ЛОКАЦІЯ</span>
+            <h1 id="worldTitle" data-i18n="world.title">Карта Зони</h1>
+          </div>
+          <span class="screen-time" data-i18n="world.time">День 1 · 08:30</span>
+        </header>
+
+        <div class="map-stage">
+          <img class="map-stage__image" src="assets/story-locations/prypiat-main-map.webp" alt="">
+          <div class="map-stage__shade" aria-hidden="true"></div>
+
+          <section class="location-card">
+            <span class="location-card__kicker" data-i18n="world.locationKicker">ЗОНА 02</span>
+            <h2 data-i18n="world.locationName">Прип’ять</h2>
+            <p data-i18n="world.locationDescription">Покинута частина міста. Карта тут тимчасова — механіку дослідження підключимо окремим етапом.</p>
+            <div class="location-card__meta">
+              <span><b data-i18n="world.threat">Небезпека:</b> <em data-i18n="world.threatMedium">середня</em></span>
+              <span><b data-i18n="world.progress">Прогрес:</b> 2/5</span>
+            </div>
+          </section>
+
+          <section class="objective-card">
+            <span data-i18n="world.objectiveKicker">ПОТОЧНЕ ЗАВДАННЯ</span>
+            <strong data-i18n="world.objectiveTitle">Дорога до ЧАЕС</strong>
+            <p data-i18n="world.objectiveText">Знайди ключ-карту від транспортного коридору.</p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Основна навігація">
+      <button class="nav-button is-active" type="button" data-route="world">
+        <span class="nav-button__icon"><img src="assets/nav/map.webp" alt=""></span>
+        <span data-i18n="nav.map">Карта</span>
       </button>
-      <button data-route="inventory" class="nav-btn" type="button">
-        <span class="nav-icon"><img src="assets/nav/inventory.webp" alt=""></span>
-        <small data-i18n="nav.inventory"></small>
+      <button class="nav-button" type="button" data-route="inventory" aria-disabled="true">
+        <span class="nav-button__icon"><img src="assets/nav/inventory.webp" alt=""></span>
+        <span data-i18n="nav.inventory">Інвентар</span>
       </button>
-      <button data-route="expeditions" class="nav-btn" type="button">
-        <span class="nav-icon"><img src="assets/nav/expeditions.webp" alt=""></span>
-        <small data-i18n="nav.expeditions"></small>
+      <button class="nav-button" type="button" data-route="expeditions" aria-disabled="true">
+        <span class="nav-button__icon"><img src="assets/nav/expeditions.webp" alt=""></span>
+        <span data-i18n="nav.expeditions">Вилазки</span>
       </button>
-      <button data-route="quests" class="nav-btn" type="button">
-        <span class="nav-icon"><img src="assets/nav/tasks.webp" alt=""></span>
-        <small data-i18n="nav.quests"></small>
+      <button class="nav-button" type="button" data-route="quests" aria-disabled="true">
+        <span class="nav-button__icon"><img src="assets/nav/tasks.webp" alt=""></span>
+        <span data-i18n="nav.quests">Завдання</span>
       </button>
-      <button data-route="tradepost" class="nav-btn" type="button">
-        <span class="nav-icon"><img src="assets/nav/tradepost.webp" alt=""></span>
-        <small data-i18n="nav.tradepost"></small>
+      <button class="nav-button" type="button" data-route="bunker" aria-disabled="true">
+        <span class="nav-button__icon"><img src="assets/nav/tradepost.webp" alt=""></span>
+        <span data-i18n="nav.bunker">Бункер</span>
       </button>
-      <button data-route="profile" class="nav-btn" type="button">
-        <span class="nav-icon"><img src="assets/nav/profile.webp" alt=""></span>
-        <small data-i18n="nav.profile"></small>
-      </button>
-      <button data-route="settings" class="nav-btn" type="button">
-        <span class="nav-icon"><img src="assets/nav/settings.webp" alt=""></span>
-        <small data-i18n="nav.settings"></small>
+      <button class="nav-button" type="button" data-route="settings" aria-disabled="true">
+        <span class="nav-button__icon"><img src="assets/nav/settings.webp" alt=""></span>
+        <span data-i18n="nav.settings">Налаштування</span>
       </button>
     </nav>
+
+    <section class="profile-modal" id="profileModal" hidden aria-modal="true" role="dialog" aria-labelledby="profileTitle">
+      <div class="profile-stage" id="profileStage">
+        <div class="profile-dialog">
+        <div class="profile-modal__top">
+          <div>
+            <span class="profile-modal__eyebrow" data-i18n="profile.eyebrow">ОСОБОВА СПРАВА</span>
+            <h2 id="profileTitle" data-i18n="profile.title">Профіль</h2>
+          </div>
+          <button class="profile-close" id="profileCloseButton" type="button" data-i18n-aria-label="profile.close">×</button>
+        </div>
+
+        <div class="profile-tabs">
+          <button class="profile-tab is-active" type="button" data-profile-tab="hero" data-i18n="profile.tabs.hero">Герой</button>
+          <button class="profile-tab" type="button" data-profile-tab="stats" data-i18n="profile.tabs.stats">Характеристики</button>
+          <button class="profile-tab" type="button" data-profile-tab="appearance" data-i18n="profile.tabs.appearance">Образ</button>
+        </div>
+
+        <div class="profile-content">
+          <section class="profile-panel is-active" data-profile-panel="hero">
+
+            <div class="equipment-layout">
+              <article class="equipment-slot slot-head" data-slot="head">
+                <span data-i18n="slots.head">Голова</span>
+                <div><img src="assets/equipment/placeholders-png/head.webp" alt=""></div>
+              </article>
+
+              <article class="equipment-slot slot-mask" data-slot="mask">
+                <span data-i18n="slots.mask">Маска</span>
+                <div><img src="assets/equipment/placeholders-png/mask.webp" alt=""></div>
+              </article>
+
+              <article class="equipment-slot slot-body" data-slot="body">
+                <span data-i18n="slots.body">Тіло</span>
+                <div><img src="assets/equipment/placeholders-png/body.webp" alt=""></div>
+              </article>
+
+              <article class="equipment-slot slot-cloak" data-slot="cloak">
+                <span data-i18n="slots.cloak">Плащ</span>
+                <div><img src="assets/equipment/placeholders-png/cloak.webp" alt=""></div>
+              </article>
+
+              <figure class="hero-frame">
+                <img src="assets/avatars/novice.webp" alt="" id="profileHeroImage">
+
+                <div class="hero-loadout-slots">
+                  <article class="equipment-slot" data-slot="melee">
+                    <span data-i18n="slots.melee">Ближня зброя</span>
+                    <div><img src="assets/equipment/items-png/melee.webp" alt=""></div>
+                  </article>
+
+                  <article class="equipment-slot slot-ranged" data-slot="ranged">
+                    <span data-i18n="slots.ranged">Дальня зброя</span>
+                    <div><img src="assets/equipment/items-png/ranged.webp" alt=""></div>
+                  </article>
+
+                  <article class="equipment-slot equipment-slot--ammo" data-slot="ammo">
+                    <span data-i18n="slots.ammo">Набої</span>
+                    <div>
+                      <img src="assets/inventory-items/item_ammo.webp" alt="">
+                      <b class="equipment-slot__count">×42</b>
+                    </div>
+                  </article>
+                </div>
+              </figure>
+
+              <article class="equipment-slot slot-pants" data-slot="pants">
+                <span data-i18n="slots.pants">Штани</span>
+                <div><img src="assets/equipment/placeholders-png/pants.webp" alt=""></div>
+              </article>
+
+              <article class="equipment-slot slot-boots" data-slot="boots">
+                <span data-i18n="slots.boots">Взуття</span>
+                <div><img src="assets/equipment/placeholders-png/boots.webp" alt=""></div>
+              </article>
+
+              <article class="equipment-slot slot-talisman" data-slot="talisman">
+                <span data-i18n="slots.talisman">Талісман</span>
+                <div class="equipment-slot__empty" aria-hidden="true"><span>◇</span></div>
+              </article>
+
+              <article class="equipment-slot slot-artifact" data-slot="artifact">
+                <span data-i18n="slots.artifact">Артефакт</span>
+                <div class="equipment-slot__empty" aria-hidden="true"><span>◈</span></div>
+              </article>
+
+              <article class="equipment-slot slot-gloves" data-slot="gloves">
+                <span data-i18n="slots.gloves">Рукавиці</span>
+                <div><img src="assets/equipment/placeholders-png/gloves.webp" alt=""></div>
+              </article>
+
+              <article class="equipment-slot slot-dosimeter" data-slot="dosimeter">
+                <span data-i18n="slots.dosimeter">Дозиметр</span>
+                <div><img src="assets/equipment/placeholders-png/dosimeter.webp" alt=""></div>
+              </article>
+            </div>
+
+            <section class="profile-summary" aria-labelledby="profileSummaryTitle">
+              <div class="profile-summary__title-row">
+                <h3 id="profileSummaryTitle" data-i18n="profile.summary.title">Зведення характеристик</h3>
+              </div>
+              <div class="profile-summary__grid" id="profileSummaryGrid"></div>
+            </section>
+          </section>
+
+          <section class="profile-panel" data-profile-panel="stats" hidden>
+            <div class="stats-grid" id="profileStatsGrid"></div>
+          </section>
+
+          <section class="profile-panel" data-profile-panel="appearance" hidden>
+            <div class="future-panel">
+              <img src="assets/avatars/stalker.webp" alt="">
+              <div>
+                <span class="screen-kicker" data-i18n="profile.appearanceKicker">МАЙБУТНІЙ ЕТАП</span>
+                <h3 data-i18n="profile.appearanceTitle">Образ персонажа</h3>
+                <p data-i18n="profile.appearanceText">Тут буде вибір зовнішності героя. Зараз функціонал навмисно не підключений.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <template id="worldTpl">
-    <section class="zone-map-screen">
-      <div class="zone-map-header">
-        <div>
-          <div class="eyebrow" data-i18n="world.eyebrow"></div>
-          <h1 data-i18n="world.title"></h1>
-        </div>
-        <div class="zone-map-time"><span data-i18n="world.day"></span> 17 · 08:34 · +16°C</div>
-      </div>
-
-      <div class="zone-map-layout">
-        <div class="zone-map-main">
-          <div class="zone-map-scroll" id="zoneMapScroll">
-            <div id="worldMap" class="zone-map-art">
-              <svg class="zone-routes" viewBox="0 0 1000 1500" preserveAspectRatio="none" aria-hidden="true"></svg>
-            </div>
-          </div>
-
-          <div class="zone-map-legend">
-            <div><i class="legend-dot current"></i><span data-i18n="world.currentLocation"></span></div>
-            <div><i class="legend-dot available"></i><span data-i18n="world.availableLocation"></span></div>
-            <div><i class="legend-dot locked"></i><span data-i18n="world.lockedLocation"></span></div>
-          </div>
-        </div>
-
-        <aside id="mapDetails" class="map-details story-quests-panel"></aside>
-      </div>
-    </section>
-  </template>
-
-  <template id="storyLocationTpl">
-    <section class="story-location-screen">
-      <header class="story-location-head">
-        <div>
-          <div class="eyebrow" data-i18n="storyUi.locationEyebrow"></div>
-          <h1 id="storyLocationTitle"></h1>
-          <p id="storyLocationDescription"></p>
-        </div>
-        <button id="storyLocationBack" class="story-location-back" type="button">← <span data-i18n="storyUi.backToMap"></span></button>
-      </header>
-
-      <div class="story-location-layout">
-        <section class="story-scene-panel">
-          <div id="storyScene" class="story-scene">
-            <img id="storySceneImage" alt="">
-            <div id="storyInteractionLayer" class="story-interaction-layer"></div>
-            <button id="storySceneBack" class="story-scene-back" type="button" hidden>← <span data-i18n="storyUi.back"></span></button>
-            <div class="story-scene-vignette"></div>
-          </div>
-          <div class="story-scene-copy">
-            <div class="story-scene-copy-main">
-              <span class="story-scene-kicker" data-i18n="storyUi.currentScene"></span>
-              <h2 id="storySceneTitle"></h2>
-              <p id="storySceneHint"></p>
-            </div>
-            <div class="story-scene-tools">
-              <button id="storyReplayIntroBtn" class="story-replay-intro" type="button" hidden data-i18n="storyIntro.ui.replay"></button>
-              <div class="story-location-progress"><b id="storyProgressCount">0/1</b><span data-i18n="storyUi.targets"></span></div>
-            </div>
-          </div>
-          <div class="story-event-row">
-            <div id="storyEvent" class="story-event" data-i18n="storyUi.inspectScene"></div>
-            <button id="storyContinueBtn" class="story-continue-btn" type="button" hidden><span data-i18n="storyUi.continue"></span> →</button>
-          </div>
-        </section>
-
-        <aside class="story-mission-panel">
-          <div class="story-mission-top">
-            <span data-i18n="storyUi.currentQuest"></span>
-            <b id="storyMissionStatus">0/1</b>
-          </div>
-          <h2 id="storyMissionTitle"></h2>
-          <p id="storyMissionText"></p>
-          <div class="story-mission-objective"><span data-i18n="storyUi.objective"></span><b id="storyMissionObjective"></b></div>
-          <div class="story-mission-objective"><span data-i18n="storyUi.reward"></span><b id="storyMissionReward"></b></div>
-          <div id="storyMissionChecklist" class="story-mission-checklist"></div>
-          <button id="storyClaimBtn" class="story-claim-btn" type="button" hidden data-i18n="storyUi.claimQuest"></button>
-          <div id="storyClaimedNote" class="story-claimed-note" hidden>✓ <span data-i18n="storyUi.rewardReceived"></span></div>
-        </aside>
-      </div>
-
-      <div id="storyIntroModal" class="story-intro-modal" hidden aria-modal="true" role="dialog" aria-labelledby="storyIntroTitle">
-        <div class="story-intro-card">
-          <div class="story-intro-topline">
-            <span id="storyIntroKicker" class="story-intro-kicker"></span>
-            <span id="storyIntroProgress" class="story-intro-progress"></span>
-          </div>
-          <h2 id="storyIntroTitle"></h2>
-          <div class="story-intro-divider"></div>
-          <p id="storyIntroText" class="story-intro-text"></p>
-          <div class="story-intro-actions">
-            <button id="storyIntroNext" class="story-intro-next" type="button"></button>
-          </div>
-        </div>
-      </div>
-
-
-      <div id="storyBattleNarrativeModal" class="story-intro-modal story-battle-narrative-modal" hidden aria-modal="true" role="dialog" aria-labelledby="storyBattleNarrativeTitle">
-        <div class="story-intro-card story-battle-narrative-card">
-          <div class="story-intro-topline">
-            <span id="storyBattleNarrativeKicker" class="story-intro-kicker"></span>
-            <span id="storyBattleNarrativeProgress" class="story-intro-progress"></span>
-          </div>
-          <h2 id="storyBattleNarrativeTitle"></h2>
-          <div class="story-intro-divider"></div>
-          <p id="storyBattleNarrativeText" class="story-intro-text"></p>
-          <div class="story-intro-actions">
-            <button id="storyBattleNarrativeNext" class="story-intro-next" type="button"></button>
-          </div>
-        </div>
-      </div>
-
-      <div id="storyItemModal" class="story-item-modal" hidden>
-        <div class="story-item-card">
-          <span class="story-item-kicker" data-i18n="storyUi.found"></span>
-          <div id="storyItemIcon" class="story-item-icon"></div>
-          <h2 id="storyItemTitle"></h2>
-          <p id="storyItemDescription"></p>
-          <div id="storyItemMeta" class="story-item-meta"></div>
-          <div class="story-item-actions">
-            <button id="storyItemEquip" class="story-item-equip" type="button" hidden data-i18n="storyUi.equip"></button>
-            <button id="storyItemClose" class="story-item-close" type="button" data-i18n="storyUi.continue"></button>
-          </div>
-        </div>
-      </div>
-
-      <div id="storyRewardModal" class="story-reward-modal" hidden>
-        <div class="story-reward-card">
-          <span class="story-reward-kicker" data-i18n="storyUi.questCompleted"></span>
-          <h2 id="storyRewardTitle"></h2>
-          <p data-i18n="storyUi.rewardAdded"></p>
-          <div id="storyRewardItems" class="story-reward-items"></div>
-          <button id="storyRewardClose" class="story-reward-close" type="button" data-i18n="storyUi.continue"></button>
-        </div>
-      </div>
-    </section>
-  </template>
-
-  <template id="inventoryTpl">
-    <section class="inventory-screen">
-      <header class="inventory-head">
-        <div>
-          <div class="eyebrow" data-i18n="inventory.eyebrow"></div>
-          <h1 data-i18n="inventory.title"></h1>
-        </div>
-
-        <div class="inventory-tools">
-          <label class="inventory-search">
-            <span>⌕</span>
-            <input id="inventorySearch" type="search" data-i18n-placeholder="inventory.searchPlaceholder" autocomplete="off">
-          </label>
-          <button id="inventorySort" class="inventory-tool-btn" type="button">
-            <span>⇅</span>
-            <span data-i18n="inventory.sort"></span>
-          </button>
-        </div>
-      </header>
-
-      <nav id="inventoryCategories" class="inventory-categories" aria-label="Inventory categories"></nav>
-
-      <div class="inventory-layout">
-        <section class="inventory-bag">
-          <div class="inventory-section-title">
-            <div>
-              <span id="inventoryCategoryIcon">🥫</span>
-              <strong id="inventoryCategoryTitle"></strong>
-            </div>
-            <small><span id="inventoryVisibleCount">0</span> <span data-i18n="inventory.itemsCount"></span></small>
-          </div>
-
-          <div id="inventoryGrid" class="inventory-grid"></div>
-
-          <footer class="inventory-bag-footer">
-            <div class="inventory-weight-copy">
-              <span data-i18n="inventory.backpackWeight"></span>
-              <strong><span id="inventoryWeight"></span> / <span id="inventoryMaxWeight">40</span> <span data-i18n="units.kg"></span></strong>
-            </div>
-            <div class="inventory-weight-track">
-              <i id="inventoryWeightBar"></i>
-            </div>
-            <div class="inventory-money">₴ <b id="inventoryMoney"></b></div>
-          </footer>
-        </section>
-
-        <aside id="inventoryDetails" class="inventory-details">
-          <div class="inventory-empty-detail">
-            <div class="inventory-empty-icon">🎒</div>
-            <h2 data-i18n="inventory.selectItem"></h2>
-            <p data-i18n="inventory.selectItemHint"></p>
-          </div>
-        </aside>
-      </div>
-    </section>
-  </template>
-
-  <template id="expeditionsTpl">
-    <section class="panel expeditions-panel">
-      <div class="expeditions-heading">
-        <div>
-          <span class="eyebrow" data-i18n="expeditions.eyebrow"></span>
-          <h1 data-i18n="expeditions.title"></h1>
-          <p data-i18n="expeditions.description"></p>
-        </div>
-
-        <div class="expedition-level-badge">
-          <small data-i18n="expeditions.currentLevel"></small>
-          <b id="expeditionLevel">1</b>
-        </div>
-      </div>
-
-      <div class="expedition-level-selector-wrap">
-        <div>
-          <span data-i18n="expeditions.chooseLevel"></span>
-          <small data-i18n="expeditions.chooseLevelHint"></small>
-        </div>
-        <div id="expeditionLevelSelector" class="expedition-level-selector"></div>
-      </div>
-
-      <div class="expedition-summary">
-        <div><span data-i18n="expeditions.levelProgress"></span><b id="expeditionProgress">0/7</b></div>
-        <div><span data-i18n="expeditions.currentPower"></span><b>⚡ <i id="expeditionPower">0</i></b></div>
-        <div><span data-i18n="expeditions.totalRuns"></span><b id="expeditionRuns">0</b></div>
-      </div>
-
-      <div id="expeditionGrid" class="expedition-grid"></div>
-    </section>
-  </template>
-
-  <template id="questsTpl">
-    <section class="panel">
-      <div class="title-row">
-        <div><div class="eyebrow" data-i18n="quests.eyebrow"></div><h1 data-i18n="quests.title"></h1></div>
-      </div>
-      <div id="questList" class="quest-list"></div>
-    </section>
-  </template>
-  <template id="tradePostTpl">
-    <section class="panel trade-post-panel">
-      <div class="trade-post-heading">
-        <div>
-          <span class="eyebrow" data-i18n="tradePost.eyebrow"></span>
-          <h1 data-i18n="tradePost.title"></h1>
-          <p data-i18n="tradePost.description"></p>
-        </div>
-        <div class="trade-post-money">₴ <b id="tradePostMoney"></b></div>
-      </div>
-
-      <div class="trade-tabs" role="tablist">
-        <button class="trade-tab active" data-trade-tab="storage" type="button" data-i18n="tradePost.tabs.storage"></button>
-        <button class="trade-tab" data-trade-tab="recovery" type="button" data-i18n="tradePost.tabs.recovery"></button>
-        <button class="trade-tab" data-trade-tab="craft" type="button" data-i18n="tradePost.tabs.craft"></button>
-        <button class="trade-tab" data-trade-tab="shop" type="button" data-i18n="tradePost.tabs.shop"></button>
-        <button class="trade-tab" data-trade-tab="contracts" type="button" data-i18n="tradePost.tabs.contracts"></button>
-        <button class="trade-tab" data-trade-tab="auction" type="button" data-i18n="tradePost.tabs.auction"></button>
-      </div>
-
-      <div id="tradePostContent"></div>
-    </section>
-  </template>
-
-  <template id="profileTpl">
-    <section class="panel profile-panel">
-      <div class="profile-topline">
-        <div class="profile-tabs" role="tablist" data-i18n-aria-label="profile.title">
-          <button class="profile-tab" data-profile-tab="profile" type="button" data-i18n="profile.title"></button>
-          <button class="profile-tab" data-profile-tab="statistics" type="button" data-i18n="profile.statistics"></button>
-          <button class="profile-tab" data-profile-tab="achievements" type="button" data-i18n="profile.achievements"></button>
-          <button class="profile-tab" data-profile-tab="avatars" type="button" data-i18n="profile.avatarsTab"></button>
-        </div>
-        <div class="profile-identity">
-          <strong id="profileNickname"></strong>
-          <span><span data-i18n="profile.level"></span> <b id="profileLevel">1</b></span>
-          <span class="profile-identity-power">⚡ <span data-i18n="profile.combatPower"></span> <b id="profileTopPower">0</b></span>
-        </div>
-      </div>
-
-      <section class="profile-tab-panel" data-profile-panel="profile">
-        <div class="profile-game-layout">
-          <div class="profile-main-column">
-            <div class="profile-equipment-layout">
-              <div id="equipmentSlotsLeft" class="profile-slot-column"></div>
-
-              <div class="profile-character-stage">
-                <div class="profile-character-frame">
-                  <img id="profileCharacterBase" class="profile-character-base" src="assets/avatars/novice.webp" alt="">
-                </div>
-              </div>
-
-              <div id="equipmentSlotsRight" class="profile-slot-column"></div>
-            </div>
-
-            <section class="profile-stats-panel profile-stats-below-character">
-              <h2 data-i18n="profile.statsTitle"></h2>
-              <div id="profileStats" class="profile-stat-list"></div>
-              <div id="profileEquipmentSummary" class="profile-equipment-summary"></div>
-            </section>
-          </div>
-
-          <aside class="profile-side-column">
-            <section class="profile-owned-panel profile-bag-panel">
-              <div class="profile-owned-head">
-                <div>
-                  <h2 data-i18n="profile.bagTitle"></h2>
-                  <span id="profileBagCount"></span>
-                </div>
-              </div>
-              <div class="profile-bag-tabs" role="tablist" data-i18n-aria-label="profile.bagTitle">
-                <button class="profile-bag-tab active" data-profile-bag-tab="items" type="button" data-i18n="profile.bagItems"></button>
-                <button class="profile-bag-tab" data-profile-bag-tab="resources" type="button" data-i18n="profile.bagResources"></button>
-              </div>
-              <div id="profileOwnedGear" class="inventory-grid profile-bag-grid"></div>
-              <div id="profileBagPager" class="profile-bag-pager" hidden></div>
-            </section>
-          </aside>
-        </div>
-
-        <div id="profileItemPopoverHost" class="profile-item-popover-host"></div>
-      </section>
-
-      <section class="profile-tab-panel" data-profile-panel="statistics" hidden>
-        <div class="profile-section-heading">
-          <div><h2 data-i18n="profile.statistics"></h2><p data-i18n="profile.statisticsHint"></p></div>
-        </div>
-        <div id="profileStatisticsGrid" class="profile-statistics-grid"></div>
-      </section>
-
-      <section class="profile-tab-panel" data-profile-panel="achievements" hidden>
-        <div class="profile-section-heading">
-          <div><h2 data-i18n="profile.achievements"></h2><p data-i18n="profile.achievementsHint"></p></div>
-        </div>
-        <div id="profileAchievementsGrid" class="profile-achievements-grid"></div>
-      </section>
-
-      <section class="profile-tab-panel" data-profile-panel="avatars" hidden>
-        <div class="profile-avatar-panel profile-avatar-panel-tab">
-          <div class="profile-avatar-head">
-            <div><h2 data-i18n="profile.avatarTitle"></h2><p data-i18n="profile.avatarHint"></p></div>
-            <strong id="profileAvatarUnlocked"></strong>
-          </div>
-          <div id="profileAvatarGrid" class="profile-avatar-grid"></div>
-        </div>
-      </section>
-    </section>
-  </template>
-
-  <div id="toast" class="toast"></div>
-
-  <template id="settingsTpl">
-    <section class="panel settings-panel settings-v2">
-      <div class="settings-heading settings-hero-heading">
-        <div>
-          <span class="eyebrow" data-i18n="settings.eyebrow"></span>
-          <h1 data-i18n="settings.title"></h1>
-          <p data-i18n="settings.description"></p>
-        </div>
-        <button id="settingsMainMenuTop" class="settings-main-menu compact" type="button">
-          ← <span data-i18n="settings.mainMenu"></span>
-        </button>
-      </div>
-
-      <div class="settings-dashboard">
-        <section class="settings-card settings-language-card">
-          <div class="settings-card-icon">文</div>
-          <div class="settings-card-copy">
-            <h2 data-i18n="settings.languageTitle"></h2>
-            <p data-i18n="settings.languageHint"></p>
-
-            <div class="language-picker" id="languagePicker">
-              <button id="languagePickerButton" class="language-picker-button" type="button" aria-expanded="false">
-                <span>
-                  <b id="languageCurrentName"></b>
-                  <small id="languageCurrentCode"></small>
-                </span>
-                <i>⌄</i>
-              </button>
-
-              <div id="languagePickerMenu" class="language-picker-menu" hidden>
-                <button class="language-option" data-language="uk" type="button">
-                  <span class="language-flag">UA</span>
-                  <span><b data-i18n="settings.languages.uk"></b><small data-i18n="settings.languageAvailable"></small></span>
-                  <i>✓</i>
-                </button>
-                <button class="language-option active" data-language="en" type="button">
-                  <span class="language-flag">EN</span>
-                  <span><b data-i18n="settings.languages.en"></b><small data-i18n="settings.languageAvailable"></small></span>
-                  <i>—</i>
-                </button>
-                <button class="language-option" data-language="ru" type="button">
-                  <span class="language-flag">RU</span>
-                  <span><b data-i18n="settings.languages.ru"></b><small data-i18n="settings.languageAvailable"></small></span>
-                  <i>—</i>
-                </button>
-                <button class="language-option" data-language="ja" type="button">
-                  <span class="language-flag">JP</span>
-                  <span><b data-i18n="settings.languages.ja"></b><small data-i18n="settings.languageAvailable"></small></span>
-                  <i>—</i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="settings-card settings-saves-card">
-          <div class="settings-section-head">
-            <div>
-              <h2 data-i18n="settings.saves.title"></h2>
-              <p data-i18n="settings.saves.hint"></p>
-            </div>
-            <div class="save-slot-counter"><b id="saveSlotCount">0</b>/5</div>
-          </div>
-
-          <div id="settingsActiveHeroBar" class="settings-active-hero-bar" hidden></div>
-          <div id="saveSlotList" class="save-slot-list"></div>
-
-          <button id="settingsNewHero" class="settings-new-hero" type="button">
-            <span>＋</span>
-            <div>
-              <b data-i18n="settings.saves.newHero"></b>
-              <small data-i18n="settings.saves.newHeroHint"></small>
-            </div>
-          </button>
-
-          <div class="settings-backup-actions">
-            <button id="settingsExportSaves" type="button"><b data-i18n="settings.backup.export"></b><small data-i18n="settings.backup.exportHint"></small></button>
-            <button id="settingsImportSaves" type="button"><b data-i18n="settings.backup.import"></b><small data-i18n="settings.backup.importHint"></small></button>
-            <input id="settingsImportFile" type="file" accept="application/json,.json" hidden>
-          </div>
-        </section>
-
-        <section class="settings-card settings-preferences-card">
-          <h2 data-i18n="settings.interface.title"></h2>
-          <p data-i18n="settings.interface.hint"></p>
-          <div class="settings-choice-row">
-            <span data-i18n="settings.interface.textSize"></span>
-            <div class="settings-segmented" id="settingsTextSize">
-              <button data-text-size="normal" type="button" data-i18n="settings.interface.normal"></button>
-              <button data-text-size="large" type="button" data-i18n="settings.interface.large"></button>
-            </div>
-          </div>
-          <div class="settings-choice-row">
-            <span><b data-i18n="settings.interface.reducedMotion"></b><small data-i18n="settings.interface.reducedMotionHint"></small></span>
-            <button id="settingsReducedMotion" class="settings-toggle" type="button" role="switch" aria-checked="false"><i></i></button>
-          </div>
-          <button id="settingsResetPreferences" class="settings-reset-preferences" type="button" data-i18n="settings.interface.reset"></button>
-        </section>
-
-        <section class="settings-card settings-link-card">
-          <button class="settings-link-button" id="settingsFaqButton" type="button">
-            <span class="settings-link-icon">?</span>
-            <span><b data-i18n="settings.faq.title"></b><small data-i18n="settings.faq.hint"></small></span>
-            <i>›</i>
-          </button>
-
-          <button class="settings-link-button" id="settingsAboutButton" type="button">
-            <span class="settings-link-icon">i</span>
-            <span><b data-i18n="settings.about.title"></b><small data-i18n="settings.about.hint"></small></span>
-            <i>›</i>
-          </button>
-        </section>
-
-        <section class="settings-card settings-system-card">
-          <h2 data-i18n="settings.systemTitle"></h2>
-          <div class="settings-status-row">
-            <span data-i18n="settings.autosave"></span>
-            <strong data-i18n="settings.enabled"></strong>
-          </div>
-          <div class="settings-status-row">
-            <span data-i18n="settings.saveLimit"></span>
-            <strong>5</strong>
-          </div>
-          <div class="settings-status-row">
-            <span data-i18n="settings.version"></span>
-            <strong id="settingsVersion"></strong>
-          </div>
-        </section>
-      </div>
-
-      <div id="settingsOverlay" class="settings-overlay" hidden>
-        <div class="settings-modal" role="dialog" aria-modal="true">
-          <button id="settingsModalClose" class="settings-modal-close" type="button">×</button>
-          <div id="settingsModalContent"></div>
-        </div>
-      </div>
-    </section>
-  </template>
-
-  <script src="i18n/core.js"></script>
-  <script src="i18n/uk/ui.js"></script>
-  <script src="i18n/uk/gameplay.js"></script>
-  <script src="i18n/uk/story.js?v=0.62"></script>
-  <script src="i18n/uk/items.js"></script>
-  <script src="i18n/en/ui.js"></script>
-  <script src="i18n/en/gameplay.js"></script>
-  <script src="i18n/en/story.js?v=0.62"></script>
-  <script src="i18n/en/items.js"></script>
-  <script src="i18n/ru/ui.js"></script>
-  <script src="i18n/ru/gameplay.js"></script>
-  <script src="i18n/ru/story.js?v=0.62"></script>
-  <script src="i18n/ru/items.js"></script>
-  <script src="i18n/ja/ui.js"></script>
-  <script src="i18n/ja/gameplay.js"></script>
-  <script src="i18n/ja/story.js?v=0.62"></script>
-  <script src="i18n/ja/items.js"></script>
-  <script src="game-data.js?v=0.62"></script>
-  <script src="js/state.js?v=0.62"></script>
-  <script src="js/preferences.js"></script>
-  <script src="js/progression.js"></script>
-  <script src="js/stats.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/story/locations/dytiatky.js"></script>
-  <script src="js/story/locations/pripyat.js"></script>
-  <script src="js/story/locations/redforest.js"></script>
-  <script src="js/story/locations/yaniv.js"></script>
-  <script src="js/story/locations/chnpp.js"></script>
-  <script src="js/game.js"></script>
-  <script src="js/story/battle-narratives.js"></script>
-  <script src="js/inventory.js"></script>
-  <script src="js/equipment.js"></script>
-  <script src="js/survival.js?v=0.62"></script>
-  <script src="js/avatars.js"></script>
-  <script src="js/tradepost.js"></script>
-  <script src="js/bunker/salvage.js"></script>
-  <script src="js/bunker/contracts.js"></script>
-  <script src="js/expeditions.js?v=0.62"></script>
-  <script src="js/expeditions/rewards.js?v=0.62"></script>
-  <script src="js/daily.js"></script>
-  <script src="js/recovery.js"></script>
-  <script src="js/profile.js"></script>
-  <script src="js/screens.js?v=0.62"></script>
-  <script src="js/app.js"></script>
-
-
-
-</body>
+  <script src="i18n/uk.js" defer></script>
+  <script src="i18n/core.js" defer></script>
+  <script src="js/core/state.js" defer></script>
+  <script src="js/ui/hud.js" defer></script>
+  <script src="js/ui/profile-modal.js" defer></script>
+  <script src="js/ui/navigation.js" defer></script>
+  <script src="js/core/app.js" defer></script></body>
 </html>
