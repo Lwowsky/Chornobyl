@@ -336,19 +336,59 @@
 }
 
 
-.hub-hotspot--rest-room .hub-hotspot__label {
-  border-color: rgba(153, 204, 244, 0.38);
-  color: #d7e9ff;
-}
 
-.hub-hotspot--rest-room .hub-hotspot__icon {
+.bar-hotspot-label--rest-room .hub-hotspot__icon {
   color: #9cd6ff;
 }
 
 
-.hub-hotspot--rest-room:hover .hub-hotspot__label,
-.hub-hotspot--rest-room:focus-visible .hub-hotspot__label,
-.hub-hotspot--rest-room.is-active .hub-hotspot__label {
+
+
+.bar-hotspot-label--casino-room .hub-hotspot__icon {
+  color: #8ff16c;
+}
+
+
+
+
+
+.bar-hotspot-label-layer {
+  position: absolute;
+  z-index: 18;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bar-hotspot-label {
+  top: 14px;
+  left: 0;
+  opacity: 0;
+  transform: translateX(-50%);
+  transition:
+    left 70ms linear,
+    opacity 120ms ease,
+    color var(--transition-fast),
+    border-color var(--transition-fast),
+    background var(--transition-fast),
+    box-shadow var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.bar-hotspot-label.is-visible {
+  opacity: 1;
+}
+
+.bar-hotspot-label.is-highlighted {
+  transform: translateX(-50%) scale(1.045);
+}
+
+.bar-hotspot-label--rest-room {
+  border-color: rgba(153, 204, 244, 0.38);
+  color: #d7e9ff;
+}
+
+.bar-hotspot-label--rest-room.is-highlighted {
   color: #ebf6ff;
   border-color: rgba(153, 204, 244, 0.74);
   background: linear-gradient(180deg, rgba(23, 42, 60, 0.92), rgba(9, 15, 20, 0.92));
@@ -357,19 +397,21 @@
     0 0 18px rgba(130, 192, 255, 0.14);
 }
 
-.hub-hotspot--casino-room .hub-hotspot__label {
+.bar-hotspot-label--bar-room.is-highlighted {
+  color: #fff0ad;
+  border-color: rgba(235, 195, 76, 0.72);
+  background: linear-gradient(180deg, rgba(48, 37, 12, 0.94), rgba(13, 11, 7, 0.92));
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.38),
+    0 0 18px rgba(242, 191, 69, 0.15);
+}
+
+.bar-hotspot-label--casino-room {
   border-color: rgba(111, 223, 120, 0.42);
   color: #d6ffbe;
 }
 
-.hub-hotspot--casino-room .hub-hotspot__icon {
-  color: #8ff16c;
-}
-
-
-.hub-hotspot--casino-room:hover .hub-hotspot__label,
-.hub-hotspot--casino-room:focus-visible .hub-hotspot__label,
-.hub-hotspot--casino-room.is-active .hub-hotspot__label {
+.bar-hotspot-label--casino-room.is-highlighted {
   color: #f0ffdc;
   border-color: rgba(134, 233, 114, 0.74);
   background: linear-gradient(180deg, rgba(25, 49, 14, 0.92), rgba(9, 18, 7, 0.92));
@@ -377,7 +419,6 @@
     0 7px 18px rgba(0, 0, 0, 0.38),
     0 0 18px rgba(108, 214, 85, 0.14);
 }
-
 
 /* Bar / Casino local hover glow — one canonical rule set */
 .bar-stage .hub-hotspot {
@@ -387,11 +428,6 @@
   overflow: visible;
 }
 
-.bar-stage .hub-hotspot__label {
-  left: var(--label-x, 50%);
-  top: var(--label-y, 16%);
-  transform: translate(-50%, -50%);
-}
 
 .bar-stage .hub-hotspot::before {
   content: "";
@@ -424,11 +460,6 @@
   filter: blur(0);
 }
 
-.bar-stage .hub-hotspot:hover .hub-hotspot__label,
-.bar-stage .hub-hotspot:focus-visible .hub-hotspot__label,
-.bar-stage .hub-hotspot.is-active .hub-hotspot__label {
-  transform: translate(-50%, -50%) scale(1.045);
-}
 
 .bar-stage .hub-hotspot--rest-room {
   --spot-glow-core: rgba(113, 192, 255, 0.22);
@@ -444,6 +475,46 @@
 
 .bar-stage.is-panning .hub-hotspot::before {
   opacity: 0;
+}
+
+
+.bar-pan-edge {
+  position: absolute;
+  z-index: 17;
+  top: 50%;
+  width: 30px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(216, 167, 51, 0.26);
+  border-radius: 9px;
+  color: rgba(242, 191, 69, 0.92);
+  background: linear-gradient(180deg, rgba(16, 18, 13, 0.82), rgba(6, 8, 6, 0.74));
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.30), 0 0 14px rgba(242, 191, 69, 0.08);
+  opacity: 0;
+  transform: translateY(-50%) scale(0.94);
+  transition: opacity 160ms ease, transform 160ms ease;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.bar-pan-edge--left {
+  left: 8px;
+}
+
+.bar-pan-edge--right {
+  right: 8px;
+}
+
+.bar-pan-edge.is-visible {
+  opacity: 0.78;
+  transform: translateY(-50%) scale(1);
+}
+
+.bar-stage.is-panning .bar-pan-edge {
+  opacity: 0.28;
 }
 
 .map-pan-hint {

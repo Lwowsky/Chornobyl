@@ -48,11 +48,11 @@
     aspect-ratio: auto;
   }
 
-  .bar-stage .hub-hotspot__label {
+  .bar-hotspot-label {
     padding: 4px 6px;
   }
 
-  .bar-stage .hub-hotspot__label span {
+  .bar-hotspot-label span {
     font-size: clamp(6px, 1.8vw, 8px);
   }
 

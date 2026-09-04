@@ -225,20 +225,29 @@
             <div class="hub-stage__shade" aria-hidden="true"></div>
 
             <button class="hub-hotspot hub-hotspot--rest-room" type="button" data-bar-point="restRoom" data-i18n-aria-label="barCasinoView.restRoom.title"
-              style="--x:0;--y:5;--w:31;--h:90;--label-x:58%;--label-y:18%;--glow-x:56%;--glow-y:52%;--glow-w:78%;--glow-h:52%;">
-              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">☾</b><span data-i18n="barCasinoView.restRoom.title">Кімната відпочинку</span></span>
-            </button>
+              style="--x:0;--y:5;--w:31;--h:90;--label-x:58%;--glow-x:56%;--glow-y:52%;--glow-w:78%;--glow-h:52%;"></button>
 
             <button class="hub-hotspot hub-hotspot--bar-room" type="button" data-bar-point="barRoom" data-i18n-aria-label="barCasinoView.bar.title"
-              style="--x:30;--y:5;--w:41;--h:90;--label-x:50%;--label-y:16%;--glow-x:50%;--glow-y:50%;--glow-w:78%;--glow-h:54%;">
-              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">♨</b><span data-i18n="barCasinoView.bar.title">Бар</span></span>
-            </button>
+              style="--x:30;--y:5;--w:41;--h:90;--label-x:50%;--glow-x:50%;--glow-y:50%;--glow-w:78%;--glow-h:54%;"></button>
 
             <button class="hub-hotspot hub-hotspot--casino-room" type="button" data-bar-point="casinoRoom" data-i18n-aria-label="barCasinoView.casino.title"
-              style="--x:70;--y:5;--w:30;--h:90;--label-x:47%;--label-y:18%;--glow-x:48%;--glow-y:52%;--glow-w:84%;--glow-h:56%;">
-              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">♠</b><span data-i18n="barCasinoView.casino.title">Казино</span></span>
-            </button>
+              style="--x:70;--y:5;--w:30;--h:90;--label-x:47%;--glow-x:48%;--glow-y:52%;--glow-w:84%;--glow-h:56%;"></button>
           </div>
+
+          <div class="bar-hotspot-label-layer" aria-hidden="true">
+            <span class="hub-hotspot__label bar-hotspot-label bar-hotspot-label--rest-room" data-bar-label="restRoom">
+              <b class="hub-hotspot__icon">☾</b><span data-i18n="barCasinoView.restRoom.title">Кімната відпочинку</span>
+            </span>
+            <span class="hub-hotspot__label bar-hotspot-label bar-hotspot-label--bar-room" data-bar-label="barRoom">
+              <b class="hub-hotspot__icon">♨</b><span data-i18n="barCasinoView.bar.title">Бар</span>
+            </span>
+            <span class="hub-hotspot__label bar-hotspot-label bar-hotspot-label--casino-room" data-bar-label="casinoRoom">
+              <b class="hub-hotspot__icon">♠</b><span data-i18n="barCasinoView.casino.title">Казино</span>
+            </span>
+          </div>
+
+          <span class="bar-pan-edge bar-pan-edge--left" aria-hidden="true">‹</span>
+          <span class="bar-pan-edge bar-pan-edge--right" aria-hidden="true">›</span>
           <button class="map-pan-reset" id="barCasinoPanReset" type="button" data-i18n-aria-label="barCasinoView.resetView">⌾</button>
         </div>
       </section>
