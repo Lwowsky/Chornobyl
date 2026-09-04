@@ -127,6 +127,11 @@
 
     function onPointerDown(event) {
       if (!event.isPrimary || event.button > 0) return;
+
+      // Interactive controls must keep their native click target on desktop.
+      // Starting a drag on empty map space still pans normally.
+      if (event.target.closest("[data-hub-point], .map-pan-reset, .zone-map-back")) return;
+
       state.pointerId = event.pointerId;
       state.startPointerX = event.clientX;
       state.startPointerY = event.clientY;
