@@ -3,4 +3,5 @@ window.addEventListener("DOMContentLoaded", () => {
   window.GameHud.render();
   window.GameProfile.bind();
   window.GameNavigation.bind();
+  window.GameHub.bind();
 });

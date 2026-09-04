@@ -78,37 +78,152 @@
     </header>
 
     <main class="game-main" id="screen">
-      <section class="world-screen" aria-labelledby="worldTitle">
+      <section class="world-screen hub-screen" id="hubScreen" aria-labelledby="worldTitle">
         <header class="screen-header">
           <div>
-            <span class="screen-kicker" data-i18n="world.kicker">ПОТОЧНА ЛОКАЦІЯ</span>
-            <h1 id="worldTitle" data-i18n="world.title">Карта Зони</h1>
+            <span class="screen-kicker" data-i18n="world.kicker">БЕЗПЕЧНА ЛОКАЦІЯ</span>
+            <h1 id="worldTitle" data-i18n="world.title">Безпечна зона</h1>
           </div>
           <span class="screen-time" data-i18n="world.time">День 1 · 08:30</span>
         </header>
 
-        <div class="map-stage">
-          <img class="map-stage__image" src="assets/story-locations/prypiat-main-map.webp" alt="">
-          <div class="map-stage__shade" aria-hidden="true"></div>
+        <div class="hub-stage map-pan-viewport" id="hubStage" tabindex="0"
+          data-pan-width="2048" data-pan-height="1152"
+          data-pan-min-desktop="1500" data-pan-min-tablet="1280"
+          data-pan-min-mobile="1024" data-pan-min-small="880"
+          data-i18n-aria-label="hub.panAreaLabel">
+          <div class="hub-map-canvas map-pan-canvas" id="hubMapCanvas">
+            <img class="hub-stage__image" src="assets/hub/safe-zone-hub.webp" alt="" draggable="false">
+            <div class="hub-stage__shade" aria-hidden="true"></div>
 
-          <section class="location-card">
-            <span class="location-card__kicker" data-i18n="world.locationKicker">ЗОНА 02</span>
-            <h2 data-i18n="world.locationName">Прип’ять</h2>
-            <p data-i18n="world.locationDescription">Покинута частина міста. Карта тут тимчасова — механіку дослідження підключимо окремим етапом.</p>
-            <div class="location-card__meta">
-              <span><b data-i18n="world.threat">Небезпека:</b> <em data-i18n="world.threatMedium">середня</em></span>
-              <span><b data-i18n="world.progress">Прогрес:</b> 2/5</span>
-            </div>
-          </section>
+            <button class="hub-hotspot hub-hotspot--shop" type="button" data-hub-point="shop"
+              style="--x:11;--y:10;--w:25;--h:24;--bgw:400%;--bgh:416.667%;--bgx:14.667%;--bgy:13.158%;">
+              <span class="hub-hotspot__slice" aria-hidden="true"></span>
+              <span class="hub-hotspot__pulse" aria-hidden="true"></span>
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">▦</b><span data-i18n="hub.shop.title">Магазин</span></span>
+            </button>
 
-          <section class="objective-card">
-            <span data-i18n="world.objectiveKicker">ПОТОЧНЕ ЗАВДАННЯ</span>
-            <strong data-i18n="world.objectiveTitle">Дорога до ЧАЕС</strong>
-            <p data-i18n="world.objectiveText">Знайди ключ-карту від транспортного коридору.</p>
-          </section>
+            <button class="hub-hotspot hub-hotspot--hospital" type="button" data-hub-point="hospital"
+              style="--x:38;--y:5;--w:25;--h:23;--bgw:400%;--bgh:434.783%;--bgx:50.667%;--bgy:6.494%;">
+              <span class="hub-hotspot__slice" aria-hidden="true"></span>
+              <span class="hub-hotspot__pulse" aria-hidden="true"></span>
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">✚</b><span data-i18n="hub.hospital.title">Лікарня</span></span>
+            </button>
+
+            <button class="hub-hotspot hub-hotspot--workshop" type="button" data-hub-point="workshop"
+              style="--x:65;--y:10;--w:25;--h:25;--bgw:400%;--bgh:400%;--bgx:86.667%;--bgy:13.333%;">
+              <span class="hub-hotspot__slice" aria-hidden="true"></span>
+              <span class="hub-hotspot__pulse" aria-hidden="true"></span>
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">⚒</b><span data-i18n="hub.workshop.title">Майстерня</span></span>
+            </button>
+
+            <button class="hub-hotspot hub-hotspot--storage" type="button" data-hub-point="storage"
+              style="--x:4;--y:31;--w:25;--h:27;--bgw:400%;--bgh:370.37%;--bgx:5.333%;--bgy:42.466%;">
+              <span class="hub-hotspot__slice" aria-hidden="true"></span>
+              <span class="hub-hotspot__pulse" aria-hidden="true"></span>
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">▣</b><span data-i18n="hub.storage.title">Склад</span></span>
+            </button>
+
+            <button class="hub-hotspot hub-hotspot--arena" type="button" data-hub-point="arena"
+              style="--x:34;--y:28;--w:33;--h:31;--bgw:303.03%;--bgh:322.581%;--bgx:50.746%;--bgy:40.58%;">
+              <span class="hub-hotspot__slice" aria-hidden="true"></span>
+              <span class="hub-hotspot__pulse" aria-hidden="true"></span>
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">◎</b><span data-i18n="hub.arena.title">Арена</span></span>
+            </button>
+
+            <button class="hub-hotspot hub-hotspot--expeditions" type="button" data-hub-point="expeditions"
+              style="--x:67;--y:34;--w:27;--h:26;--bgw:370.37%;--bgh:384.615%;--bgx:91.781%;--bgy:45.946%;">
+              <span class="hub-hotspot__slice" aria-hidden="true"></span>
+              <span class="hub-hotspot__pulse" aria-hidden="true"></span>
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">▲</b><span data-i18n="hub.expeditions.title">Вилазки</span></span>
+            </button>
+
+            <button class="hub-hotspot hub-hotspot--quests" type="button" data-hub-point="questBoard"
+              style="--x:10;--y:58;--w:25;--h:24;--bgw:400%;--bgh:416.667%;--bgx:13.333%;--bgy:76.316%;">
+              <span class="hub-hotspot__slice" aria-hidden="true"></span>
+              <span class="hub-hotspot__pulse" aria-hidden="true"></span>
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">▤</b><span data-i18n="hub.questBoard.title">Дошка завдань</span></span>
+            </button>
+
+            <button class="hub-hotspot hub-hotspot--bar" type="button" data-hub-point="barCasino"
+              style="--x:34;--y:57;--w:34;--h:35;--bgw:294.118%;--bgh:285.714%;--bgx:51.515%;--bgy:87.692%;">
+              <span class="hub-hotspot__slice" aria-hidden="true"></span>
+              <span class="hub-hotspot__pulse" aria-hidden="true"></span>
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">♠</b><span data-i18n="hub.barCasino.title">Бар / Казино</span></span>
+            </button>
+
+            <button class="hub-hotspot hub-hotspot--cordon" type="button" data-hub-point="cordon"
+              style="--x:71;--y:57;--w:27;--h:39;--bgw:370.37%;--bgh:256.41%;--bgx:97.26%;--bgy:93.443%;">
+              <span class="hub-hotspot__slice" aria-hidden="true"></span>
+              <span class="hub-hotspot__pulse" aria-hidden="true"></span>
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">◉</b><span data-i18n="hub.cordon.title">Кордон</span></span>
+            </button>
+          </div>
+
+          <div class="map-pan-hint" id="hubPanHint" aria-hidden="true">
+            <span class="map-pan-hint__icon">↔</span>
+            <span data-i18n="hub.panHint">Перетягніть карту</span>
+          </div>
+          <button class="map-pan-reset" id="hubPanReset" type="button" data-i18n-aria-label="hub.resetView">⌾</button>
+
+          <aside class="hub-help" data-i18n-aria-label="hub.helpLabel">
+            <strong data-i18n="hub.safeTitle">БЕЗПЕЧНА ЗОНА</strong>
+            <span data-i18n="hub.safeText">Натисніть на об’єкт, щоб відкрити його. Лише Кордон веде на карту Зони.</span>
+          </aside>
+        </div>
+      </section>
+
+      <section class="zone-map-view" id="zoneMapView" hidden aria-labelledby="zoneMapTitle">
+        <header class="screen-header zone-map-view__header">
+          <div>
+            <span class="screen-kicker" data-i18n="zoneMap.kicker">ЗА КОРДОНОМ</span>
+            <h1 id="zoneMapTitle" data-i18n="zoneMap.title">Карта Зони</h1>
+          </div>
+          <button class="zone-map-back" id="zoneMapBack" type="button">
+            <span aria-hidden="true">←</span>
+            <span data-i18n="zoneMap.back">До безпечної зони</span>
+          </button>
+        </header>
+        <div class="zone-map-stage map-pan-viewport" id="zoneMapStage" tabindex="0"
+          data-pan-width="1024" data-pan-height="1536"
+          data-pan-min-desktop="900" data-pan-min-tablet="820"
+          data-pan-min-mobile="720" data-pan-min-small="650"
+          data-i18n-aria-label="zoneMap.panAreaLabel">
+          <div class="zone-map-canvas map-pan-canvas" id="zoneMapCanvas">
+            <img src="assets/maps/chernobyl-story-map.webp" alt="" draggable="false">
+            <div class="zone-map-stage__shade" aria-hidden="true"></div>
+          </div>
+          <div class="map-pan-hint map-pan-hint--zone" id="zonePanHint" aria-hidden="true">
+            <span class="map-pan-hint__icon">↔</span>
+            <span data-i18n="zoneMap.panHint">Перетягніть карту</span>
+          </div>
+          <button class="map-pan-reset" id="zonePanReset" type="button" data-i18n-aria-label="zoneMap.resetView">⌾</button>
+          <div class="zone-map-stage__note">
+            <strong data-i18n="zoneMap.prototypeTitle">Глобальна карта підключена</strong>
+            <span data-i18n="zoneMap.prototypeText">Наступним етапом тут розставимо реальні регіони, міста, села та квестові точки.</span>
+          </div>
         </div>
       </section>
     </main>
+
+    <section class="hub-modal" id="hubModal" hidden aria-modal="true" role="dialog" aria-labelledby="hubModalTitle">
+      <button class="hub-modal__backdrop" id="hubModalBackdrop" type="button" data-i18n-aria-label="hub.close"></button>
+      <div class="hub-modal__dialog">
+        <header class="hub-modal__header">
+          <div>
+            <span class="screen-kicker" data-i18n="hub.modalKicker">БЕЗПЕЧНА ЗОНА</span>
+            <h2 id="hubModalTitle"></h2>
+          </div>
+          <button class="hub-modal__close" id="hubModalClose" type="button" data-i18n-aria-label="hub.close">×</button>
+        </header>
+        <div class="hub-modal__body">
+          <p id="hubModalDescription"></p>
+          <div class="hub-modal__status">
+            <span data-i18n="hub.modalStatus">Функціонал точки буде підключено наступним етапом.</span>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <nav class="bottom-nav" aria-label="Основна навігація">
       <button class="nav-button is-active" type="button" data-route="world">
@@ -276,5 +391,6 @@
   <script src="js/ui/hud.js" defer></script>
   <script src="js/ui/profile-modal.js" defer></script>
   <script src="js/ui/navigation.js" defer></script>
+  <script src="js/ui/hub-map.js" defer></script>
   <script src="js/core/app.js" defer></script></body>
 </html>

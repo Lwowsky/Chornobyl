@@ -23,8 +23,6 @@
 
   .screen-header h1 { font-size: 21px; }
   .screen-time { font-size: 8px; }
-  .location-card { left: 9px; top: 9px; max-width: min(75%, 278px); }
-  .objective-card { left: 9px; right: 9px; bottom: 9px; }
 }
 
 @media (min-width: 430px) and (max-width: 699px) {

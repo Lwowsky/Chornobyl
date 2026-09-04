@@ -12,8 +12,7 @@
   .player-copy > strong { font-size: 14px; }
   .player-level-row { font-size: 9px; }
 
-  .resource-name,
-  .location-card p {
+  .resource-name {
     display: none;
   }
 
@@ -37,5 +36,4 @@
   .nav-button > span:last-child { font-size: 8px; }
   .screen-kicker { font-size: 8px; }
   .screen-header h1 { font-size: 19px; }
-  .location-card__meta { margin-top: 6px; }
 }
