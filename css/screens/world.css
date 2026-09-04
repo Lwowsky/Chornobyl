@@ -131,6 +131,11 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+.hub-stage.is-pointer-down .hub-hotspot,
+.hub-stage.is-panning .hub-hotspot {
+  cursor: grabbing;
+}
+
 .hub-hotspot__slice {
   position: absolute;
   z-index: -1;

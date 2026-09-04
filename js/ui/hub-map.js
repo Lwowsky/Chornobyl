@@ -117,6 +117,7 @@
       startX: 0,
       startY: 0,
       moved: false,
+      startedOnHotspot: false,
       suppressClickUntil: 0,
       hint: document.getElementById(hintId)
     };
@@ -128,9 +129,8 @@
     function onPointerDown(event) {
       if (!event.isPrimary || event.button > 0) return;
 
-      // Interactive controls must keep their native click target on desktop.
-      // Starting a drag on empty map space still pans normally.
-      if (event.target.closest("[data-hub-point], .map-pan-reset, .zone-map-back")) return;
+      // Reset/back are real UI controls and must never start map dragging.
+      if (event.target.closest(".map-pan-reset, .zone-map-back")) return;
 
       state.pointerId = event.pointerId;
       state.startPointerX = event.clientX;
@@ -138,7 +138,15 @@
       state.startX = state.x;
       state.startY = state.y;
       state.moved = false;
-      viewport.setPointerCapture?.(event.pointerId);
+      state.startedOnHotspot = Boolean(event.target.closest("[data-hub-point]"));
+
+      // Important: do not capture immediately when starting on a hotspot.
+      // This preserves a normal desktop click if the pointer does not move.
+      // Capture is enabled only after the drag threshold is crossed.
+      if (!state.startedOnHotspot) {
+        viewport.setPointerCapture?.(event.pointerId);
+      }
+
       viewport.classList.add("is-pointer-down");
     }
 
@@ -147,8 +155,15 @@
       const dx = event.clientX - state.startPointerX;
       const dy = event.clientY - state.startPointerY;
 
-      if (!state.moved && Math.hypot(dx, dy) >= 6) {
+      if (!state.moved && Math.hypot(dx, dy) >= 7) {
         state.moved = true;
+
+        // Once movement clearly becomes a pan, capture the pointer even if
+        // the gesture started directly on a building/hotspot.
+        if (!viewport.hasPointerCapture?.(event.pointerId)) {
+          viewport.setPointerCapture?.(event.pointerId);
+        }
+
         viewport.classList.add("is-panning");
         hideHint();
       }
@@ -165,9 +180,13 @@
       if (state.moved) {
         state.suppressClickUntil = performance.now() + 280;
       }
-      viewport.releasePointerCapture?.(event.pointerId);
+      if (viewport.hasPointerCapture?.(event.pointerId)) {
+        viewport.releasePointerCapture?.(event.pointerId);
+      }
+
       viewport.classList.remove("is-pointer-down", "is-panning");
       state.pointerId = null;
+      state.startedOnHotspot = false;
     }
 
     viewport.addEventListener("pointerdown", onPointerDown);
