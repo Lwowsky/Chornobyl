@@ -33,12 +33,11 @@
     const minX = Math.min(0, state.viewportWidth - state.canvasWidth);
 
     if (state.lockVerticalPan) {
-      const centeredY = (state.viewportHeight - state.canvasHeight) / 2;
       return {
         minX,
         maxX: 0,
-        minY: centeredY,
-        maxY: centeredY
+        minY: 0,
+        maxY: 0
       };
     }
 
@@ -52,50 +51,6 @@
 
   function syncBarStageUi(state) {
     if (state.viewport.id !== "barCasinoStage") return;
-
-    const viewportRect = state.viewport.getBoundingClientRect();
-
-    state.canvas.querySelectorAll("[data-bar-point]").forEach((hotspot) => {
-      const pointId = hotspot.dataset.barPoint;
-      const label = state.viewport.querySelector(`[data-bar-label="${pointId}"]`);
-      if (!label) return;
-
-      const hotspotRect = hotspot.getBoundingClientRect();
-      const labelXPercent = Number.parseFloat(
-        hotspot.style.getPropertyValue("--label-x")
-      ) || 50;
-
-      const labelCenterX =
-        hotspotRect.left - viewportRect.left +
-        hotspotRect.width * (labelXPercent / 100);
-
-      const sectorVisible =
-        hotspotRect.right > viewportRect.left &&
-        hotspotRect.left < viewportRect.right;
-
-      const centerVisible =
-        labelCenterX >= 0 &&
-        labelCenterX <= state.viewportWidth;
-
-      label.classList.toggle("is-visible", sectorVisible && centerVisible);
-
-      if (sectorVisible && centerVisible) {
-        const halfWidth = label.offsetWidth / 2;
-        const safeX = clamp(
-          labelCenterX,
-          halfWidth + 8,
-          state.viewportWidth - halfWidth - 8
-        );
-        label.style.left = `${Math.round(safeX)}px`;
-      }
-
-      label.classList.toggle(
-        "is-highlighted",
-        hotspot.classList.contains("is-active") ||
-        hotspot.matches(":hover") ||
-        document.activeElement === hotspot
-      );
-    });
 
     const bounds = getBounds(state);
     const hasHorizontalPan = state.canvasWidth > state.viewportWidth + 1;
@@ -359,9 +314,6 @@
     document.querySelectorAll(".hub-hotspot.is-active").forEach((node) => {
       node.classList.remove("is-active");
     });
-
-    const state = panSurfaces.get("barCasinoStage");
-    if (state) syncBarStageUi(state);
   }
 
   function closeModal() {
@@ -562,19 +514,7 @@
     });
 
     document.querySelectorAll("[data-bar-point]").forEach((button) => {
-      const syncLabels = () => {
-        const state = panSurfaces.get("barCasinoStage");
-        if (state) syncBarStageUi(state);
-      };
-
-      button.addEventListener("click", () => {
-        activateBarPoint(button);
-        syncLabels();
-      });
-      button.addEventListener("pointerenter", syncLabels);
-      button.addEventListener("pointerleave", syncLabels);
-      button.addEventListener("focus", syncLabels);
-      button.addEventListener("blur", syncLabels);
+      button.addEventListener("click", () => activateBarPoint(button));
     });
 
     document.querySelectorAll("[data-casino-game]").forEach((button) => {
