@@ -78,7 +78,7 @@
     </header>
 
     <main class="game-main" id="screen">
-      <section class="world-screen hub-screen" id="hubScreen" aria-labelledby="worldTitle">
+      <section class="world-screen hub-screen is-active" id="hubScreen" data-game-screen aria-labelledby="worldTitle" aria-hidden="false">
         <header class="screen-header">
           <div>
             <span class="screen-kicker" data-i18n="world.kicker">БЕЗПЕЧНА ЛОКАЦІЯ</span>
@@ -173,7 +173,7 @@
         </div>
       </section>
 
-      <section class="zone-map-view" id="zoneMapView" hidden aria-labelledby="zoneMapTitle">
+      <section class="zone-map-view" id="zoneMapView" data-game-screen aria-labelledby="zoneMapTitle" aria-hidden="true">
         <header class="screen-header zone-map-view__header">
           <div>
             <span class="screen-kicker" data-i18n="zoneMap.kicker">ЗА КОРДОНОМ</span>
@@ -204,6 +204,100 @@
           </div>
         </div>
       </section>
+
+      <section class="bar-casino-view" id="barCasinoView" data-game-screen aria-labelledby="barCasinoTitle" aria-hidden="true">
+        <header class="screen-header zone-map-view__header">
+          <div>
+            <span class="screen-kicker" data-i18n="barCasinoView.kicker">БЕЗПЕЧНА ЛОКАЦІЯ</span>
+            <h1 id="barCasinoTitle" data-i18n="barCasinoView.title">Бар / Казино</h1>
+          </div>
+          <button class="zone-map-back" id="barCasinoBack" type="button">
+            <span aria-hidden="true">←</span>
+            <span data-i18n="barCasinoView.back">До безпечної зони</span>
+          </button>
+        </header>
+
+        <div class="bar-stage map-pan-viewport" id="barCasinoStage" tabindex="0"
+          data-pan-width="1672" data-pan-height="941" data-pan-fit="width" data-pan-start="top"
+          data-i18n-aria-label="barCasinoView.panAreaLabel">
+          <div class="bar-map-canvas map-pan-canvas" id="barCasinoCanvas">
+            <img class="bar-stage__image" src="assets/hub/bar-casino-view.webp" alt="" draggable="false">
+            <div class="hub-stage__shade" aria-hidden="true"></div>
+
+            <button class="hub-hotspot hub-hotspot--rest-room" type="button" data-bar-point="restRoom" data-i18n-aria-label="barCasinoView.restRoom.title"
+              style="--x:0;--y:5;--w:31;--h:90;--label-x:58%;--label-y:18%;--glow-x:56%;--glow-y:52%;--glow-w:78%;--glow-h:52%;">
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">☾</b><span data-i18n="barCasinoView.restRoom.title">Кімната відпочинку</span></span>
+            </button>
+
+            <button class="hub-hotspot hub-hotspot--bar-room" type="button" data-bar-point="barRoom" data-i18n-aria-label="barCasinoView.bar.title"
+              style="--x:30;--y:5;--w:41;--h:90;--label-x:50%;--label-y:16%;--glow-x:50%;--glow-y:50%;--glow-w:78%;--glow-h:54%;">
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">♨</b><span data-i18n="barCasinoView.bar.title">Бар</span></span>
+            </button>
+
+            <button class="hub-hotspot hub-hotspot--casino-room" type="button" data-bar-point="casinoRoom" data-i18n-aria-label="barCasinoView.casino.title"
+              style="--x:70;--y:5;--w:30;--h:90;--label-x:47%;--label-y:18%;--glow-x:48%;--glow-y:52%;--glow-w:84%;--glow-h:56%;">
+              <span class="hub-hotspot__label"><b class="hub-hotspot__icon">♠</b><span data-i18n="barCasinoView.casino.title">Казино</span></span>
+            </button>
+          </div>
+          <button class="map-pan-reset" id="barCasinoPanReset" type="button" data-i18n-aria-label="barCasinoView.resetView">⌾</button>
+        </div>
+      </section>
+
+      <section class="casino-view" id="casinoView" data-game-screen aria-labelledby="casinoTitle" aria-hidden="true">
+        <header class="screen-header zone-map-view__header">
+          <div>
+            <span class="screen-kicker" data-i18n="casinoView.kicker">БАР / КАЗИНО</span>
+            <h1 id="casinoTitle" data-i18n="casinoView.title">Казино</h1>
+          </div>
+          <button class="zone-map-back" id="casinoBack" type="button">
+            <span aria-hidden="true">←</span>
+            <span data-i18n="casinoView.back">До бару</span>
+          </button>
+        </header>
+
+        <div class="casino-stage">
+          <img class="casino-stage__image" src="assets/hub/casino/casino-room.webp" alt="" draggable="false">
+          <div class="casino-stage__shade" aria-hidden="true"></div>
+
+          <div class="casino-games" aria-label="Ігри казино">
+            <button class="casino-game-card" type="button" data-casino-game="slots">
+              <img src="assets/hub/casino/slots.webp" alt="">
+              <span class="casino-game-card__body">
+                <strong data-i18n="casinoView.games.slots.title">Слоти</strong>
+                <small data-i18n="casinoView.games.slots.description">Крути барабани та випробуй удачу.</small>
+                <span class="casino-game-card__cta" data-i18n="casinoView.play">Грати</span>
+              </span>
+            </button>
+
+            <button class="casino-game-card" type="button" data-casino-game="blackjack">
+              <img src="assets/hub/casino/blackjack.webp" alt="">
+              <span class="casino-game-card__body">
+                <strong data-i18n="casinoView.games.blackjack.title">21</strong>
+                <small data-i18n="casinoView.games.blackjack.description">Набери 21 або обіграй дилера.</small>
+                <span class="casino-game-card__cta" data-i18n="casinoView.play">Грати</span>
+              </span>
+            </button>
+
+            <button class="casino-game-card" type="button" data-casino-game="poker">
+              <img src="assets/hub/casino/poker.webp" alt="">
+              <span class="casino-game-card__body">
+                <strong data-i18n="casinoView.games.poker.title">Покер</strong>
+                <small data-i18n="casinoView.games.poker.description">Гра за столом з високими ставками.</small>
+                <span class="casino-game-card__cta" data-i18n="casinoView.play">Грати</span>
+              </span>
+            </button>
+
+            <button class="casino-game-card" type="button" data-casino-game="dice">
+              <img src="assets/hub/casino/dice.webp" alt="">
+              <span class="casino-game-card__body">
+                <strong data-i18n="casinoView.games.dice.title">Кості</strong>
+                <small data-i18n="casinoView.games.dice.description">Швидка гра з простими правилами.</small>
+                <span class="casino-game-card__cta" data-i18n="casinoView.play">Грати</span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
     </main>
 
     <section class="hub-modal" id="hubModal" hidden aria-modal="true" role="dialog" aria-labelledby="hubModalTitle">
@@ -218,7 +312,8 @@
         </header>
         <div class="hub-modal__body">
           <p id="hubModalDescription"></p>
-          <div class="hub-modal__status">
+          <div class="hub-modal__extra" id="hubModalExtra"></div>
+          <div class="hub-modal__status" id="hubModalStatus">
             <span data-i18n="hub.modalStatus">Функціонал точки буде підключено наступним етапом.</span>
           </div>
         </div>

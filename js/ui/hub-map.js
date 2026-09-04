@@ -1,20 +1,24 @@
 (function () {
-  const modalPoints = new Set([
+  const mainModalPoints = new Set([
     "shop",
     "hospital",
     "workshop",
     "storage",
     "arena",
     "expeditions",
-    "questBoard",
-    "barCasino"
+    "questBoard"
   ]);
 
+  const barModalPoints = new Set(["restRoom", "barRoom"]);
+  const casinoGames = new Set(["slots", "blackjack", "poker", "dice"]);
   const panSurfaces = new Map();
-  let activePoint = null;
 
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
+  }
+
+  function t(key, fallback = "") {
+    return window.GameI18n?.resolve(key) || fallback;
   }
 
   function readMinimumWidth(viewport) {
@@ -26,8 +30,20 @@
   }
 
   function getBounds(state) {
+    const minX = Math.min(0, state.viewportWidth - state.canvasWidth);
+
+    if (state.lockVerticalPan) {
+      const centeredY = (state.viewportHeight - state.canvasHeight) / 2;
+      return {
+        minX,
+        maxX: 0,
+        minY: centeredY,
+        maxY: centeredY
+      };
+    }
+
     return {
-      minX: Math.min(0, state.viewportWidth - state.canvasWidth),
+      minX,
       maxX: 0,
       minY: Math.min(0, state.viewportHeight - state.canvasHeight),
       maxY: 0
@@ -47,6 +63,17 @@
     applyPan(state);
   }
 
+  function resetPan(state) {
+    if (state.viewport.dataset.panStart === "top") {
+      state.x = (state.viewportWidth - state.canvasWidth) / 2;
+      state.y = 0;
+      applyPan(state);
+      return;
+    }
+
+    centerPan(state);
+  }
+
   function resizePanSurface(state, preserveCenter = true) {
     const viewportWidth = state.viewport.clientWidth;
     const viewportHeight = state.viewport.clientHeight;
@@ -54,6 +81,7 @@
 
     let centerX = 0.5;
     let centerY = 0.5;
+
     if (preserveCenter && state.canvasWidth && state.canvasHeight) {
       centerX = (viewportWidth / 2 - state.x) / state.canvasWidth;
       centerY = (viewportHeight / 2 - state.y) / state.canvasHeight;
@@ -61,22 +89,25 @@
       centerY = clamp(centerY, 0, 1);
     }
 
-    const naturalWidth = state.naturalWidth;
-    const naturalHeight = state.naturalHeight;
-    const minWidth = readMinimumWidth(state.viewport);
-
-    // Cover the viewport without stretching, then enforce a readable minimum map size.
-    // If the map becomes larger than the viewport, the excess area is reachable by drag.
-    const scale = Math.max(
-      viewportWidth / naturalWidth,
-      viewportHeight / naturalHeight,
-      minWidth / naturalWidth
-    );
+    const fitMode = state.viewport.dataset.panFit;
+    const useCover = state.viewport.id === "barCasinoStage";
+    const scale = useCover
+      ? Math.max(
+          viewportWidth / state.naturalWidth,
+          viewportHeight / state.naturalHeight
+        )
+      : fitMode === "width"
+        ? viewportWidth / state.naturalWidth
+        : Math.max(
+            viewportWidth / state.naturalWidth,
+            viewportHeight / state.naturalHeight,
+            readMinimumWidth(state.viewport) / state.naturalWidth
+          );
 
     state.viewportWidth = viewportWidth;
     state.viewportHeight = viewportHeight;
-    state.canvasWidth = Math.round(naturalWidth * scale);
-    state.canvasHeight = Math.round(naturalHeight * scale);
+    state.canvasWidth = Math.round(state.naturalWidth * scale);
+    state.canvasHeight = Math.round(state.naturalHeight * scale);
 
     state.canvas.style.width = `${state.canvasWidth}px`;
     state.canvas.style.height = `${state.canvasHeight}px`;
@@ -86,16 +117,19 @@
       state.y = viewportHeight / 2 - centerY * state.canvasHeight;
       applyPan(state);
     } else {
-      centerPan(state);
+      resetPan(state);
     }
 
     state.viewport.classList.toggle(
       "is-pan-enabled",
-      state.canvasWidth > viewportWidth + 1 || state.canvasHeight > viewportHeight + 1
+      state.canvasWidth > viewportWidth + 1 ||
+        (!state.lockVerticalPan && state.canvasHeight > viewportHeight + 1)
     );
   }
 
   function setupPanSurface(viewportId, canvasId, resetId, hintId) {
+    if (panSurfaces.has(viewportId)) return panSurfaces.get(viewportId);
+
     const viewport = document.getElementById(viewportId);
     const canvas = document.getElementById(canvasId);
     if (!viewport || !canvas) return null;
@@ -119,17 +153,16 @@
       moved: false,
       startedOnHotspot: false,
       suppressClickUntil: 0,
+      lockVerticalPan: viewportId === "barCasinoStage",
       hint: document.getElementById(hintId)
     };
 
     function hideHint() {
-      if (state.hint) state.hint.classList.add("is-hidden");
+      state.hint?.classList.add("is-hidden");
     }
 
     function onPointerDown(event) {
       if (!event.isPrimary || event.button > 0) return;
-
-      // Reset/back are real UI controls and must never start map dragging.
       if (event.target.closest(".map-pan-reset, .zone-map-back")) return;
 
       state.pointerId = event.pointerId;
@@ -138,11 +171,10 @@
       state.startX = state.x;
       state.startY = state.y;
       state.moved = false;
-      state.startedOnHotspot = Boolean(event.target.closest("[data-hub-point]"));
+      state.startedOnHotspot = Boolean(
+        event.target.closest("[data-hub-point], [data-bar-point]")
+      );
 
-      // Important: do not capture immediately when starting on a hotspot.
-      // This preserves a normal desktop click if the pointer does not move.
-      // Capture is enabled only after the drag threshold is crossed.
       if (!state.startedOnHotspot) {
         viewport.setPointerCapture?.(event.pointerId);
       }
@@ -152,14 +184,13 @@
 
     function onPointerMove(event) {
       if (event.pointerId !== state.pointerId) return;
+
       const dx = event.clientX - state.startPointerX;
       const dy = event.clientY - state.startPointerY;
 
       if (!state.moved && Math.hypot(dx, dy) >= 7) {
         state.moved = true;
 
-        // Once movement clearly becomes a pan, capture the pointer even if
-        // the gesture started directly on a building/hotspot.
         if (!viewport.hasPointerCapture?.(event.pointerId)) {
           viewport.setPointerCapture?.(event.pointerId);
         }
@@ -169,6 +200,7 @@
       }
 
       if (!state.moved) return;
+
       event.preventDefault();
       state.x = state.startX + dx;
       state.y = state.startY + dy;
@@ -177,9 +209,11 @@
 
     function finishPointer(event) {
       if (event.pointerId !== state.pointerId) return;
+
       if (state.moved) {
-        state.suppressClickUntil = performance.now() + 280;
+        state.suppressClickUntil = performance.now() + 350;
       }
+
       if (viewport.hasPointerCapture?.(event.pointerId)) {
         viewport.releasePointerCapture?.(event.pointerId);
       }
@@ -194,49 +228,76 @@
     viewport.addEventListener("pointerup", finishPointer);
     viewport.addEventListener("pointercancel", finishPointer);
 
-    // A drag that started on a hotspot must never accidentally open its modal.
-    viewport.addEventListener("click", (event) => {
-      if (performance.now() < state.suppressClickUntil) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    }, true);
-
     viewport.addEventListener("keydown", (event) => {
       const step = event.shiftKey ? 80 : 32;
       let handled = true;
+
       if (event.key === "ArrowLeft") state.x += step;
       else if (event.key === "ArrowRight") state.x -= step;
       else if (event.key === "ArrowUp") state.y += step;
       else if (event.key === "ArrowDown") state.y -= step;
       else handled = false;
 
-      if (handled) {
-        event.preventDefault();
-        hideHint();
-        applyPan(state);
-      }
+      if (!handled) return;
+
+      event.preventDefault();
+      hideHint();
+      applyPan(state);
     });
 
     document.getElementById(resetId)?.addEventListener("click", (event) => {
       event.stopPropagation();
-      centerPan(state);
+      resetPan(state);
     });
 
-    const resizeObserver = new ResizeObserver(() => resizePanSurface(state, true));
-    resizeObserver.observe(viewport);
-    state.resizeObserver = resizeObserver;
+    if (typeof ResizeObserver === "function") {
+      const observer = new ResizeObserver(() => resizePanSurface(state, true));
+      observer.observe(viewport);
+      state.resizeObserver = observer;
+    } else {
+      const resizeHandler = () => resizePanSurface(state, true);
+      window.addEventListener("resize", resizeHandler);
+      state.resizeHandler = resizeHandler;
+    }
 
     resizePanSurface(state, false);
     panSurfaces.set(viewportId, state);
     return state;
   }
 
+  function wasRecentDrag(button) {
+    const viewport = button.closest(".map-pan-viewport");
+    if (!viewport) return false;
+
+    const state = panSurfaces.get(viewport.id);
+    return Boolean(state && performance.now() < state.suppressClickUntil);
+  }
+
+  function showScreen(screenId) {
+    document.querySelectorAll("[data-game-screen]").forEach((screen) => {
+      const active = screen.id === screenId;
+      screen.classList.toggle("is-active", active);
+      screen.setAttribute("aria-hidden", active ? "false" : "true");
+    });
+
+    const gameShell = document.getElementById("gameApp");
+    gameShell?.classList.toggle("is-bar-casino-screen", screenId === "barCasinoView");
+    gameShell?.classList.toggle("is-casino-screen", screenId === "casinoView");
+  }
+
+  function refreshPan(viewportId, center = false) {
+    requestAnimationFrame(() => {
+      const state = panSurfaces.get(viewportId);
+      if (!state) return;
+      resizePanSurface(state, !center);
+      if (center) resetPan(state);
+    });
+  }
+
   function clearActivePoint() {
     document.querySelectorAll(".hub-hotspot.is-active").forEach((node) => {
       node.classList.remove("is-active");
     });
-    activePoint = null;
   }
 
   function closeModal() {
@@ -246,86 +307,250 @@
     clearActivePoint();
   }
 
+  function buildModalExtra(pointId) {
+    if (pointId === "restRoom") {
+      return `
+        <div class="hub-modal__grid">
+          <div class="hub-modal__card">
+            <strong>${t("barCasinoView.restRoom.bonusLabel", "Бонус")}</strong>
+            <span>${t("barCasinoView.restRoom.bonusValue", "Регенерація ×2 на 30 хвилин")}</span>
+          </div>
+          <div class="hub-modal__card">
+            <strong>${t("barCasinoView.restRoom.costLabel", "Вартість")}</strong>
+            <span>${t("barCasinoView.restRoom.costValue", "120₴ за один відпочинок")}</span>
+          </div>
+        </div>`;
+    }
+
+    if (pointId === "barRoom") {
+      return `
+        <div class="hub-modal__grid">
+          <div class="hub-modal__card"><strong>${t("barCasinoView.bar.item1.title", "Гаряча їжа")}</strong><span>${t("barCasinoView.bar.item1.text", "Невелике відновлення енергії та ситості.")}</span></div>
+          <div class="hub-modal__card"><strong>${t("barCasinoView.bar.item2.title", "Чутки")}</strong><span>${t("barCasinoView.bar.item2.text", "Підказки про квести, лут і небезпечні місця.")}</span></div>
+          <div class="hub-modal__card"><strong>${t("barCasinoView.bar.item3.title", "Тимчасовий баф")}</strong><span>${t("barCasinoView.bar.item3.text", "Їжа та напої можуть дати короткий бонус.")}</span></div>
+          <div class="hub-modal__card"><strong>${t("barCasinoView.bar.item4.title", "Контакти")}</strong><span>${t("barCasinoView.bar.item4.text", "Деякі NPC і завдання будуть доступні лише тут.")}</span></div>
+        </div>`;
+    }
+
+    if (pointId === "casinoRoom") {
+      return `
+        <div class="hub-modal__actions">
+          <div class="hub-modal__action">${t("barCasinoView.casino.game1.title", "Покер")}<small>${t("barCasinoView.casino.game1.text", "Гра за столом")}</small></div>
+          <div class="hub-modal__action">${t("barCasinoView.casino.game2.title", "21")}<small>${t("barCasinoView.casino.game2.text", "Класична карткова гра")}</small></div>
+          <div class="hub-modal__action">${t("barCasinoView.casino.game3.title", "Слоти")}<small>${t("barCasinoView.casino.game3.text", "Швидка азартна сесія")}</small></div>
+        </div>
+        <div class="hub-modal__grid">
+          <div class="hub-modal__card"><strong>${t("barCasinoView.casino.rewardTitle", "Що можна виграти")}</strong><span>${t("barCasinoView.casino.rewardText", "Жетони, гроші, рідкісні дрібні нагороди або тимчасовий баф удачі.")}</span></div>
+          <div class="hub-modal__card"><strong>${t("barCasinoView.casino.riskTitle", "Ризик")}</strong><span>${t("barCasinoView.casino.riskText", "Можна як виграти, так і програти частину грошей або жетонів.")}</span></div>
+        </div>`;
+    }
+
+    return "";
+  }
+
+  function getModalContent(pointId) {
+    if (pointId === "restRoom") {
+      return {
+        title: t("barCasinoView.restRoom.title", "Кімната відпочинку"),
+        description: t("barCasinoView.restRoom.description", "Платна зона, де герой відпочиває і швидше відновлює сили."),
+        status: t("barCasinoView.restRoom.status", "У наступному етапі тут буде кнопка оплати та активація прискореної регенерації."),
+        extra: buildModalExtra(pointId)
+      };
+    }
+
+    if (pointId === "barRoom") {
+      return {
+        title: t("barCasinoView.bar.title", "Бар"),
+        description: t("barCasinoView.bar.description", "Місце їжі, напоїв, діалогів і корисних чуток від NPC."),
+        status: t("barCasinoView.bar.status", "Пізніше тут підключимо повне меню бару, NPC та бонуси від їжі / напоїв."),
+        extra: buildModalExtra(pointId)
+      };
+    }
+
+    if (pointId === "casinoRoom") {
+      return {
+        title: t("barCasinoView.casino.title", "Казино"),
+        description: t("barCasinoView.casino.description", "Окрема зона з азартними мінііграми та ризиком заради винагород."),
+        status: t("barCasinoView.casino.status", "Наступним етапом підключимо першу мінігру, а далі — покер, 21 і слоти."),
+        extra: buildModalExtra(pointId)
+      };
+    }
+
+    if (casinoGames.has(pointId)) {
+      return {
+        title: t(`casinoView.games.${pointId}.title`, pointId),
+        description: t(`casinoView.games.${pointId}.modalDescription`, t(`casinoView.games.${pointId}.description`, "")),
+        status: t("casinoView.gameStatus", "Механіку цієї гри підключимо наступним етапом."),
+        extra: ""
+      };
+    }
+
+    return {
+      title: t(`hub.${pointId}.title`, pointId),
+      description: t(`hub.${pointId}.description`, ""),
+      status: t("hub.modalStatus", "Функціонал точки буде підключено наступним етапом."),
+      extra: ""
+    };
+  }
+
   function openModal(pointId) {
     const modal = document.getElementById("hubModal");
     const title = document.getElementById("hubModalTitle");
     const description = document.getElementById("hubModalDescription");
-    if (!modal || !title || !description) return;
+    const status = document.getElementById("hubModalStatus");
+    const extra = document.getElementById("hubModalExtra");
+    if (!modal || !title || !description || !status || !extra) return;
 
-    title.textContent = window.GameI18n.resolve(`hub.${pointId}.title`) || pointId;
-    description.textContent = window.GameI18n.resolve(`hub.${pointId}.description`) || "";
+    const content = getModalContent(pointId);
+    title.textContent = content.title;
+    description.textContent = content.description;
+    status.textContent = content.status;
+    extra.innerHTML = content.extra;
+    extra.classList.toggle("is-visible", Boolean(content.extra));
     modal.hidden = false;
   }
 
   function openZoneMap() {
-    const hubScreen = document.getElementById("hubScreen");
-    const zoneMap = document.getElementById("zoneMapView");
-    if (!hubScreen || !zoneMap) return;
-
-    hubScreen.hidden = true;
-    zoneMap.hidden = false;
-
-    requestAnimationFrame(() => {
-      const state = panSurfaces.get("zoneMapStage");
-      if (state) resizePanSurface(state, false);
-    });
+    showScreen("zoneMapView");
+    refreshPan("zoneMapStage", true);
   }
 
   function closeZoneMap() {
-    const hubScreen = document.getElementById("hubScreen");
-    const zoneMap = document.getElementById("zoneMapView");
-    if (!hubScreen || !zoneMap) return;
-
-    zoneMap.hidden = true;
-    hubScreen.hidden = false;
+    showScreen("hubScreen");
     clearActivePoint();
-
-    requestAnimationFrame(() => {
-      const state = panSurfaces.get("hubStage");
-      if (state) resizePanSurface(state, true);
-    });
+    refreshPan("hubStage", false);
   }
 
-  function activatePoint(button) {
+  function openBarCasino() {
+    showScreen("barCasinoView");
+    refreshPan("barCasinoStage", true);
+  }
+
+  function closeBarCasino() {
+    showScreen("hubScreen");
+    clearActivePoint();
+    refreshPan("hubStage", false);
+  }
+
+  function openCasino() {
+    showScreen("casinoView");
+    clearActivePoint();
+  }
+
+  function closeCasino() {
+    showScreen("barCasinoView");
+    clearActivePoint();
+    refreshPan("barCasinoStage", false);
+  }
+
+  function activateMainPoint(button) {
+    if (wasRecentDrag(button)) return;
+
+    const pointId = button.dataset.hubPoint;
+    if (!pointId) return;
+
     clearActivePoint();
     button.classList.add("is-active");
-    activePoint = button.dataset.hubPoint;
 
-    if (activePoint === "cordon") {
-      window.setTimeout(openZoneMap, 160);
+    if (pointId === "barCasino") {
+      openBarCasino();
       return;
     }
 
-    if (modalPoints.has(activePoint)) {
-      window.setTimeout(() => openModal(activePoint), 120);
+    if (pointId === "cordon") {
+      openZoneMap();
+      return;
     }
+
+    if (mainModalPoints.has(pointId)) {
+      openModal(pointId);
+    }
+  }
+
+  function activateBarPoint(button) {
+    if (wasRecentDrag(button)) return;
+
+    const pointId = button.dataset.barPoint;
+    if (!pointId) return;
+
+    clearActivePoint();
+    button.classList.add("is-active");
+
+    if (pointId === "casinoRoom") {
+      openCasino();
+      return;
+    }
+
+    if (barModalPoints.has(pointId)) {
+      openModal(pointId);
+    }
+  }
+
+  function activateCasinoGame(button) {
+    const gameId = button.dataset.casinoGame;
+    if (!gameId || !casinoGames.has(gameId)) return;
+    openModal(gameId);
+  }
+
+  function bindHotspots() {
+    document.querySelectorAll("[data-hub-point]").forEach((button) => {
+      button.addEventListener("click", () => activateMainPoint(button));
+    });
+
+    document.querySelectorAll("[data-bar-point]").forEach((button) => {
+      button.addEventListener("click", () => activateBarPoint(button));
+    });
+
+    document.querySelectorAll("[data-casino-game]").forEach((button) => {
+      button.addEventListener("click", () => activateCasinoGame(button));
+    });
   }
 
   function bind() {
     setupPanSurface("hubStage", "hubMapCanvas", "hubPanReset", "hubPanHint");
     setupPanSurface("zoneMapStage", "zoneMapCanvas", "zonePanReset", "zonePanHint");
+    setupPanSurface("barCasinoStage", "barCasinoCanvas", "barCasinoPanReset", "");
 
-    document.querySelectorAll("[data-hub-point]").forEach((button) => {
-      button.addEventListener("click", () => activatePoint(button));
-    });
+    bindHotspots();
 
     document.getElementById("hubModalClose")?.addEventListener("click", closeModal);
     document.getElementById("hubModalBackdrop")?.addEventListener("click", closeModal);
     document.getElementById("zoneMapBack")?.addEventListener("click", closeZoneMap);
+    document.getElementById("barCasinoBack")?.addEventListener("click", closeBarCasino);
+    document.getElementById("casinoBack")?.addEventListener("click", closeCasino);
 
     document.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
 
       const modal = document.getElementById("hubModal");
-      const zoneMap = document.getElementById("zoneMapView");
-
       if (modal && !modal.hidden) {
         closeModal();
-      } else if (zoneMap && !zoneMap.hidden) {
+        return;
+      }
+
+      if (document.getElementById("casinoView")?.classList.contains("is-active")) {
+        closeCasino();
+        return;
+      }
+
+      if (document.getElementById("barCasinoView")?.classList.contains("is-active")) {
+        closeBarCasino();
+        return;
+      }
+
+      if (document.getElementById("zoneMapView")?.classList.contains("is-active")) {
         closeZoneMap();
       }
     });
   }
 
-  window.GameHub = { bind };
+  window.GameHub = {
+    bind,
+    openBarCasino,
+    closeBarCasino,
+    openCasino,
+    closeCasino,
+    openZoneMap,
+    closeZoneMap
+  };
 })();

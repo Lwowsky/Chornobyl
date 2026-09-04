@@ -1,5 +1,7 @@
 .world-screen,
-.zone-map-view {
+.zone-map-view,
+.bar-casino-view,
+.casino-view {
   height: 100%;
   min-height: 0;
   display: grid;
@@ -9,6 +11,14 @@
   background:
     radial-gradient(circle at 55% 0%, rgba(216, 167, 51, 0.045), transparent 34%),
     #090b09;
+}
+
+[data-game-screen] {
+  display: none;
+}
+
+[data-game-screen].is-active {
+  display: grid;
 }
 
 .screen-header {
@@ -42,7 +52,8 @@
 }
 
 .hub-stage,
-.zone-map-stage {
+.zone-map-stage,
+.bar-stage {
   position: relative;
   min-height: 0;
   overflow: hidden;
@@ -58,8 +69,10 @@
 
 .hub-stage.is-pointer-down,
 .zone-map-stage.is-pointer-down,
+.bar-stage.is-pointer-down,
 .hub-stage.is-panning,
-.zone-map-stage.is-panning {
+.zone-map-stage.is-panning,
+.bar-stage.is-panning {
   cursor: grabbing;
 }
 
@@ -78,12 +91,17 @@
   aspect-ratio: 16 / 9;
 }
 
+.bar-map-canvas {
+  aspect-ratio: 1672 / 941;
+}
+
 .zone-map-canvas {
   aspect-ratio: 2 / 3;
 }
 
 .hub-stage::after,
-.zone-map-stage::after {
+.zone-map-stage::after,
+.bar-stage::after {
   content: "";
   position: absolute;
   z-index: 20;
@@ -92,7 +110,8 @@
   box-shadow: inset 0 0 58px rgba(0, 0, 0, 0.70);
 }
 
-.hub-stage__image {
+.hub-stage__image,
+.bar-stage__image {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -132,7 +151,9 @@
 }
 
 .hub-stage.is-pointer-down .hub-hotspot,
-.hub-stage.is-panning .hub-hotspot {
+.hub-stage.is-panning .hub-hotspot,
+.bar-stage.is-pointer-down .hub-hotspot,
+.bar-stage.is-panning .hub-hotspot {
   cursor: grabbing;
 }
 
@@ -141,7 +162,7 @@
   z-index: -1;
   inset: 0;
   opacity: 0;
-  background-image: url("../../assets/hub/safe-zone-hub.webp");
+  background-image: var(--slice-image, url("../../assets/hub/safe-zone-hub.webp"));
   background-repeat: no-repeat;
   background-size: var(--bgw) var(--bgh);
   background-position: var(--bgx) var(--bgy);
@@ -260,11 +281,14 @@
 
 
 .hub-stage.is-panning .hub-hotspot__slice,
-.hub-stage.is-panning .hub-hotspot__pulse {
+.hub-stage.is-panning .hub-hotspot__pulse,
+.bar-stage.is-panning .hub-hotspot__slice,
+.bar-stage.is-panning .hub-hotspot__pulse {
   opacity: 0;
 }
 
-.hub-stage.is-panning .hub-hotspot__label {
+.hub-stage.is-panning .hub-hotspot__label,
+.bar-stage.is-panning .hub-hotspot__label {
   transform: translateX(-50%);
 }
 
@@ -305,6 +329,121 @@
   box-shadow:
     0 7px 18px rgba(0, 0, 0, 0.38),
     0 0 20px rgba(137, 214, 62, 0.18);
+}
+
+.bar-stage__image {
+  filter: saturate(0.86) contrast(1.03) brightness(0.82);
+}
+
+
+.hub-hotspot--rest-room .hub-hotspot__label {
+  border-color: rgba(153, 204, 244, 0.38);
+  color: #d7e9ff;
+}
+
+.hub-hotspot--rest-room .hub-hotspot__icon {
+  color: #9cd6ff;
+}
+
+
+.hub-hotspot--rest-room:hover .hub-hotspot__label,
+.hub-hotspot--rest-room:focus-visible .hub-hotspot__label,
+.hub-hotspot--rest-room.is-active .hub-hotspot__label {
+  color: #ebf6ff;
+  border-color: rgba(153, 204, 244, 0.74);
+  background: linear-gradient(180deg, rgba(23, 42, 60, 0.92), rgba(9, 15, 20, 0.92));
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.38),
+    0 0 18px rgba(130, 192, 255, 0.14);
+}
+
+.hub-hotspot--casino-room .hub-hotspot__label {
+  border-color: rgba(111, 223, 120, 0.42);
+  color: #d6ffbe;
+}
+
+.hub-hotspot--casino-room .hub-hotspot__icon {
+  color: #8ff16c;
+}
+
+
+.hub-hotspot--casino-room:hover .hub-hotspot__label,
+.hub-hotspot--casino-room:focus-visible .hub-hotspot__label,
+.hub-hotspot--casino-room.is-active .hub-hotspot__label {
+  color: #f0ffdc;
+  border-color: rgba(134, 233, 114, 0.74);
+  background: linear-gradient(180deg, rgba(25, 49, 14, 0.92), rgba(9, 18, 7, 0.92));
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.38),
+    0 0 18px rgba(108, 214, 85, 0.14);
+}
+
+
+/* Bar / Casino local hover glow — one canonical rule set */
+.bar-stage .hub-hotspot {
+  --spot-glow-core: rgba(242, 191, 69, 0.24);
+  --spot-glow-mid: rgba(242, 191, 69, 0.10);
+  --spot-glow-soft: rgba(242, 191, 69, 0.025);
+  overflow: visible;
+}
+
+.bar-stage .hub-hotspot__label {
+  left: var(--label-x, 50%);
+  top: var(--label-y, 16%);
+  transform: translate(-50%, -50%);
+}
+
+.bar-stage .hub-hotspot::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: var(--glow-x, 50%);
+  top: var(--glow-y, 50%);
+  width: var(--glow-w, 74%);
+  height: var(--glow-h, 52%);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.94);
+  background: radial-gradient(
+    ellipse at center,
+    var(--spot-glow-core) 0%,
+    var(--spot-glow-mid) 36%,
+    var(--spot-glow-soft) 58%,
+    transparent 76%
+  );
+  filter: blur(1px);
+  transition: opacity 170ms ease, transform 190ms ease, filter 190ms ease;
+}
+
+.bar-stage .hub-hotspot:hover::before,
+.bar-stage .hub-hotspot:focus-visible::before,
+.bar-stage .hub-hotspot.is-active::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.04);
+  filter: blur(0);
+}
+
+.bar-stage .hub-hotspot:hover .hub-hotspot__label,
+.bar-stage .hub-hotspot:focus-visible .hub-hotspot__label,
+.bar-stage .hub-hotspot.is-active .hub-hotspot__label {
+  transform: translate(-50%, -50%) scale(1.045);
+}
+
+.bar-stage .hub-hotspot--rest-room {
+  --spot-glow-core: rgba(113, 192, 255, 0.22);
+  --spot-glow-mid: rgba(113, 192, 255, 0.09);
+  --spot-glow-soft: rgba(113, 192, 255, 0.025);
+}
+
+.bar-stage .hub-hotspot--casino-room {
+  --spot-glow-core: rgba(105, 226, 112, 0.22);
+  --spot-glow-mid: rgba(105, 226, 112, 0.09);
+  --spot-glow-soft: rgba(105, 226, 112, 0.025);
+}
+
+.bar-stage.is-panning .hub-hotspot::before {
+  opacity: 0;
 }
 
 .map-pan-hint {
@@ -479,8 +618,182 @@
   font-size: 9px;
 }
 
-.zone-map-view[hidden] {
+
+.casino-stage {
+  position: relative;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(216, 167, 51, 0.24);
+  border-radius: var(--radius-md);
+  background: #080708;
+  box-shadow: var(--shadow-panel), inset 0 0 0 1px rgba(255, 255, 255, 0.018);
+}
+
+.casino-stage__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.68) saturate(0.96) contrast(1.04);
+}
+
+.casino-stage__shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(5, 4, 7, 0.04) 0%, rgba(5, 4, 7, 0.10) 30%, rgba(5, 4, 7, 0.42) 64%, rgba(5, 4, 7, 0.80) 100%),
+    radial-gradient(circle at 50% 18%, rgba(205, 54, 255, 0.08), transparent 42%);
+}
+
+.casino-games {
+  --casino-columns: 4;
+  --casino-grid-max: 980px;
+
+  position: relative;
+  z-index: 3;
+  width: min(var(--casino-grid-max), calc(100% - clamp(12px, 2vw, 28px)));
+  display: grid;
+  grid-template-columns: repeat(var(--casino-columns), minmax(0, 1fr));
+  place-self: center;
+  align-items: stretch;
+  gap: clamp(5px, 0.75vw, 10px);
+}
+
+.casino-game-card {
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid rgba(216, 167, 51, 0.28);
+  border-radius: clamp(8px, 1vw, 11px);
+  color: var(--color-text-strong);
+  background: linear-gradient(180deg, rgba(17, 16, 15, 0.96), rgba(7, 8, 7, 0.98));
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.42);
+  cursor: pointer;
+  transition: transform var(--transition-ui), border-color var(--transition-ui), box-shadow var(--transition-ui);
+}
+
+.casino-game-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  filter: brightness(0.86) saturate(0.94);
+  transition: transform var(--transition-ui), filter var(--transition-ui);
+}
+
+.casino-game-card__body {
+  display: grid;
+  gap: clamp(1px, 0.3vw, 3px);
+  padding: clamp(4px, 0.75vw, 9px) clamp(5px, 0.85vw, 10px) clamp(5px, 0.85vw, 10px);
+}
+
+.casino-game-card strong {
+  color: var(--color-gold-bright);
+  font-family: var(--font-display);
+  font-size: clamp(8.5px, 1vw, 13px);
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.casino-game-card small {
+  min-height: 2.5em;
+  overflow: hidden;
+  color: #aaa69d;
+  font-size: clamp(6px, 0.64vw, 8px);
+  line-height: 1.25;
+  text-align: center;
+}
+
+.casino-game-card__cta {
+  margin-top: clamp(2px, 0.35vw, 5px);
+  padding: clamp(4px, 0.45vw, 6px) clamp(4px, 0.6vw, 8px);
+  border: 1px solid rgba(216, 167, 51, 0.24);
+  border-radius: 7px;
+  color: #e6c85d;
+  background: rgba(216, 167, 51, 0.06);
+  font-size: clamp(6.2px, 0.65vw, 8px);
+  font-weight: 800;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.casino-game-card:hover,
+.casino-game-card:focus-visible {
+  border-color: rgba(235, 195, 76, 0.72);
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.52), 0 0 22px rgba(218, 67, 255, 0.10);
+}
+
+.casino-game-card:hover img,
+.casino-game-card:focus-visible img {
+  transform: scale(1.035);
+  filter: brightness(1.02) saturate(1.06);
+}
+
+.hub-modal__extra {
   display: none;
+  gap: 10px;
+}
+
+.hub-modal__extra.is-visible {
+  display: grid;
+}
+
+.hub-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.hub-modal__card {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border: 1px solid rgba(216, 167, 51, 0.16);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.hub-modal__card strong {
+  color: var(--color-gold-bright);
+  font-size: 12px;
+}
+
+.hub-modal__card span {
+  color: #b6b2a5;
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.hub-modal__actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.hub-modal__action {
+  padding: 11px 10px;
+  border: 1px solid rgba(216, 167, 51, 0.26);
+  border-radius: 10px;
+  color: var(--color-gold-bright);
+  background: linear-gradient(180deg, rgba(43, 33, 10, 0.92), rgba(12, 11, 7, 0.94));
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.hub-modal__action small {
+  display: block;
+  margin-top: 4px;
+  color: #b7b29f;
+  font-size: 8px;
+  font-weight: 600;
 }
 
 .zone-map-view__header {
@@ -549,114 +862,10 @@
   line-height: 1.4;
 }
 
-@media (max-width: 767px) {
-  .zone-map-view {
-    gap: 6px;
-    padding: 8px;
-  }
-
-  .hub-hotspot__label {
-    top: 4px;
-    gap: 4px;
-    padding: 4px 6px;
-    border-radius: 6px;
-  }
-
-  .hub-hotspot__label span {
-    font-size: clamp(6px, 1.7vw, 8px);
-  }
-
-  .hub-hotspot__icon {
-    min-width: 10px;
-    font-size: 10px;
-  }
-
-  .hub-help {
-    left: 8px;
-    bottom: 8px;
-    width: min(210px, 42%);
-    padding: 7px 8px;
-  }
-
-  .hub-help span {
-    font-size: 7px;
-  }
-
-  .map-pan-hint {
-    right: 8px;
-    top: 8px;
-    padding: 5px 7px;
-  }
-
-  .map-pan-hint span:last-child {
-    font-size: 7px;
-  }
-
-  .map-pan-reset {
-    right: 8px;
-    bottom: 8px;
-    width: 29px;
-    height: 29px;
-  }
-}
-
-@media (max-width: 520px) {
-  .hub-help {
-    display: none;
-  }
-
-  .hub-hotspot__label {
-    max-width: 110%;
-  }
-
-  .hub-hotspot__label span {
-    font-size: 6px;
-  }
-
-  .map-pan-hint span:last-child {
-    display: none;
-  }
-
-  .zone-map-back span:last-child {
-    display: none;
-  }
-}
-
-@media (min-width: 1024px) {
-  .zone-map-view {
-    gap: 10px;
-    padding: 14px 18px 12px;
-  }
-
-  .hub-stage,
-  .zone-map-stage {
-    border-radius: 16px;
-  }
-
-  .hub-hotspot__label {
-    padding: 7px 10px;
-  }
-
-  .hub-hotspot__label span {
-    font-size: 10px;
-  }
-
-  .hub-hotspot__icon {
-    font-size: 15px;
-  }
-
-  .hub-help {
-    left: 16px;
-    bottom: 16px;
-    width: 270px;
-    padding: 10px 12px;
-  }
-
-  .hub-help strong {
-    font-size: 9px;
-  }
-
-  .hub-help span {
-    font-size: 9px;
+/* Casino cards use one canonical layout; only the column count changes below 700px. */
+@media (max-width: 699px) {
+  .casino-games {
+    --casino-columns: 2;
+    --casino-grid-max: 620px;
   }
 }
