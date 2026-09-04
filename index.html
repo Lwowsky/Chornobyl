@@ -179,7 +179,16 @@
               </article>
 
               <figure class="hero-frame">
-                <img src="assets/avatars/novice.webp" alt="" id="profileHeroImage">
+                <div class="profile-live-background" id="profileLiveBackground" aria-hidden="true">
+                  <video class="profile-live-video" autoplay muted loop playsinline preload="auto" poster="assets/profile/profile-pripyat-reactor-live.webp">
+                    <source src="assets/profile/profile-background-live.webm" type="video/webm">
+                    <source src="assets/profile/profile-background-live.mp4" type="video/mp4">
+                  </video>
+                </div>
+
+                <div class="hero-layer-stack" id="heroLayerStack" aria-hidden="true">
+                  <img class="hero-layer hero-layer--base" src="assets/profile/hero-stalker-equipped.webp" alt="">
+</div>
 
                 <div class="hero-loadout-slots">
                   <article class="equipment-slot" data-slot="melee">

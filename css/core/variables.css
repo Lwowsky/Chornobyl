@@ -65,6 +65,8 @@
   /* Future layered hero canvas */
   --hero-canvas-width: 768;
   --hero-canvas-height: 1024;
+  --hero-idle-duration: 5.8s;
+  --hero-blink-duration: 7.2s;
 
   /* Profile equipment geometry */
   --profile-equipment-slot-size: 56px;

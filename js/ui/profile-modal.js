@@ -136,3 +136,5 @@
 
   window.GameProfile = { bind, open, close, renderStats, renderSummary, fitProfile };
 })();
+
+
