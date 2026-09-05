@@ -9,7 +9,7 @@
     "questBoard"
   ]);
 
-  const barModalPoints = new Set(["restRoom", "barRoom"]);
+  const barModalPoints = new Set(["barRoom"]);
   const casinoGames = new Set(["slots", "blackjack", "poker", "dice"]);
   const panSurfaces = new Map();
 
@@ -299,6 +299,7 @@
     const gameShell = document.getElementById("gameApp");
     gameShell?.classList.toggle("is-bar-casino-screen", screenId === "barCasinoView");
     gameShell?.classList.toggle("is-casino-screen", screenId === "casinoView");
+    gameShell?.classList.toggle("is-rest-room-screen", screenId === "restRoomView");
   }
 
   function refreshPan(viewportId, center = false) {
@@ -324,19 +325,6 @@
   }
 
   function buildModalExtra(pointId) {
-    if (pointId === "restRoom") {
-      return `
-        <div class="hub-modal__grid">
-          <div class="hub-modal__card">
-            <strong>${t("barCasinoView.restRoom.bonusLabel", "Бонус")}</strong>
-            <span>${t("barCasinoView.restRoom.bonusValue", "Регенерація ×2 на 30 хвилин")}</span>
-          </div>
-          <div class="hub-modal__card">
-            <strong>${t("barCasinoView.restRoom.costLabel", "Вартість")}</strong>
-            <span>${t("barCasinoView.restRoom.costValue", "120₴ за один відпочинок")}</span>
-          </div>
-        </div>`;
-    }
 
     if (pointId === "barRoom") {
       return `
@@ -365,14 +353,6 @@
   }
 
   function getModalContent(pointId) {
-    if (pointId === "restRoom") {
-      return {
-        title: t("barCasinoView.restRoom.title", "Кімната відпочинку"),
-        description: t("barCasinoView.restRoom.description", "Платна зона, де герой відпочиває і швидше відновлює сили."),
-        status: t("barCasinoView.restRoom.status", "У наступному етапі тут буде кнопка оплати та активація прискореної регенерації."),
-        extra: buildModalExtra(pointId)
-      };
-    }
 
     if (pointId === "barRoom") {
       return {
@@ -459,6 +439,20 @@
     refreshPan("barCasinoStage", false);
   }
 
+
+  function openRestRoom() {
+    showScreen("restRoomView");
+    clearActivePoint();
+    window.GameRestRoom?.refresh();
+  }
+
+  function closeRestRoom() {
+    window.GameRestRoom?.closeLevels();
+    showScreen("barCasinoView");
+    clearActivePoint();
+    refreshPan("barCasinoStage", false);
+  }
+
   function activateMainPoint(button) {
     if (wasRecentDrag(button)) return;
 
@@ -494,6 +488,11 @@
 
     if (pointId === "casinoRoom") {
       openCasino();
+      return;
+    }
+
+    if (pointId === "restRoom") {
+      openRestRoom();
       return;
     }
 
@@ -534,6 +533,7 @@
     document.getElementById("zoneMapBack")?.addEventListener("click", closeZoneMap);
     document.getElementById("barCasinoBack")?.addEventListener("click", closeBarCasino);
     document.getElementById("casinoBack")?.addEventListener("click", closeCasino);
+    document.getElementById("restRoomBack")?.addEventListener("click", closeRestRoom);
 
     document.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
@@ -541,6 +541,16 @@
       const modal = document.getElementById("hubModal");
       if (modal && !modal.hidden) {
         closeModal();
+        return;
+      }
+
+      if (document.getElementById("restRoomView")?.classList.contains("is-active")) {
+        const levelsPanel = document.getElementById("restRoomLevelsPanel");
+        if (levelsPanel && !levelsPanel.hidden) {
+          window.GameRestRoom?.closeLevels();
+        } else {
+          closeRestRoom();
+        }
         return;
       }
 
