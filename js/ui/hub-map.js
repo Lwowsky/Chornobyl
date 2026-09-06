@@ -9,7 +9,7 @@
     "questBoard"
   ]);
 
-  const barModalPoints = new Set(["barRoom"]);
+  const barModalPoints = new Set();
   const casinoGames = new Set(["slots", "blackjack", "poker", "dice"]);
   const panSurfaces = new Map();
 
@@ -383,6 +383,65 @@
     };
   }
 
+  function getBarActionContent(actionId) {
+    if (actionId === "menu") {
+      return {
+        title: "Меню бару",
+        description: "Їжа й напої відновлюють ресурси та можуть дати короткий бонус перед вилазкою.",
+        status: "Купівлю страв підключимо окремою механікою; зараз меню вже відкривається та показує майбутні позиції.",
+        extra: `
+          <div class="hub-modal__grid hub-modal__grid--bar-menu">
+            <div class="hub-modal__card"><strong>Тушонка · ₴ 70</strong><span>HP +12% · ситість на 45 хв</span></div>
+            <div class="hub-modal__card"><strong>Міцна кава · ₴ 55</strong><span>Енергія +20% · +3% EXP на 1 год</span></div>
+            <div class="hub-modal__card"><strong>Гаряча страва · ₴ 120</strong><span>HP +20% · Енергія +20%</span></div>
+            <div class="hub-modal__card"><strong>Чай з травами · ₴ 90</strong><span>Радіація −5% · регенерація +5%</span></div>
+          </div>`
+      };
+    }
+
+    if (actionId === "rumors") {
+      return {
+        title: "Чутки",
+        description: "Чутки тимчасово підсилюють конкретну локацію або тип знахідок. Одночасно активна одна свіжа чутка.",
+        status: "Сьогодні: Рудий ліс · підвищений шанс матеріалів на 2 години.",
+        extra: `
+          <div class="hub-modal__grid">
+            <div class="hub-modal__card"><strong>Рудий ліс</strong><span>+10% шанс матеріалів на 2 год</span></div>
+            <div class="hub-modal__card"><strong>Янів</strong><span>Наступна чутка може відкрити бонус до технічного луту.</span></div>
+          </div>`
+      };
+    }
+
+    return {
+      title: "Контакти",
+      description: "Тут з’являтимуться NPC, короткі діалоги, персональні квести й особливі пропозиції.",
+      status: "Першими можна додати медика, механіка та контрабандиста.",
+      extra: `
+        <div class="hub-modal__actions">
+          <div class="hub-modal__action">Медик<small>лікування та медичні завдання</small></div>
+          <div class="hub-modal__action">Механік<small>ремонт і технічні квести</small></div>
+          <div class="hub-modal__action">Контрабандист<small>рідкісні пропозиції</small></div>
+        </div>`
+    };
+  }
+
+  function openBarAction(actionId) {
+    const modal = document.getElementById("hubModal");
+    const title = document.getElementById("hubModalTitle");
+    const description = document.getElementById("hubModalDescription");
+    const status = document.getElementById("hubModalStatus");
+    const extra = document.getElementById("hubModalExtra");
+    if (!modal || !title || !description || !status || !extra) return;
+
+    const content = getBarActionContent(actionId);
+    title.textContent = content.title;
+    description.textContent = content.description;
+    status.textContent = content.status;
+    extra.innerHTML = content.extra;
+    extra.classList.add("is-visible");
+    modal.hidden = false;
+  }
+
   function openModal(pointId) {
     const modal = document.getElementById("hubModal");
     const title = document.getElementById("hubModalTitle");
@@ -420,6 +479,17 @@
     showScreen("hubScreen");
     clearActivePoint();
     refreshPan("hubStage", false);
+  }
+
+  function openBarView() {
+    showScreen("barView");
+    clearActivePoint();
+  }
+
+  function closeBarView() {
+    showScreen("barCasinoView");
+    clearActivePoint();
+    refreshPan("barCasinoStage", false);
   }
 
   function openCasino() {
@@ -480,6 +550,11 @@
     clearActivePoint();
     button.classList.add("is-active");
 
+    if (pointId === "barRoom") {
+      openBarView();
+      return;
+    }
+
     if (pointId === "casinoRoom") {
       openCasino();
       return;
@@ -513,6 +588,11 @@
     document.querySelectorAll("[data-casino-game]").forEach((button) => {
       button.addEventListener("click", () => activateCasinoGame(button));
     });
+
+
+    document.querySelectorAll("[data-bar-action]").forEach((button) => {
+      button.addEventListener("click", () => openBarAction(button.dataset.barAction));
+    });
   }
 
   function bind() {
@@ -526,6 +606,7 @@
     document.getElementById("hubModalBackdrop")?.addEventListener("click", closeModal);
     document.getElementById("zoneMapBack")?.addEventListener("click", closeZoneMap);
     document.getElementById("barCasinoBack")?.addEventListener("click", closeBarCasino);
+    document.getElementById("barViewBack")?.addEventListener("click", closeBarView);
     document.getElementById("casinoBack")?.addEventListener("click", closeCasino);
     document.getElementById("restRoomBack")?.addEventListener("click", closeRestRoom);
 
@@ -553,6 +634,11 @@
         return;
       }
 
+      if (document.getElementById("barView")?.classList.contains("is-active")) {
+        closeBarView();
+        return;
+      }
+
       if (document.getElementById("barCasinoView")?.classList.contains("is-active")) {
         closeBarCasino();
         return;
@@ -568,6 +654,8 @@
     bind,
     openBarCasino,
     closeBarCasino,
+    openBarView,
+    closeBarView,
     openCasino,
     closeCasino,
     openZoneMap,

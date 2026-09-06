@@ -246,6 +246,113 @@
         </div>
       </section>
 
+      <section class="bar-view" id="barView" data-game-screen aria-labelledby="barViewTitle" aria-hidden="true">
+        <header class="screen-header zone-map-view__header">
+          <div class="bar-view__title-wrap">
+            <span class="screen-kicker">БЕЗПЕЧНА ЗОНА</span>
+            <h1 id="barViewTitle">Бар</h1>
+            <p class="bar-view__intro">Їжа, напої, чутки, контакти і тимчасові бонуси від відпочинку.</p>
+          </div>
+          <button class="zone-map-back" id="barViewBack" type="button">
+            <span aria-hidden="true">←</span>
+            <span>До бази</span>
+          </button>
+        </header>
+
+        <div class="bar-view__shell">
+          <article class="bar-feature bar-feature--hero">
+            <div class="bar-feature__media">
+              <img src="assets/hub/bar-casino-view.webp" alt="Бар 1037" draggable="false">
+              <div class="bar-feature__shade" aria-hidden="true"></div>
+            </div>
+            <div class="bar-feature__content">
+              <span class="bar-pill">Бар «1037»</span>
+              <h2>Тепло в Зоні</h2>
+              <p>Тут можна перекусити, трохи відновитись, почути корисні чутки та знайти нові контакти перед вилазкою.</p>
+              <ul class="bar-feature__facts">
+                <li>• гаряча їжа та напої</li>
+                <li>• тимчасові бафи на кілька годин</li>
+                <li>• NPC, квести та особливі пропозиції</li>
+              </ul>
+            </div>
+          </article>
+
+          <aside class="bar-view__aside" aria-label="Пропозиції бару">
+            <article class="bar-side-card">
+              <div class="bar-side-card__header">
+                <strong>Пропозиція дня</strong>
+                <span>оновиться через 07:12:25</span>
+              </div>
+              <div class="bar-side-card__body">
+                <h3>Тушонка + міцна кава</h3>
+                <p>Класика, яка тримає у Зоні довше та допомагає перед виходом.</p>
+                <ul class="bar-side-card__list bar-side-card__list--positive">
+                  <li>HP +20%</li>
+                  <li>Енергія +30%</li>
+                  <li>EXP +5% на 2 год</li>
+                </ul>
+                <div class="bar-price-tag">₴ 180</div>
+              </div>
+            </article>
+
+            <article class="bar-side-card">
+              <div class="bar-side-card__header">
+                <strong>Активний баф</strong>
+                <span>залишилось 01:48</span>
+              </div>
+              <div class="bar-side-card__body">
+                <h3>Ситість сталкера</h3>
+                <p>Добра їжа робить день легшим і дає невеликий бойовий бонус.</p>
+                <ul class="bar-side-card__list bar-side-card__list--positive">
+                  <li>Атака +5%</li>
+                  <li>Регенерація +10%</li>
+                </ul>
+              </div>
+            </article>
+
+            <article class="bar-side-card">
+              <div class="bar-side-card__header">
+                <strong>Свіжа чутка</strong>
+                <span>оновиться через 02:15:33</span>
+              </div>
+              <div class="bar-side-card__body">
+                <p>Кажуть, у Рудому лісі сьогодні частіше знаходять матеріали. Перевір це перед нічною вилазкою.</p>
+                <div class="bar-rumor-bonus">+10% шанс матеріалів на 2 год</div>
+              </div>
+            </article>
+          </aside>
+
+          <div class="bar-view__actions" aria-label="Розділи бару">
+            <button class="bar-action-card" type="button" data-bar-action="menu">
+              <span class="bar-action-card__icon" aria-hidden="true">🍲</span>
+              <span class="bar-action-card__body">
+                <strong>Меню</strong>
+                <small>Купити їжу та напої</small>
+              </span>
+              <span class="bar-action-card__arrow" aria-hidden="true">›</span>
+            </button>
+
+            <button class="bar-action-card" type="button" data-bar-action="rumors">
+              <span class="bar-action-card__icon" aria-hidden="true">💬</span>
+              <span class="bar-action-card__body">
+                <strong>Чутки</strong>
+                <small>Дізнатись про бонуси в зонах</small>
+              </span>
+              <span class="bar-action-card__arrow" aria-hidden="true">›</span>
+            </button>
+
+            <button class="bar-action-card" type="button" data-bar-action="contacts">
+              <span class="bar-action-card__icon" aria-hidden="true">🤝</span>
+              <span class="bar-action-card__body">
+                <strong>Контакти</strong>
+                <small>NPC, квести та особливі пропозиції</small>
+              </span>
+              <span class="bar-action-card__arrow" aria-hidden="true">›</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       <section class="casino-view" id="casinoView" data-game-screen aria-labelledby="casinoTitle" aria-hidden="true">
         <header class="screen-header zone-map-view__header">
           <div>
