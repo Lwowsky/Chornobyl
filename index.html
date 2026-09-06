@@ -303,22 +303,43 @@
       </section>
 
       <section class="rest-room-view" id="restRoomView" data-game-screen aria-labelledby="restRoomTitle" aria-hidden="true">
+        <svg class="rest-room-icon-sprite" aria-hidden="true" focusable="false">
+          <symbol id="rr-icon-bed" viewBox="0 0 24 24"><path d="M3 18v-8m0 5h18v3H3Zm3-5V7h5a3 3 0 0 1 3 3v2m0 0h4a3 3 0 0 1 3 3"/></symbol>
+          <symbol id="rr-icon-home" viewBox="0 0 24 24"><path d="M4 11.5 12 5l8 6.5V20H4v-8.5Zm5 8.5v-5h6v5"/></symbol>
+          <symbol id="rr-icon-crate" viewBox="0 0 24 24"><path d="M4 7h16v13H4V7Zm2-3h12v3H6V4Zm2 7h8m-8 4h8m-4-8v13"/></symbol>
+          <symbol id="rr-icon-upgrade" viewBox="0 0 24 24"><path d="M12 20V7m0 0-5 5m5-5 5 5M5 4h14"/></symbol>
+          <symbol id="rr-icon-key" viewBox="0 0 24 24"><path d="M14.5 9.5a4.5 4.5 0 1 1-1.3 3.2L21 5v4h-3v3h-3l-.5.5"/></symbol>
+          <symbol id="rr-icon-moon" viewBox="0 0 24 24"><path d="M19 15.5A8 8 0 0 1 8.5 5 8.5 8.5 0 1 0 19 15.5Z"/></symbol>
+          <symbol id="rr-icon-layers" viewBox="0 0 24 24"><path d="m12 4 8 4-8 4-8-4 8-4Zm-8 8 8 4 8-4m-16 4 8 4 8-4"/></symbol>
+          <symbol id="rr-icon-heart" viewBox="0 0 24 24"><path d="M20.8 5.8a5 5 0 0 0-7.1 0L12 7.5l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 21l8.8-8.1a5 5 0 0 0 0-7.1Z"/></symbol>
+          <symbol id="rr-icon-wrench" viewBox="0 0 24 24"><path d="M14.5 6.5a5 5 0 0 0-6.3 6.3L3.5 17.5a2.1 2.1 0 1 0 3 3l4.7-4.7a5 5 0 0 0 6.3-6.3l-3 3-3-3 3-3Z"/></symbol>
+          <symbol id="rr-icon-coin" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="8" ry="9"/><path d="M14.8 8.5c-.7-.7-1.7-1-2.8-1-1.7 0-3 .9-3 2.2 0 3.2 6 1.5 6 4.6 0 1.3-1.3 2.2-3 2.2-1.2 0-2.3-.4-3-1.1M12 6v12"/></symbol>
+        </svg>
+
         <header class="rest-room-view__header">
           <div class="rest-room-view__title-row">
-            <h1 id="restRoomTitle">Кімната відпочинку</h1>
+            <div class="rest-room-view__title-group">
+              <span class="rest-room-view__title-icon" aria-hidden="true"><svg class="rest-room-icon"><use href="#rr-icon-bed"></use></svg></span>
+              <div>
+                <h1 id="restRoomTitle">Кімната відпочинку</h1>
+                <p class="rest-room-view__subtitle" id="restRoomSubtitle">Орендуй кімнату на 1 добу або викупи її та прокачуй до 10 рівня. Вищий рівень збільшує пасивний дохід, час накопичення та шанс рідкісних знахідок.</p>
+              </div>
+            </div>
             <button class="rest-room-back" id="restRoomBack" type="button">
               <span aria-hidden="true">←</span>
               <span>До бару</span>
             </button>
           </div>
-          <p class="rest-room-view__subtitle" id="restRoomSubtitle">Орендуй кімнату на 1 добу або викупи її та прокачуй до 10 рівня. У таблиці нижче показані всі кімнати, ціни та точні бонуси.</p>
         </header>
 
         <div class="rest-room-view__body">
           <div class="rest-room-view__main">
             <figure class="rest-room-view__scene">
               <img id="restRoomSceneImage" src="assets/hub/rest-room/room-level-1.webp" alt="" draggable="false">
-
+              <button class="rest-room-sidebar-toggle" id="restRoomSidebarToggle" type="button" aria-controls="restRoomSidebar" aria-expanded="false" aria-label="Показати інформацію про кімнату">
+                <span class="rest-room-sidebar-toggle__icon" aria-hidden="true">☰</span>
+                <span class="rest-room-sidebar-toggle__text">Інфо</span>
+              </button>
               <figcaption class="rest-room-scene-caption">
                 <div class="rest-room-scene-caption__main">
                   <span class="rest-room-scene-caption__label" id="restRoomSceneCaptionLabel">Доступна кімната</span>
@@ -328,60 +349,19 @@
               </figcaption>
             </figure>
 
-            <section class="rest-room-view__mobile-info" aria-label="Інформація про кімнату">
-              <div class="rest-room-info-card">
-                <span class="rest-room-info-card__title">Поточна кімната</span>
-                <strong id="restRoomCurrentTierNameMobile">1 · Базова кімната</strong>
-                <small id="restRoomCurrentTierDescriptionMobile">Чистіша кімната, постійний доступ і стартові бонуси.</small>
-                <div class="rest-room-stats">
-                  <span><small>HP</small><b id="restRoomHpBonusMobile">×1.2</b></span>
-                  <span><small>Енергія</small><b id="restRoomEnergyBonusMobile">×1.2</b></span>
-                  <span><small>Радіація</small><b id="restRoomRadiationBonusMobile">−5%</b></span>
-                </div>
-              </div>
 
-              <div class="rest-room-info-card">
-                <span class="rest-room-info-card__title">Наступний рівень</span>
-                <strong id="restRoomNextTierMobile">2 · Прибрана кімната</strong>
-                <small id="restRoomNextTierDescriptionMobile">Краще ліжко, акуратніший інтер’єр і більше світла.</small>
-                <small id="restRoomNextTierBonusesMobile">HP ×1.25 · Енергія ×1.25 · Радіація −6%</small>
-                <span class="rest-room-info-card__price" id="restRoomNextTierCostMobile">₴ 250</span>
-              </div>
-
-              <div class="rest-room-info-card">
-                <span class="rest-room-info-card__title">Доступ і ціни</span>
-                <div class="rest-room-mobile-offers">
-                  <div id="restRoomRentMobileRow"><strong id="restRoomRentLabelMobile">Оренда:</strong><span id="restRoomRentPriceMobile">₴ 10</span></div>
-                  <div id="restRoomBuyMobileRow"><strong id="restRoomBuyLabelMobile">Викуп:</strong><span id="restRoomBuyPriceMobile">₴ 1000</span></div>
-                </div>
-                <small id="restRoomOwnershipStatusMobile">Кімната ще не викуплена. Можна орендувати або одразу купити.</small>
-              </div>
-
-              <div class="rest-room-info-card rest-room-daily-card">
-                <div class="rest-room-daily-card__heading">
-                  <div>
-                    <span class="rest-room-info-card__title">ЩОДЕННИЙ ЗАПАС</span>
-                    <strong data-daily-field="title">Запас кімнати</strong>
-                  </div>
-                  <span class="rest-room-daily-card__timer" data-daily-field="timer">Після викупу</span>
-                </div>
-                <small data-daily-field="description">Викупіть кімнату, щоб отримувати нагороду раз на 24 години.</small>
-                <div class="rest-room-daily-choice" data-daily-choice-wrap hidden>
-                  <button type="button" data-daily-choice="medical">❤ Медичний</button>
-                  <button type="button" data-daily-choice="technical">⌘ Технічний</button>
-                  <button type="button" data-daily-choice="trade">₴ Торговий</button>
-                </div>
-                <div class="rest-room-daily-card__reward" data-daily-field="reward">₴25 + 1 бинт</div>
-                <button class="rest-room-daily-claim" type="button" data-rest-room-daily-claim disabled>Спочатку викупити</button>
-                <small class="rest-room-daily-card__message" data-daily-field="message"></small>
-                <small class="rest-room-daily-card__storage" data-daily-field="storage">Запаси кімнати: порожньо</small>
-              </div>
-            </section>
           </div>
 
-          <aside class="rest-room-view__sidebar" aria-label="Бонуси кімнати">
-            <section class="rest-room-side-card">
-              <span class="rest-room-side-card__title" id="restRoomCurrentTierTitle">Доступна кімната</span>
+          <aside class="rest-room-view__sidebar" id="restRoomSidebar" aria-label="Інформація про кімнату">
+            <button class="rest-room-sidebar-close" id="restRoomSidebarClose" type="button" aria-label="Закрити інформацію про кімнату">
+              <span aria-hidden="true">×</span>
+              <span>Закрити</span>
+            </button>
+            <section class="rest-room-side-card rest-room-side-card--current">
+              <div class="rest-room-side-card__heading">
+                <span class="rest-room-side-card__icon" aria-hidden="true"><svg class="rest-room-icon"><use href="#rr-icon-home"></use></svg></span>
+                <span class="rest-room-side-card__title" id="restRoomCurrentTierTitle">Доступна кімната</span>
+              </div>
               <strong id="restRoomCurrentTierName">1 · Базова кімната</strong>
               <p id="restRoomCurrentTierDescription">Чистіша кімната, постійний доступ і стартові бонуси.</p>
               <dl class="rest-room-side-list">
@@ -389,130 +369,195 @@
                 <div><dt>Відновлення енергії</dt><dd id="restRoomEnergyBonus">×1.2</dd></div>
                 <div><dt>Зниження радіації</dt><dd id="restRoomRadiationBonus">−5%</dd></div>
               </dl>
-              <div class="rest-room-side-note" id="restRoomOwnershipStatus">Кімната ще не викуплена. Можна орендувати або одразу купити.</div>
             </section>
 
-
-            <section class="rest-room-side-card rest-room-daily-card">
-              <div class="rest-room-daily-card__heading">
-                <div>
-                  <span class="rest-room-side-card__title">ЩОДЕННИЙ ЗАПАС</span>
-                  <strong data-daily-field="title">Запас кімнати</strong>
+            <section class="rest-room-side-card rest-room-daily-card rest-room-side-card--daily" data-farm-card>
+              <div class="rest-room-daily-card__topline">
+                <div class="rest-room-side-card__heading">
+                  <span class="rest-room-side-card__icon" aria-hidden="true"><svg class="rest-room-icon"><use href="#rr-icon-crate"></use></svg></span>
+                  <span class="rest-room-side-card__title">ЗАПАСИ КІМНАТИ</span>
                 </div>
-                <span class="rest-room-daily-card__timer" data-daily-field="timer">Після викупу</span>
+                <span class="rest-room-farm-status" data-daily-field="status">Неактивно</span>
               </div>
-              <p data-daily-field="description">Викупіть кімнату, щоб отримувати нагороду раз на 24 години.</p>
-              <div class="rest-room-daily-choice" data-daily-choice-wrap hidden>
-                <button type="button" data-daily-choice="medical">❤ Медичний</button>
-                <button type="button" data-daily-choice="technical">⌘ Технічний</button>
-                <button type="button" data-daily-choice="trade">₴ Торговий</button>
+
+              <div class="rest-room-farm-vault">
+                <div class="rest-room-farm-vault__money">
+                  <span>Накопичено</span>
+                  <strong data-daily-field="money">₴ 0.00</strong>
+                </div>
+                <div class="rest-room-farm-vault__finds">
+                  <span>Знахідок</span>
+                  <strong data-daily-field="finds">0</strong>
+                </div>
               </div>
-              <div class="rest-room-daily-card__reward" data-daily-field="reward">₴25 + 1 бинт</div>
+
+              <div class="rest-room-farm-clock-row">
+                <span>Прогрес</span>
+                <strong data-daily-field="timer">Після викупу</strong>
+              </div>
+              <div class="rest-room-farm-progress" aria-hidden="true">
+                <span class="rest-room-farm-progress__fill" data-daily-progress></span>
+              </div>
+
+              <div class="rest-room-farm-meta" aria-label="Параметри пасивного фарму">
+                <div><span>₴ / хв</span><strong data-daily-field="rate">₴ 0.10</strong></div>
+                <div><span>Макс.</span><strong data-daily-field="capacity">1 год</strong></div>
+                <div><span>Шанс</span><strong data-daily-field="chance">1.0%</strong></div>
+              </div>
+
               <button class="rest-room-daily-claim" type="button" data-rest-room-daily-claim disabled>Спочатку викупити</button>
               <small class="rest-room-daily-card__message" data-daily-field="message"></small>
-              <small class="rest-room-daily-card__storage" data-daily-field="storage">Запаси кімнати: порожньо</small>
             </section>
-
-            <section class="rest-room-side-card rest-room-side-card--offers">
-              <span class="rest-room-side-card__title">Доступ і ціни</span>
-              <div class="rest-room-offer-list">
-                <div class="rest-room-offer" id="restRoomRentOffer">
-                  <div>
-                    <strong id="restRoomRentOfferTitle">Оренда на 1 добу</strong>
-                    <p id="restRoomRentOfferDescription">Дає доступ до кнопки «Відпочити» на поточну ігрову добу. HP та енергія відновлюються до максимуму.</p>
+            <section class="rest-room-side-card rest-room-side-card--compact-upgrade" id="restRoomCompactUpgradeCard" hidden>
+              <div class="rest-room-side-card__heading">
+                <span class="rest-room-side-card__icon" aria-hidden="true"><svg class="rest-room-icon"><use href="#rr-icon-upgrade"></use></svg></span>
+                <span class="rest-room-side-card__title">НАСТУПНЕ ПОКРАЩЕННЯ</span>
+              </div>
+              <div class="rest-room-compact-upgrade">
+                <img class="rest-room-compact-upgrade__thumb" id="restRoomCompactNextThumb" src="assets/hub/rest-room/room-thumb-2.webp" alt="" draggable="false">
+                <div class="rest-room-compact-upgrade__body">
+                  <strong id="restRoomCompactNextTier">2 · Прибрана кімната</strong>
+                  <p id="restRoomCompactNextTierDescription">Краще ліжко, акуратніший інтер’єр і більше світла.</p>
+                  <div class="rest-room-compact-upgrade__delta" aria-label="Зміна бонусів">
+                    <span class="rest-room-delta"><small>HP</small><b><span id="restRoomCompactNextHpCurrent">×1.2</span><i>→</i><span id="restRoomCompactNextHpTarget">×1.25</span></b></span>
+                    <span class="rest-room-delta"><small>Енергія</small><b><span id="restRoomCompactNextEnergyCurrent">×1.2</span><i>→</i><span id="restRoomCompactNextEnergyTarget">×1.25</span></b></span>
+                    <span class="rest-room-delta"><small>Радіація</small><b><span id="restRoomCompactNextRadiationCurrent">−5%</span><i>→</i><span id="restRoomCompactNextRadiationTarget">−6%</span></b></span>
                   </div>
-                  <span class="rest-room-offer__price" id="restRoomRentPrice">₴ 10</span>
-                </div>
-
-                <div class="rest-room-offer" id="restRoomBuyOffer">
-                  <div>
-                    <strong id="restRoomBuyOfferTitle">Викуп кімнати</strong>
-                    <p id="restRoomBuyOfferDescription">Назавжди відкриває Базову кімнату і дає доступ до покращень 2–10 рівня.</p>
+                  <div class="rest-room-compact-upgrade__price">
+                    <small id="restRoomCompactNextTierCostLabel">Ціна покращення</small>
+                    <span id="restRoomCompactNextTierCost">₴ 250</span>
                   </div>
-                  <span class="rest-room-offer__price" id="restRoomBuyPrice">₴ 1000</span>
-                </div>
-
-                <div class="rest-room-offer rest-room-offer--next">
-                  <div>
-                    <strong id="restRoomNextTier">2 · Прибрана кімната</strong>
-                    <p id="restRoomNextTierDescription">Краще ліжко, акуратніший інтер’єр і більше світла.</p>
-                  </div>
-                  <span class="rest-room-offer__price" id="restRoomNextTierCost">₴ 250</span>
                 </div>
               </div>
             </section>
 
-            <section class="rest-room-side-card rest-room-side-card--summary">
-              <span class="rest-room-side-card__title">Що дає наступний рівень</span>
-              <dl class="rest-room-side-list">
-                <div><dt>HP</dt><dd id="restRoomNextHp">×1.25</dd></div>
-                <div><dt>Енергія</dt><dd id="restRoomNextEnergy">×1.25</dd></div>
-                <div><dt>Радіація</dt><dd id="restRoomNextRadiation">−6%</dd></div>
-              </dl>
-            </section>
           </aside>
         </div>
 
+            <section class="rest-room-main-offers" id="restRoomOffers" aria-label="Доступ і ціни">
+          <div class="rest-room-main-offers__header">
+            <span class="rest-room-main-offers__icon" aria-hidden="true"><svg class="rest-room-icon"><use href="#rr-icon-key"></use></svg></span>
+            <span class="rest-room-section-title" id="restRoomOffersTitle">ДОСТУП І ЦІНИ</span>
+          </div>
+          <div class="rest-room-offer-list rest-room-offer-list--main">
+            <div class="rest-room-offer" id="restRoomRentOffer">
+              <div>
+                <strong id="restRoomRentOfferTitle">Оренда на 1 добу</strong>
+                <p id="restRoomRentOfferDescription">Дає доступ до кнопки «Відпочити» на поточну ігрову добу. HP та енергія відновлюються до максимуму.</p>
+              </div>
+              <span class="rest-room-offer__price" id="restRoomRentPrice">₴ 10</span>
+            </div>
+
+            <div class="rest-room-offer" id="restRoomBuyOffer">
+              <div>
+                <strong id="restRoomBuyOfferTitle">Викуп кімнати</strong>
+                <p id="restRoomBuyOfferDescription">Назавжди відкриває Базову кімнату і дає доступ до покращень 2–10 рівня.</p>
+              </div>
+              <span class="rest-room-offer__price" id="restRoomBuyPrice">₴ 1000</span>
+            </div>
+
+            <div class="rest-room-offer rest-room-offer--next" id="restRoomNextOffer">
+              <img class="rest-room-offer__thumb" id="restRoomNextThumb" src="assets/hub/rest-room/room-thumb-2.webp" alt="" draggable="false">
+              <div class="rest-room-offer__body">
+                <strong id="restRoomNextTier">2 · Прибрана кімната</strong>
+                <p id="restRoomNextTierDescription">Краще ліжко, акуратніший інтер’єр і більше світла.</p>
+                <div class="rest-room-offer__delta" aria-label="Зміна бонусів">
+                  <span class="rest-room-delta"><small>HP</small><b><span id="restRoomNextHpCurrent">×1.2</span><i>→</i><span id="restRoomNextHpTarget">×1.25</span></b></span>
+                  <span class="rest-room-delta"><small>Енергія</small><b><span id="restRoomNextEnergyCurrent">×1.2</span><i>→</i><span id="restRoomNextEnergyTarget">×1.25</span></b></span>
+                  <span class="rest-room-delta"><small>Радіація</small><b><span id="restRoomNextRadiationCurrent">−5%</span><i>→</i><span id="restRoomNextRadiationTarget">−6%</span></b></span>
+                </div>
+              </div>
+              <div class="rest-room-offer__price-block">
+                <small id="restRoomNextTierCostLabel">Ціна покращення</small>
+                <span class="rest-room-offer__price" id="restRoomNextTierCost">₴ 250</span>
+              </div>
+            </div>
+          </div>
+            </section>
+
         <footer class="rest-room-view__actions">
           <button class="rest-room-action rest-room-action--rest" id="restRoomPrimaryButton" type="button">
-            <span aria-hidden="true">☾</span>
-            <span id="restRoomPrimaryButtonText">Орендувати · ₴10</span>
+            <span class="rest-room-action__icon" aria-hidden="true"><svg class="rest-room-icon"><use href="#rr-icon-moon"></use></svg></span>
+            <span class="rest-room-action__copy"><b id="restRoomPrimaryButtonText">Орендувати · ₴ 10</b><small>Відновити сили та отримати бонуси</small></span>
           </button>
           <button class="rest-room-action rest-room-action--upgrade" id="restRoomSecondaryButton" type="button">
-            <span aria-hidden="true">⌕</span>
-            <span id="restRoomSecondaryButtonText">Викупити кімнату · ₴1000</span>
+            <span class="rest-room-action__icon" aria-hidden="true"><svg class="rest-room-icon"><use href="#rr-icon-upgrade"></use></svg></span>
+            <span class="rest-room-action__copy"><b id="restRoomSecondaryButtonText">Викупити кімнату · ₴ 1000</b><small>Перейти на наступний рівень</small></span>
           </button>
           <button class="rest-room-action rest-room-action--levels" id="restRoomLevelsToggle" type="button">
-            <span aria-hidden="true">▣</span>
-            <span>Усі рівні</span>
+            <span class="rest-room-action__icon" aria-hidden="true"><svg class="rest-room-icon"><use href="#rr-icon-layers"></use></svg></span>
+            <span class="rest-room-action__copy"><b>Усі рівні</b><small>Переглянути всі кімнати та бонуси</small></span>
           </button>
         </footer>
 
-        <section class="rest-room-levels-panel" id="restRoomLevelsPanel" hidden aria-labelledby="restRoomLevelsTitle">
-          <div class="rest-room-levels-panel__sheet">
-            <header class="rest-room-levels-panel__header">
-              <div>
-                <span class="screen-kicker">ПРОГРЕС КІМНАТИ</span>
-                <h2 id="restRoomLevelsTitle">Усі рівні кімнати</h2>
-                <p>Тут показані всі 10 рівнів кімнати, їх вигляд, бонуси та вартість покращення.</p>
-              </div>
-              <button class="rest-room-levels-panel__close" id="restRoomLevelsClose" type="button" aria-label="Закрити">×</button>
-            </header>
 
-            <div class="rest-room-levels-summary">
-              <div class="rest-room-levels-summary__item">
-                <span>Поточний стан</span>
-                <strong id="restRoomLevelsCurrent">Не викуплена</strong>
-              </div>
-              <div class="rest-room-levels-summary__item">
-                <span>Наступний крок</span>
-                <strong id="restRoomLevelsNext">1 · Базова кімната</strong>
-              </div>
-              <div class="rest-room-levels-summary__item">
-                <span>Статус</span>
-                <strong id="restRoomLevelsStatus">Можна орендувати або викупити</strong>
-              </div>
-            </div>
-
-            <div class="rest-room-levels-table-wrap">
-              <table class="rest-room-levels-table">
-                <thead>
-                  <tr>
-                    <th>Рівень</th>
-                    <th>Вигляд кімнати</th>
-                    <th>Назва і опис</th>
-                    <th>Бонуси</th>
-                    <th>Ціна</th>
-                  </tr>
-                </thead>
-                <tbody id="restRoomLevelsTableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
       </section>
 
     </main>
+
+
+    <section class="rest-room-levels-panel" id="restRoomLevelsPanel" hidden aria-labelledby="restRoomLevelsTitle">
+      <div class="rest-room-levels-panel__sheet">
+        <header class="rest-room-levels-panel__header">
+          <div>
+            <span class="screen-kicker">ПРОГРЕС КІМНАТИ</span>
+            <h2 id="restRoomLevelsTitle">Усі рівні кімнати</h2>
+            <p>Тут показані всі 10 рівнів кімнати, їх вигляд, бонуси, пасивний фарм та вартість покращення.</p>
+          </div>
+          <button class="rest-room-levels-panel__close" id="restRoomLevelsClose" type="button" aria-label="Закрити">×</button>
+        </header>
+
+        <div class="rest-room-levels-summary">
+          <div class="rest-room-levels-summary__item rest-room-levels-summary__item--current">
+            <div class="rest-room-levels-summary__eyebrow"><span>Поточний рівень</span><b>ПОТОЧНИЙ</b></div>
+            <strong id="restRoomLevelsCurrent">Не викуплена</strong>
+            <small id="restRoomLevelsCurrentDescription">Кімнату ще не викуплено.</small>
+          </div>
+          <div class="rest-room-levels-summary__item rest-room-levels-summary__item--next">
+            <div class="rest-room-levels-summary__eyebrow"><span>Наступний рівень</span><b>НАСТУПНИЙ</b></div>
+            <strong id="restRoomLevelsNext">1 · Базова кімната</strong>
+            <small id="restRoomLevelsNextDescription">Перший рівень постійної кімнати.</small>
+          </div>
+        </div>
+
+        <div class="rest-room-levels-table-wrap">
+          <div class="rest-room-levels-cards" id="restRoomLevelsCards"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rest-room-claim-panel" id="restRoomClaimPanel" hidden aria-modal="true" role="dialog" aria-labelledby="restRoomClaimTitle">
+      <div class="rest-room-claim-panel__sheet">
+        <header class="rest-room-claim-panel__header">
+          <div>
+            <span class="screen-kicker">ЗАПАСИ КІМНАТИ</span>
+            <h2 id="restRoomClaimTitle">Запаси отримано</h2>
+            <p id="restRoomClaimSubtitle">Нагороду додано до запасів.</p>
+          </div>
+          <button class="rest-room-claim-panel__close" id="restRoomClaimClose" type="button" aria-label="Закрити">×</button>
+        </header>
+
+        <div class="rest-room-claim-hero">
+          <div class="rest-room-claim-hero__money">
+            <span>Отримано грошей</span>
+            <strong id="restRoomClaimMoney">₴ 0.00</strong>
+          </div>
+          <div class="rest-room-claim-hero__meta">
+            <div><span>Час</span><strong id="restRoomClaimTime">00:00</strong></div>
+            <div><span>Знахідок</span><strong id="restRoomClaimFindCount">0</strong></div>
+          </div>
+        </div>
+
+        <section class="rest-room-claim-loot" aria-labelledby="restRoomClaimLootTitle">
+          <h3 id="restRoomClaimLootTitle">Знахідки</h3>
+          <div class="rest-room-claim-results" id="restRoomClaimResults"></div>
+        </section>
+
+        <footer class="rest-room-claim-panel__footer">
+          <button class="rest-room-claim-panel__take" id="restRoomClaimConfirm" type="button">Готово</button>
+        </footer>
+      </div>
+    </section>
 
     <section class="hub-modal" id="hubModal" hidden aria-modal="true" role="dialog" aria-labelledby="hubModalTitle">
       <button class="hub-modal__backdrop" id="hubModalBackdrop" type="button" data-i18n-aria-label="hub.close"></button>

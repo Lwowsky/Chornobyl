@@ -132,11 +132,6 @@
       resetPan(state);
     }
 
-    state.viewport.classList.toggle(
-      "is-pan-enabled",
-      state.canvasWidth > viewportWidth + 1 ||
-        (!state.lockVerticalPan && state.canvasHeight > viewportHeight + 1)
-    );
 
     syncBarStageUi(state);
   }
@@ -298,7 +293,6 @@
 
     const gameShell = document.getElementById("gameApp");
     gameShell?.classList.toggle("is-bar-casino-screen", screenId === "barCasinoView");
-    gameShell?.classList.toggle("is-casino-screen", screenId === "casinoView");
     gameShell?.classList.toggle("is-rest-room-screen", screenId === "restRoomView");
   }
 

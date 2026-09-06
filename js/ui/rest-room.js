@@ -1,20 +1,33 @@
 (function () {
   const RENT_PRICE = 10;
-  const BUY_PRICE = RENT_PRICE * 100;
-  const DAILY_COOLDOWN_MS = 24 * 60 * 60 * 1000;
+  const BUY_PRICE = 5000;
   const STORAGE_KEY = 'the1037.restRoom.v2';
+  const FARM_MINUTE_MS = 60 * 1000;
 
-  const DAILY_BASE_MONEY = {
-    1: 25,
-    2: 35,
-    3: 50,
-    4: 70,
-    5: 90,
-    6: 120,
-    7: 150,
-    8: 190,
-    9: 240,
-    10: 300
+  const FIND_CHANCE_BY_LEVEL = {
+    1: 1.0,
+    2: 1.1,
+    3: 1.2,
+    4: 1.4,
+    5: 1.6,
+    6: 1.8,
+    7: 2.1,
+    8: 2.4,
+    9: 2.7,
+    10: 3.0
+  };
+
+  const FIND_DROP_WEIGHTS = {
+    1: { materials: 70, bandage: 20, iodine: 7, medkit: 2.5, rareMaterials: 0.5, gearCrate: 0 },
+    2: { materials: 68, bandage: 20, iodine: 8, medkit: 3, rareMaterials: 1, gearCrate: 0 },
+    3: { materials: 66, bandage: 20, iodine: 9, medkit: 3.5, rareMaterials: 1.5, gearCrate: 0 },
+    4: { materials: 63, bandage: 20, iodine: 10, medkit: 4, rareMaterials: 2.5, gearCrate: 0.5 },
+    5: { materials: 60, bandage: 20, iodine: 11, medkit: 4.5, rareMaterials: 3.5, gearCrate: 1 },
+    6: { materials: 57, bandage: 20, iodine: 12, medkit: 5, rareMaterials: 4.5, gearCrate: 1.5 },
+    7: { materials: 54, bandage: 20, iodine: 13, medkit: 6, rareMaterials: 5, gearCrate: 2 },
+    8: { materials: 51, bandage: 20, iodine: 14, medkit: 7, rareMaterials: 5.5, gearCrate: 2.5 },
+    9: { materials: 48, bandage: 20, iodine: 15, medkit: 8, rareMaterials: 6, gearCrate: 3 },
+    10: { materials: 45, bandage: 20, iodine: 16, medkit: 9, rareMaterials: 7, gearCrate: 3 }
   };
 
   const RESOURCE_LABELS = {
@@ -24,8 +37,12 @@
     ammo: 'набої',
     medkit: 'аптечка',
     rareMaterials: 'рідкісні матеріали',
-    eliteCrate: 'Елітний ящик'
+    eliteCrate: 'Елітний ящик',
+    gearCrate: 'Ящик з речами'
   };
+
+  const FARM_FIND_KEYS = ['materials', 'bandage', 'iodine', 'medkit', 'rareMaterials', 'gearCrate'];
+
 
   const ROOM_LEVELS = [
     {
@@ -46,7 +63,7 @@
       hp: '×1.25',
       energy: '×1.25',
       radiation: '−6%',
-      price: 250,
+      price: 10000,
       scene: 'assets/hub/rest-room/room-level-2.webp',
       thumb: 'assets/hub/rest-room/room-thumb-2.webp'
     },
@@ -57,7 +74,7 @@
       hp: '×1.3',
       energy: '×1.3',
       radiation: '−7%',
-      price: 350,
+      price: 15000,
       scene: 'assets/hub/rest-room/room-level-3.webp',
       thumb: 'assets/hub/rest-room/room-thumb-3.webp'
     },
@@ -68,7 +85,7 @@
       hp: '×1.35',
       energy: '×1.35',
       radiation: '−8%',
-      price: 500,
+      price: 25000,
       scene: 'assets/hub/rest-room/room-level-4.webp',
       thumb: 'assets/hub/rest-room/room-thumb-4.webp'
     },
@@ -79,7 +96,7 @@
       hp: '×1.4',
       energy: '×1.4',
       radiation: '−10%',
-      price: 700,
+      price: 40000,
       scene: 'assets/hub/rest-room/room-level-5.webp',
       thumb: 'assets/hub/rest-room/room-thumb-5.webp'
     },
@@ -90,7 +107,7 @@
       hp: '×1.45',
       energy: '×1.45',
       radiation: '−12%',
-      price: 900,
+      price: 60000,
       scene: 'assets/hub/rest-room/room-level-6.webp',
       thumb: 'assets/hub/rest-room/room-thumb-6.webp'
     },
@@ -101,7 +118,7 @@
       hp: '×1.5',
       energy: '×1.5',
       radiation: '−14%',
-      price: 1200,
+      price: 90000,
       scene: 'assets/hub/rest-room/room-level-7.webp',
       thumb: 'assets/hub/rest-room/room-thumb-7.webp'
     },
@@ -112,7 +129,7 @@
       hp: '×1.55',
       energy: '×1.55',
       radiation: '−16%',
-      price: 1600,
+      price: 130000,
       scene: 'assets/hub/rest-room/room-level-8.webp',
       thumb: 'assets/hub/rest-room/room-thumb-8.webp'
     },
@@ -123,7 +140,7 @@
       hp: '×1.6',
       energy: '×1.6',
       radiation: '−18%',
-      price: 2100,
+      price: 180000,
       scene: 'assets/hub/rest-room/room-level-9.webp',
       thumb: 'assets/hub/rest-room/room-thumb-9.webp'
     },
@@ -134,7 +151,7 @@
       hp: '×1.7',
       energy: '×1.7',
       radiation: '−20%',
-      price: 2800,
+      price: 250000,
       scene: 'assets/hub/rest-room/room-level-10.webp',
       thumb: 'assets/hub/rest-room/room-thumb-10.webp'
     }
@@ -144,8 +161,18 @@
     level: 0,
     owned: false,
     rented: false,
-    dailyLastClaimAt: 0,
-    dailyChoice: 'medical',
+    farmStartedAt: 0,
+    farmProcessedMinutes: 0,
+    farmMoneyCents: 0,
+    farmFindEvents: 0,
+    farmFinds: {
+      materials: 0,
+      bandage: 0,
+      iodine: 0,
+      medkit: 0,
+      rareMaterials: 0,
+      gearCrate: 0
+    },
     supplies: {
       bandage: 0,
       iodine: 0,
@@ -153,12 +180,15 @@
       ammo: 0,
       medkit: 0,
       rareMaterials: 0,
-      eliteCrate: 0
+      eliteCrate: 0,
+      gearCrate: 0
     }
   };
 
   let dailyTimerId = null;
   let dailyMessage = '';
+  let isSidebarOpen = false;
+  let sidebarResizeObserver = null;
 
   const FIRST_LEVEL = ROOM_LEVELS[0];
   const LAST_LEVEL = ROOM_LEVELS[ROOM_LEVELS.length - 1];
@@ -183,10 +213,6 @@
     return findLevel(room.level + 1);
   }
 
-  function formatMoney(amount) {
-    return `₴ ${amount}`;
-  }
-
   function formatLevelName(item) {
     return `${item.level} · ${item.name}`;
   }
@@ -199,14 +225,29 @@
       room.level = Number.isInteger(saved.level) ? Math.max(0, Math.min(10, saved.level)) : room.level;
       room.owned = Boolean(saved.owned);
       room.rented = Boolean(saved.rented);
-      room.dailyLastClaimAt = Number.isFinite(saved.dailyLastClaimAt) ? saved.dailyLastClaimAt : 0;
-      room.dailyChoice = ['medical', 'technical', 'trade'].includes(saved.dailyChoice) ? saved.dailyChoice : 'medical';
+      room.farmStartedAt = Number.isFinite(saved.farmStartedAt) ? saved.farmStartedAt : 0;
+      room.farmProcessedMinutes = Number.isFinite(saved.farmProcessedMinutes) ? Math.max(0, Math.floor(saved.farmProcessedMinutes)) : 0;
+      room.farmMoneyCents = Number.isFinite(saved.farmMoneyCents) ? Math.max(0, Math.floor(saved.farmMoneyCents)) : 0;
+      room.farmFindEvents = Number.isFinite(saved.farmFindEvents) ? Math.max(0, Math.floor(saved.farmFindEvents)) : 0;
+
+      if (saved.farmFinds && typeof saved.farmFinds === 'object') {
+        FARM_FIND_KEYS.forEach((key) => {
+          const value = Number(saved.farmFinds[key]);
+          room.farmFinds[key] = Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
+        });
+      }
 
       if (saved.supplies && typeof saved.supplies === 'object') {
         Object.keys(room.supplies).forEach((key) => {
           const value = Number(saved.supplies[key]);
           room.supplies[key] = Number.isFinite(value) && value > 0 ? Math.floor(value) : 0;
         });
+      }
+
+      if (room.owned && !room.farmStartedAt) {
+        room.farmStartedAt = Date.now();
+        room.farmProcessedMinutes = 0;
+        room.farmMoneyCents = 0;
       }
     } catch (error) {
       console.warn('Rest room state could not be loaded.', error);
@@ -227,182 +268,296 @@
     });
   }
 
-  function getFixedDailyReward(level) {
-    const base = DAILY_BASE_MONEY[level] || DAILY_BASE_MONEY[1];
-    const fixed = {
-      1: { money: base, supplies: { bandage: 1 } },
-      2: { money: base, supplies: { bandage: 1, materials: 1 } },
-      3: { money: base, supplies: { materials: 2 } },
-      4: { money: base, supplies: { bandage: 1, iodine: 1 } }
-    };
-    return fixed[level] || null;
+  function setDailyProgress(percent) {
+    const safe = Math.max(0, Math.min(100, percent));
+    document.querySelectorAll('[data-daily-progress]').forEach((node) => {
+      node.style.width = `${safe}%`;
+    });
   }
 
-  function getChoiceDailyReward(level, choice) {
-    const money = DAILY_BASE_MONEY[level] || DAILY_BASE_MONEY[5];
-    const elite = level === 10 ? { eliteCrate: 1 } : {};
-
-    if (choice === 'technical') {
-      return {
-        money,
-        supplies: {
-          materials: 2 + Math.max(0, level - 4),
-          ammo: 10 + (level - 5) * 5,
-          ...(level >= 8 ? { rareMaterials: level - 7 } : {}),
-          ...elite
-        }
-      };
-    }
-
-    if (choice === 'trade') {
-      return {
-        money: Math.round(money * 1.65),
-        supplies: {
-          ...(level >= 8 ? { materials: 1 } : {}),
-          ...elite
-        }
-      };
-    }
-
-    return {
-      money,
-      supplies: {
-        bandage: level >= 8 ? 2 : 1,
-        iodine: Math.max(1, Math.floor((level - 3) / 2)),
-        ...(level >= 6 ? { medkit: Math.max(1, Math.floor((level - 4) / 2)) } : {}),
-        ...elite
-      }
-    };
+  function formatMoney(amount) {
+    const value = Number(amount) || 0;
+    const hasCoins = Math.abs(value - Math.round(value)) > 0.0001;
+    return `₴ ${value.toLocaleString('uk-UA', {
+      minimumFractionDigits: hasCoins ? 2 : 0,
+      maximumFractionDigits: 2
+    })}`;
   }
 
-  function getDailyReward(level = Math.max(1, room.level)) {
-    return level < 5
-      ? getFixedDailyReward(level)
-      : getChoiceDailyReward(level, room.dailyChoice);
+  function formatMoneyFromCents(cents) {
+    return formatMoney((Number(cents) || 0) / 100);
   }
 
   function formatResourceAmount(key, amount) {
     if (!amount) return '';
     const label = RESOURCE_LABELS[key] || key;
-    if (key === 'eliteCrate') return `${amount}× ${label}`;
     return `${amount}× ${label}`;
   }
 
-  function formatDailyReward(reward) {
-    if (!reward) return '—';
-    const parts = [`${formatMoney(reward.money)}`];
-    Object.entries(reward.supplies || {}).forEach(([key, amount]) => {
-      if (amount > 0) parts.push(formatResourceAmount(key, amount));
-    });
-    return parts.join(' + ');
+  function getFarmCapacityMinutes(level = Math.max(1, room.level || 1)) {
+    return Math.max(1, Math.min(10, level)) * 60;
   }
 
-  function getStoredSuppliesText() {
-    const parts = Object.entries(room.supplies)
-      .filter(([, amount]) => amount > 0)
-      .map(([key, amount]) => formatResourceAmount(key, amount));
-    return parts.length ? `Запаси кімнати: ${parts.join(' · ')}` : 'Запаси кімнати: порожньо';
+  function getFarmMoneyRateCents(level = Math.max(1, room.level || 1)) {
+    return Math.max(1, Math.min(10, level)) * 10;
   }
 
-  function getDailyReadyAt() {
-    return room.dailyLastClaimAt ? room.dailyLastClaimAt + DAILY_COOLDOWN_MS : 0;
+  function getFindChance(level = Math.max(1, room.level || 1)) {
+    return FIND_CHANCE_BY_LEVEL[level] || FIND_CHANCE_BY_LEVEL[1];
   }
 
-  function isDailyReady() {
+  function getFindWeights(level = Math.max(1, room.level || 1)) {
+    return FIND_DROP_WEIGHTS[level] || FIND_DROP_WEIGHTS[1];
+  }
+
+  function getGearCrateChance(level = Math.max(1, room.level || 1)) {
+    return getFindWeights(level).gearCrate || 0;
+  }
+
+  function rollFarmFind(level) {
+    const weights = getFindWeights(level);
+    const roll = Math.random() * 100;
+    let cursor = 0;
+
+    for (const key of FARM_FIND_KEYS) {
+      cursor += Number(weights[key] || 0);
+      if (roll < cursor) return key;
+    }
+
+    return 'materials';
+  }
+
+  function getFarmFindQuantity(key) {
+    if (key === 'materials') return 1 + Math.floor(Math.random() * 3);
+    return 1;
+  }
+
+  function getFarmFindCount() {
+    return Math.max(0, room.farmFindEvents || 0);
+  }
+
+  function ensureFarmStarted(now = Date.now()) {
     if (!room.owned) return false;
-    const readyAt = getDailyReadyAt();
-    return !readyAt || Date.now() >= readyAt;
+    if (!Number.isFinite(room.farmStartedAt) || room.farmStartedAt <= 0 || room.farmStartedAt > now) {
+      room.farmStartedAt = now;
+      room.farmProcessedMinutes = 0;
+      room.farmMoneyCents = 0;
+      room.farmFindEvents = 0;
+      FARM_FIND_KEYS.forEach((key) => { room.farmFinds[key] = 0; });
+      saveRoomState();
+      return true;
+    }
+    return false;
   }
 
-  function formatCountdown(ms) {
-    const safe = Math.max(0, ms);
-    const totalSeconds = Math.ceil(safe / 1000);
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  function settlePassiveFarm(now = Date.now()) {
+    if (!room.owned) return false;
+    ensureFarmStarted(now);
+
+    const level = Math.max(1, room.level || 1);
+    const capacityMinutes = getFarmCapacityMinutes(level);
+    const elapsedMinutes = Math.min(
+      capacityMinutes,
+      Math.max(0, Math.floor((now - room.farmStartedAt) / FARM_MINUTE_MS))
+    );
+    const alreadyProcessed = Math.min(capacityMinutes, Math.max(0, room.farmProcessedMinutes || 0));
+    const newMinutes = elapsedMinutes - alreadyProcessed;
+    if (newMinutes <= 0) return false;
+
+    const moneyRateCents = getFarmMoneyRateCents(level);
+    const findChance = getFindChance(level);
+
+    for (let minute = 0; minute < newMinutes; minute += 1) {
+      room.farmMoneyCents += moneyRateCents;
+      if (Math.random() * 100 < findChance) {
+        const key = rollFarmFind(level);
+        room.farmFindEvents += 1;
+        room.farmFinds[key] = (room.farmFinds[key] || 0) + getFarmFindQuantity(key);
+      }
+    }
+
+    room.farmProcessedMinutes = elapsedMinutes;
+    saveRoomState();
+    return true;
   }
 
-  function getDailyChoiceLabel() {
-    if (room.dailyChoice === 'technical') return 'Технічний запас';
-    if (room.dailyChoice === 'trade') return 'Торговий запас';
-    return 'Медичний запас';
+  function reanchorFarmForUpgrade(now = Date.now()) {
+    if (!room.owned) return;
+    settlePassiveFarm(now);
+    room.farmStartedAt = now - Math.max(0, room.farmProcessedMinutes || 0) * FARM_MINUTE_MS;
+    saveRoomState();
+  }
+
+  function getFarmElapsedMs(now = Date.now()) {
+    if (!room.owned || !room.farmStartedAt) return 0;
+    return Math.min(
+      getFarmCapacityMinutes() * FARM_MINUTE_MS,
+      Math.max(0, now - room.farmStartedAt)
+    );
+  }
+
+  function formatFarmClock(ms) {
+    const totalMinutes = Math.max(0, Math.floor(ms / FARM_MINUTE_MS));
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  }
+
+  function formatFarmCapacity(level) {
+    const hours = Math.max(1, Math.min(10, level));
+    return `${hours} ${hours === 1 ? 'година' : hours >= 2 && hours <= 4 ? 'години' : 'годин'}`;
+  }
+
+  function getBestFindsText(level) {
+    if (level <= 3) return 'Матеріали · бинт · йод · аптечка';
+    if (level <= 6) return 'Аптечка · рідкісний матеріал · ящик з речами';
+    return 'Рідкісний матеріал · аптечка · ящик з речами';
+  }
+
+  function getLevelsDailyRewardMarkup(level) {
+    const rate = formatMoneyFromCents(getFarmMoneyRateCents(level));
+    const chance = getFindChance(level).toFixed(1);
+
+    return `
+      <div class="rest-room-level-card__farm-info">
+        <div class="rest-room-level-card__farm-metric"><span>Макс. фарм</span><b>${formatFarmCapacity(level)}</b></div>
+        <div class="rest-room-level-card__farm-metric"><span>Дохід</span><b>${rate} / хв</b></div>
+        <div class="rest-room-level-card__farm-metric"><span>Шанс знахідки</span><b>${chance}% / хв</b></div>
+      </div>`;
   }
 
   function renderDailyReward() {
     const level = Math.max(1, room.level || 1);
-    const reward = getDailyReward(level);
-    const choiceUnlocked = room.owned && level >= 5;
-    const readyAt = getDailyReadyAt();
-    const ready = isDailyReady();
+    const now = Date.now();
+    settlePassiveFarm(now);
 
-    setDailyText('title', level >= 10 ? 'Елітний щоденний запас' : `Щоденний запас · Рівень ${level}`);
-    setDailyText('description', room.owned
-      ? (choiceUnlocked
-        ? `Раз на 24 години. З 5 рівня можна обрати тип нагороди. Зараз: ${getDailyChoiceLabel()}.`
-        : 'Раз на 24 години. З кожним рівнем кімнати нагорода стає більшою.')
-      : 'Викупіть кімнату, щоб отримувати нагороду раз на 24 години.');
-    setDailyText('reward', formatDailyReward(reward));
-    setDailyText('storage', getStoredSuppliesText());
+    const capacityMinutes = getFarmCapacityMinutes(level);
+    const capacityMs = capacityMinutes * FARM_MINUTE_MS;
+    const elapsedMs = getFarmElapsedMs(now);
+    const progress = capacityMs ? (elapsedMs / capacityMs) * 100 : 0;
+    const full = room.owned && elapsedMs >= capacityMs;
+    const findCount = getFarmFindCount();
+
+    setDailyText('rate', formatMoneyFromCents(getFarmMoneyRateCents(level)));
+    setDailyText('capacity', formatFarmCapacity(level));
+    setDailyText('chance', `${getFindChance(level).toFixed(1)}%`);
+    setDailyText('money', formatMoneyFromCents(room.farmMoneyCents));
+    setDailyText('finds', String(findCount));
+    setDailyText('status', !room.owned ? 'Неактивно' : full ? 'Заповнено' : 'Працює');
     setDailyText('message', dailyMessage);
+    setDailyProgress(progress);
 
-    document.querySelectorAll('[data-daily-choice-wrap]').forEach((wrap) => {
-      wrap.hidden = !choiceUnlocked;
+    document.querySelectorAll('[data-farm-card]').forEach((card) => {
+      card.classList.toggle('is-full', full);
+      card.classList.toggle('is-active', room.owned && !full);
     });
 
-    document.querySelectorAll('[data-daily-choice]').forEach((button) => {
-      button.classList.toggle('is-selected', button.dataset.dailyChoice === room.dailyChoice);
-      button.disabled = !choiceUnlocked;
-    });
+    if (!room.owned) {
+      setDailyText('timer', 'Після викупу');
+    } else {
+      setDailyText('timer', `${formatFarmClock(elapsedMs)} / ${String(level).padStart(2, '0')}:00`);
+    }
 
     document.querySelectorAll('[data-rest-room-daily-claim]').forEach((button) => {
       if (!room.owned) {
         button.disabled = true;
         button.textContent = 'Спочатку викупити';
-      } else if (ready) {
-        button.disabled = false;
-        button.textContent = level >= 10 ? 'Забрати елітний запас' : 'Забрати запас';
-      } else {
+      } else if (room.farmProcessedMinutes <= 0) {
         button.disabled = true;
-        button.textContent = 'Забрано сьогодні';
+        button.textContent = 'Накопичення триває';
+      } else {
+        button.disabled = false;
+        button.textContent = full ? 'Забрати заповнені запаси' : 'Забрати запаси';
       }
     });
+  }
 
-    if (!room.owned) {
-      setDailyText('timer', 'Після викупу');
-    } else if (ready) {
-      setDailyText('timer', 'Доступно зараз');
-    } else {
-      setDailyText('timer', `Через ${formatCountdown(readyAt - Date.now())}`);
+  function getClaimResultRows(finds) {
+    const icons = {
+      materials: '🔩',
+      bandage: '🩹',
+      iodine: '☢️',
+      medkit: '❤️',
+      rareMaterials: '⚙️',
+      gearCrate: '📦'
+    };
+
+    return FARM_FIND_KEYS
+      .filter((key) => (finds[key] || 0) > 0)
+      .map((key) => {
+        const isRare = key === 'rareMaterials' || key === 'gearCrate';
+        const isCrate = key === 'gearCrate';
+        const label = isCrate ? 'Особлива знахідка' : isRare ? 'Рідкісна знахідка' : 'Знайдено';
+        return `
+          <div class="rest-room-claim-result ${isRare ? 'is-rare' : ''} ${isCrate ? 'is-crate' : ''}">
+            <span class="rest-room-claim-result__icon" aria-hidden="true">${icons[key] || '•'}</span>
+            <div><small>${label}</small><strong>${RESOURCE_LABELS[key] || key}</strong></div>
+            <b>×${finds[key]}</b>
+          </div>`;
+      })
+      .join('');
+  }
+
+  function openClaimModal(result) {
+    closeLevels();
+    closeResponsiveSidebar();
+    setText('restRoomClaimTime', formatFarmClock(result.elapsedMinutes * FARM_MINUTE_MS));
+    setText('restRoomClaimMoney', formatMoneyFromCents(result.moneyCents));
+    setText('restRoomClaimFindCount', String(result.findCount));
+    setText('restRoomClaimSubtitle', result.findCount
+      ? 'Гроші та знайдені припаси вже зараховано.'
+      : 'Гроші зараховано. Цього разу без додаткових знахідок.');
+
+    const results = $('restRoomClaimResults');
+    if (results) {
+      results.innerHTML = result.findCount
+        ? getClaimResultRows(result.finds)
+        : '<div class="rest-room-claim-empty">Додаткових знахідок цього разу немає.</div>';
     }
+
+    const panel = $('restRoomClaimPanel');
+    if (panel) panel.hidden = false;
+  }
+
+  function closeClaimModal() {
+    const panel = $('restRoomClaimPanel');
+    if (panel) panel.hidden = true;
   }
 
   function claimDailyReward() {
-    if (!room.owned || !isDailyReady()) return;
+    if (!room.owned) return;
+    settlePassiveFarm();
+    if (room.farmProcessedMinutes <= 0) return;
 
-    const reward = getDailyReward(Math.max(1, room.level));
     const player = window.GameState?.player;
-    if (!player || !reward) return;
+    if (!player) return;
 
-    player.money += reward.money;
-    Object.entries(reward.supplies || {}).forEach(([key, amount]) => {
+    const result = {
+      elapsedMinutes: room.farmProcessedMinutes,
+      moneyCents: room.farmMoneyCents,
+      findCount: getFarmFindCount(),
+      finds: { ...room.farmFinds }
+    };
+
+    player.money = Math.round((player.money + result.moneyCents / 100) * 100) / 100;
+    FARM_FIND_KEYS.forEach((key) => {
+      const amount = result.finds[key] || 0;
+      if (!amount) return;
       if (!(key in room.supplies)) room.supplies[key] = 0;
       room.supplies[key] += amount;
     });
 
-    room.dailyLastClaimAt = Date.now();
-    dailyMessage = `Отримано: ${formatDailyReward(reward)}`;
+    room.farmStartedAt = Date.now();
+    room.farmProcessedMinutes = 0;
+    room.farmMoneyCents = 0;
+    room.farmFindEvents = 0;
+    FARM_FIND_KEYS.forEach((key) => { room.farmFinds[key] = 0; });
+    dailyMessage = 'Новий цикл накопичення вже запущено.';
+
     saveRoomState();
     window.GameHud?.render();
     renderDailyReward();
-  }
-
-  function selectDailyChoice(choice) {
-    if (!room.owned || room.level < 5 || !['medical', 'technical', 'trade'].includes(choice)) return;
-    room.dailyChoice = choice;
-    dailyMessage = `Наступний запас: ${getDailyChoiceLabel()}`;
-    saveRoomState();
-    renderDailyReward();
+    openClaimModal(result);
   }
 
   function startDailyTimer() {
@@ -416,18 +571,6 @@
     player.money -= amount;
     window.GameHud?.render();
     return true;
-  }
-
-  function getOwnershipStatusText() {
-    if (room.owned) {
-      return `Кімната викуплена. Активний рівень ${room.level} з 10. Можна покращувати далі, якщо рівень ще не максимальний.`;
-    }
-
-    if (room.rented) {
-      return 'Оренда активна на поточну ігрову добу. Можна відпочивати вже зараз або одразу викупити кімнату.';
-    }
-
-    return 'Кімната ще не викуплена. Можна орендувати або одразу купити.';
   }
 
   function getLevelsStatusText() {
@@ -445,7 +588,7 @@
   }
 
   function getCurrentTitleText() {
-    return room.owned ? `Твоя кімната · Рівень ${room.level}` : 'Доступна кімната';
+    return room.owned ? `Твоя кімната · Рівень\u00A0${room.level}` : 'Доступна кімната';
   }
 
   function getPrimaryButtonLabel() {
@@ -454,14 +597,14 @@
 
   function getSubtitleText() {
     if (room.owned) {
-      return 'Кімната вже викуплена. Відновлюй сили та покращуй її до 10 рівня. У таблиці нижче показані всі кімнати, ціни та точні бонуси.';
+      return 'Кімната вже викуплена. Відновлюй сили та покращуй її до 10 рівня. Кожен рівень підсилює пасивний фарм і шанс рідкісних знахідок.';
     }
 
     if (room.rented) {
       return 'Оренда вже активна на поточну ігрову добу. Можна відпочивати зараз або одразу викупити кімнату для постійного доступу.';
     }
 
-    return 'Орендуй кімнату на 1 добу або викупи її та прокачуй до 10 рівня. У таблиці нижче показані всі кімнати, ціни та точні бонуси.';
+    return 'Орендуй кімнату на 1 добу або викупи її та прокачуй до 10 рівня. Вищий рівень збільшує пасивний дохід, час накопичення та шанс рідкісних знахідок.';
   }
 
   function getSecondaryButtonLabel(nextRoom) {
@@ -471,6 +614,9 @@
   }
 
   function renderMainInfo(currentRoom, nextRoom) {
+    const view = $('restRoomView');
+    if (view) view.classList.toggle('is-owned', room.owned);
+
     const scene = $('restRoomSceneImage');
     if (scene) scene.src = currentRoom.scene;
 
@@ -479,51 +625,41 @@
     setText('restRoomCurrentTierTitle', getCurrentTitleText());
     setText('restRoomCurrentTierName', formatLevelName(currentRoom));
     setText('restRoomCurrentTierDescription', currentRoom.description);
-    setText('restRoomCurrentTierNameMobile', formatLevelName(currentRoom));
-    setText('restRoomCurrentTierDescriptionMobile', currentRoom.description);
     setText('restRoomCurrentNameOverlay', currentRoom.name);
     setText('restRoomCurrentDescriptionOverlay', currentRoom.description);
 
     setText('restRoomHpBonus', currentRoom.hp);
     setText('restRoomEnergyBonus', currentRoom.energy);
     setText('restRoomRadiationBonus', currentRoom.radiation);
-    setText('restRoomHpBonusMobile', currentRoom.hp);
-    setText('restRoomEnergyBonusMobile', currentRoom.energy);
-    setText('restRoomRadiationBonusMobile', currentRoom.radiation);
-
-    const statusText = getOwnershipStatusText();
-    setText('restRoomOwnershipStatus', statusText);
-    setText('restRoomOwnershipStatusMobile', statusText);
 
     const rentOffer = $('restRoomRentOffer');
     const buyOffer = $('restRoomBuyOffer');
-    const rentMobileRow = $('restRoomRentMobileRow');
-    const buyMobileRow = $('restRoomBuyMobileRow');
+    const nextOffer = $('restRoomNextOffer');
+    const nextThumb = $('restRoomNextThumb');
+
+    const offersTitle = !room.owned ? 'ДОСТУП І ЦІНИ' : (nextRoom ? 'НАСТУПНЕ ПОКРАЩЕННЯ' : 'МАКСИМАЛЬНИЙ РІВЕНЬ');
+    setText('restRoomOffersTitle', offersTitle);
+    $('restRoomOffers')?.setAttribute('aria-label', offersTitle.toLowerCase());
+    setText('restRoomNextHpCurrent', currentRoom.hp);
+    setText('restRoomNextEnergyCurrent', currentRoom.energy);
+    setText('restRoomNextRadiationCurrent', currentRoom.radiation);
 
     if (room.owned) {
       if (rentOffer) rentOffer.hidden = true;
-      if (rentMobileRow) rentMobileRow.hidden = true;
-      if (buyOffer) buyOffer.hidden = false;
-      if (buyMobileRow) buyMobileRow.hidden = false;
+      if (buyOffer) buyOffer.hidden = true;
+      if (nextOffer) {
+        nextOffer.hidden = false;
+        nextOffer.classList.toggle('is-max', !nextRoom);
+      }
 
-      if (nextRoom) {
-        setText('restRoomBuyOfferTitle', 'Покращення кімнати');
-        setText('restRoomBuyOfferDescription', `Наступний крок — ${formatLevelName(nextRoom)}. Прокачування відкриває новий вигляд кімнати та кращі бонуси.`);
-        setText('restRoomBuyPrice', formatMoney(nextRoom.price));
-        setText('restRoomBuyLabelMobile', 'Покращення:');
-        setText('restRoomBuyPriceMobile', formatMoney(nextRoom.price));
-      } else {
-        setText('restRoomBuyOfferTitle', 'Максимальний рівень');
-        setText('restRoomBuyOfferDescription', 'Кімната повністю покращена. Нових рівнів більше немає.');
-        setText('restRoomBuyPrice', 'MAX');
-        setText('restRoomBuyLabelMobile', 'Статус:');
-        setText('restRoomBuyPriceMobile', 'MAX');
+      if (nextThumb) {
+        nextThumb.src = nextRoom?.thumb || currentRoom.thumb;
+        nextThumb.alt = nextRoom?.name || currentRoom.name;
       }
     } else {
       if (rentOffer) rentOffer.hidden = false;
-      if (rentMobileRow) rentMobileRow.hidden = false;
       if (buyOffer) buyOffer.hidden = false;
-      if (buyMobileRow) buyMobileRow.hidden = false;
+      if (nextOffer) nextOffer.hidden = true;
 
       setText('restRoomRentOfferTitle', 'Оренда на 1 добу');
       setText('restRoomRentOfferDescription', 'Дає доступ до кнопки «Відпочити» на поточну ігрову добу. HP та енергія відновлюються до максимуму.');
@@ -531,10 +667,11 @@
       setText('restRoomBuyOfferTitle', 'Викуп кімнати');
       setText('restRoomBuyOfferDescription', 'Назавжди відкриває Базову кімнату і дає доступ до покращень 2–10 рівня.');
       setText('restRoomBuyPrice', formatMoney(BUY_PRICE));
-      setText('restRoomRentLabelMobile', 'Оренда:');
-      setText('restRoomRentPriceMobile', formatMoney(RENT_PRICE));
-      setText('restRoomBuyLabelMobile', 'Викуп:');
-      setText('restRoomBuyPriceMobile', formatMoney(BUY_PRICE));
+    }
+
+    const compactUpgradeCard = $('restRoomCompactUpgradeCard');
+    if (compactUpgradeCard) {
+      compactUpgradeCard.hidden = !room.owned;
     }
 
     if (nextRoom) {
@@ -543,24 +680,54 @@
       setText('restRoomNextHp', nextRoom.hp);
       setText('restRoomNextEnergy', nextRoom.energy);
       setText('restRoomNextRadiation', nextRoom.radiation);
+      setText('restRoomNextTierCostLabel', 'Ціна покращення');
       setText('restRoomNextTierCost', room.owned ? formatMoney(nextRoom.price) : `Викуп · ${formatMoney(BUY_PRICE)}`);
+      setText('restRoomNextHpTarget', nextRoom.hp);
+      setText('restRoomNextEnergyTarget', nextRoom.energy);
+      setText('restRoomNextRadiationTarget', nextRoom.radiation);
+      setText('restRoomCompactNextTier', formatLevelName(nextRoom));
+      setText('restRoomCompactNextTierDescription', nextRoom.description);
+      setText('restRoomCompactNextHpCurrent', currentRoom.hp);
+      setText('restRoomCompactNextHpTarget', nextRoom.hp);
+      setText('restRoomCompactNextEnergyCurrent', currentRoom.energy);
+      setText('restRoomCompactNextEnergyTarget', nextRoom.energy);
+      setText('restRoomCompactNextRadiationCurrent', currentRoom.radiation);
+      setText('restRoomCompactNextRadiationTarget', nextRoom.radiation);
+      setText('restRoomCompactNextTierCostLabel', 'Ціна покращення');
+      setText('restRoomCompactNextTierCost', room.owned ? formatMoney(nextRoom.price) : `Викуп · ${formatMoney(BUY_PRICE)}`);
+      const compactThumb = $('restRoomCompactNextThumb');
+      if (compactThumb) {
+        compactThumb.src = nextRoom.thumb;
+        compactThumb.alt = nextRoom.name;
+      }
 
-      setText('restRoomNextTierMobile', formatLevelName(nextRoom));
-      setText('restRoomNextTierDescriptionMobile', nextRoom.description);
-      setText('restRoomNextTierBonusesMobile', `HP ${nextRoom.hp} · Енергія ${nextRoom.energy} · Радіація ${nextRoom.radiation}`);
-      setText('restRoomNextTierCostMobile', room.owned ? formatMoney(nextRoom.price) : `Викуп · ${formatMoney(BUY_PRICE)}`);
     } else {
       setText('restRoomNextTier', 'Максимальний рівень');
       setText('restRoomNextTierDescription', 'Кімната повністю покращена. Нових рівнів більше немає.');
       setText('restRoomNextHp', 'MAX');
       setText('restRoomNextEnergy', 'MAX');
       setText('restRoomNextRadiation', 'MAX');
-      setText('restRoomNextTierCost', '—');
+      setText('restRoomNextTierCostLabel', 'Статус');
+      setText('restRoomNextTierCost', 'MAX');
+      setText('restRoomNextHpTarget', 'MAX');
+      setText('restRoomNextEnergyTarget', 'MAX');
+      setText('restRoomNextRadiationTarget', 'MAX');
+      setText('restRoomCompactNextTier', 'Максимальний рівень');
+      setText('restRoomCompactNextTierDescription', 'Кімната повністю покращена. Нових рівнів більше немає.');
+      setText('restRoomCompactNextHpCurrent', currentRoom.hp);
+      setText('restRoomCompactNextHpTarget', 'MAX');
+      setText('restRoomCompactNextEnergyCurrent', currentRoom.energy);
+      setText('restRoomCompactNextEnergyTarget', 'MAX');
+      setText('restRoomCompactNextRadiationCurrent', currentRoom.radiation);
+      setText('restRoomCompactNextRadiationTarget', 'MAX');
+      setText('restRoomCompactNextTierCostLabel', 'Статус');
+      setText('restRoomCompactNextTierCost', 'MAX');
+      const compactThumb = $('restRoomCompactNextThumb');
+      if (compactThumb) {
+        compactThumb.src = currentRoom.thumb;
+        compactThumb.alt = currentRoom.name;
+      }
 
-      setText('restRoomNextTierMobile', 'Максимальний рівень');
-      setText('restRoomNextTierDescriptionMobile', 'Кімната повністю покращена.');
-      setText('restRoomNextTierBonusesMobile', 'Усі бонуси вже відкриті');
-      setText('restRoomNextTierCostMobile', '—');
     }
   }
 
@@ -571,24 +738,39 @@
     setText('restRoomPrimaryButtonText', getPrimaryButtonLabel());
     setText('restRoomSecondaryButtonText', getSecondaryButtonLabel(nextRoom));
 
+    const primaryHint = primary?.querySelector('.rest-room-action__copy small');
+    const secondaryHint = secondary?.querySelector('.rest-room-action__copy small');
+
+    if (primaryHint) {
+      primaryHint.textContent = room.owned || room.rented
+        ? 'Відновити сили та отримати бонуси'
+        : 'Оренда відкриє відпочинок на добу';
+    }
+
+    if (secondaryHint) {
+      secondaryHint.textContent = room.owned
+        ? (nextRoom ? 'Перейти на наступний рівень' : 'Кімната вже максимального рівня')
+        : 'Назавжди відкрити кімнату';
+    }
+
     if (primary) primary.disabled = false;
     if (secondary) secondary.disabled = room.owned && !nextRoom;
   }
 
   function renderLevelsTable() {
-    const tableBody = $('restRoomLevelsTableBody');
-    if (!tableBody) return;
+    const cardsRoot = $('restRoomLevelsCards');
+    if (!cardsRoot) return;
 
     const currentLevel = room.owned ? room.level : null;
     const nextLevel = room.owned ? room.level + 1 : 1;
 
-    tableBody.innerHTML = ROOM_LEVELS.map((item) => {
+    cardsRoot.innerHTML = ROOM_LEVELS.map((item) => {
       const isCurrent = item.level === currentLevel;
       const isNext = item.level === nextLevel;
       const stateBadge = isCurrent
-        ? '<span class="rest-room-levels-table__badge">Поточний</span>'
+        ? '<span class="rest-room-level-card__state-badge">Поточний</span>'
         : isNext
-          ? '<span class="rest-room-levels-table__badge rest-room-levels-table__badge--next">Наступний</span>'
+          ? '<span class="rest-room-level-card__state-badge rest-room-level-card__state-badge--next">Наступний</span>'
           : '';
 
       const priceLabel = item.level === 1 && !room.owned
@@ -596,30 +778,100 @@
         : formatMoney(item.price);
 
       return `
-        <tr class="${isCurrent ? 'is-current' : ''} ${isNext ? 'is-next' : ''}">
-          <td class="rest-room-levels-table__level">
-            <span>${item.level}</span>
-          </td>
-          <td class="rest-room-levels-table__preview">
-            <img src="${item.thumb}" alt="${item.name}">
-          </td>
-          <td class="rest-room-levels-table__room">
-            <strong>${item.name}</strong>
-            ${stateBadge}
+        <article class="rest-room-level-card ${isCurrent ? 'is-current' : ''} ${isNext ? 'is-next' : ''}">
+          <div class="rest-room-level-card__title-wrap">
+            <strong>${item.level} - ${item.name}</strong>
             <p>${item.description}</p>
-          </td>
-          <td class="rest-room-levels-table__bonuses">
-            <span><b>HP</b>${item.hp}</span>
-            <span><b>Енергія</b>${item.energy}</span>
-            <span><b>Радіація</b>${item.radiation}</span>
-          </td>
-          <td class="rest-room-levels-table__price">${priceLabel}</td>
-        </tr>`;
+          </div>
+
+          <div class="rest-room-level-card__media">
+            <img src="${item.thumb}" alt="${item.name}">
+            <span class="rest-room-level-card__level-badge">${item.level}</span>
+            ${stateBadge}
+          </div>
+
+          <div class="rest-room-level-card__content">
+            <div class="rest-room-level-card__stats" aria-label="Бонуси кімнати">
+              <div class="rest-room-level-card__stat"><b>HP</b><span>${item.hp}</span></div>
+              <div class="rest-room-level-card__stat"><b>Енергія</b><span>${item.energy}</span></div>
+              <div class="rest-room-level-card__stat"><b>Радіація</b><span>${item.radiation}</span></div>
+            </div>
+
+            <div class="rest-room-level-card__daily">
+              ${getLevelsDailyRewardMarkup(item.level)}
+            </div>
+
+            <div class="rest-room-level-card__footer">
+              <div class="rest-room-level-card__finds">
+                <span>Можливі знахідки</span>
+                <b>${getBestFindsText(item.level)}</b>
+              </div>
+
+              <div class="rest-room-level-card__price">
+                <small>Ціна покращення</small>
+                <strong>${priceLabel}</strong>
+              </div>
+            </div>
+          </div>
+        </article>`;
     }).join('');
 
+    const currentRoom = room.owned ? getCurrentRoomData() : null;
+    const nextRoom = getNextRoomData();
     setText('restRoomLevelsCurrent', getCurrentSummaryText());
-    setText('restRoomLevelsNext', getNextRoomData() ? formatLevelName(getNextRoomData()) : 'Максимальний рівень');
-    setText('restRoomLevelsStatus', getLevelsStatusText());
+    setText('restRoomLevelsCurrentDescription', currentRoom ? currentRoom.description : 'Кімнату ще не викуплено.');
+    setText('restRoomLevelsNext', nextRoom ? formatLevelName(nextRoom) : 'Максимальний рівень');
+    setText('restRoomLevelsNextDescription', nextRoom ? nextRoom.description : 'Кімната повністю покращена.');
+  }
+
+  function isCompactSidebarLayout() {
+    const view = $('restRoomView');
+    if (!view) return window.innerWidth <= 900;
+    return view.getBoundingClientRect().width <= 900;
+  }
+
+  function syncResponsiveSidebar() {
+    const toggle = $('restRoomSidebarToggle');
+    const sidebar = $('restRoomSidebar');
+    if (!toggle || !sidebar) return;
+
+    const isCompact = isCompactSidebarLayout();
+    if (!isCompact) {
+      sidebar.hidden = false;
+      sidebar.classList.remove('is-open');
+      toggle.hidden = true;
+      toggle.classList.remove('is-open');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Інформація про кімнату');
+      const iconNode = toggle.querySelector('.rest-room-sidebar-toggle__icon');
+      const textNode = toggle.querySelector('.rest-room-sidebar-toggle__text');
+      if (iconNode) iconNode.textContent = '☰';
+      if (textNode) textNode.textContent = 'Інфо';
+      return;
+    }
+
+    toggle.hidden = false;
+    sidebar.hidden = false;
+    sidebar.classList.toggle('is-open', isSidebarOpen);
+    toggle.classList.toggle('is-open', isSidebarOpen);
+    toggle.setAttribute('aria-expanded', isSidebarOpen ? 'true' : 'false');
+    toggle.setAttribute('aria-label', isSidebarOpen ? 'Сховати інформацію про кімнату' : 'Показати інформацію про кімнату');
+    const iconNode = toggle.querySelector('.rest-room-sidebar-toggle__icon');
+    const textNode = toggle.querySelector('.rest-room-sidebar-toggle__text');
+    if (iconNode) iconNode.textContent = '☰';
+    if (textNode) textNode.textContent = 'Інфо';
+  }
+
+  function toggleResponsiveSidebar() {
+    if (!isCompactSidebarLayout()) return;
+    isSidebarOpen = !isSidebarOpen;
+    syncResponsiveSidebar();
+  }
+
+  function closeResponsiveSidebar() {
+    if (!isSidebarOpen) return;
+    isSidebarOpen = false;
+    syncResponsiveSidebar();
   }
 
   function render() {
@@ -629,6 +881,7 @@
     renderButtons(nextRoom);
     renderLevelsTable();
     renderDailyReward();
+    syncResponsiveSidebar();
   }
 
   function primaryAction() {
@@ -654,7 +907,12 @@
       room.owned = true;
       room.rented = false;
       room.level = 1;
-      dailyMessage = 'Щоденний запас відкрито. Першу нагороду можна забрати зараз.';
+      room.farmStartedAt = Date.now();
+      room.farmProcessedMinutes = 0;
+      room.farmMoneyCents = 0;
+      room.farmFindEvents = 0;
+      FARM_FIND_KEYS.forEach((key) => { room.farmFinds[key] = 0; });
+      dailyMessage = 'Пасивний генератор запущено. Перші ₴0.10 з’являться через хвилину.';
       saveRoomState();
       render();
       return;
@@ -662,8 +920,9 @@
 
     const nextRoom = getNextRoomData();
     if (!nextRoom || !spend(nextRoom.price)) return;
+    reanchorFarmForUpgrade();
     room.level = nextRoom.level;
-    dailyMessage = `Щоденний запас покращено до рівня ${room.level}.`;
+    dailyMessage = `Пасивний фарм покращено: ${formatMoneyFromCents(getFarmMoneyRateCents(room.level))}/хв · ліміт ${formatFarmCapacity(room.level)}.`;
     saveRoomState();
     render();
   }
@@ -672,16 +931,20 @@
     renderLevelsTable();
     const panel = $('restRoomLevelsPanel');
     if (panel) panel.hidden = false;
+    document.documentElement.classList.add('rest-room-levels-open');
   }
 
   function closeLevels() {
     const panel = $('restRoomLevelsPanel');
     if (panel) panel.hidden = true;
+    document.documentElement.classList.remove('rest-room-levels-open');
   }
 
   function refresh() {
+    isSidebarOpen = false;
     render();
     closeLevels();
+    closeClaimModal();
 
     const view = $('restRoomView');
     const scrollContainer = view?.closest('.game-main');
@@ -697,17 +960,29 @@
     $('restRoomSecondaryButton')?.addEventListener('click', secondaryAction);
     $('restRoomLevelsToggle')?.addEventListener('click', openLevels);
     $('restRoomLevelsClose')?.addEventListener('click', closeLevels);
+    $('restRoomSidebarToggle')?.addEventListener('click', toggleResponsiveSidebar);
+    $('restRoomSidebarClose')?.addEventListener('click', closeResponsiveSidebar);
+    window.addEventListener('resize', syncResponsiveSidebar);
+    if (window.ResizeObserver) {
+      sidebarResizeObserver = new ResizeObserver(() => syncResponsiveSidebar());
+      const view = $('restRoomView');
+      if (view) sidebarResizeObserver.observe(view);
+    }
 
     document.querySelectorAll('[data-rest-room-daily-claim]').forEach((button) => {
       button.addEventListener('click', claimDailyReward);
     });
 
-    document.querySelectorAll('[data-daily-choice]').forEach((button) => {
-      button.addEventListener('click', () => selectDailyChoice(button.dataset.dailyChoice));
-    });
+    $('restRoomClaimClose')?.addEventListener('click', closeClaimModal);
+    $('restRoomClaimConfirm')?.addEventListener('click', closeClaimModal);
 
     document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && !$('restRoomClaimPanel')?.hidden) closeClaimModal();
       if (event.key === 'Escape' && !$('restRoomLevelsPanel')?.hidden) closeLevels();
+      if (event.key === 'Escape' && isSidebarOpen) {
+        isSidebarOpen = false;
+        syncResponsiveSidebar();
+      }
     });
 
     render();
@@ -718,6 +993,7 @@
     bind,
     refresh,
     closeLevels,
+    closeClaimModal,
     claimDailyReward,
     getStorage: () => ({ ...room.supplies })
   };
