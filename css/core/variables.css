@@ -3,6 +3,33 @@
   --font-ui: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
   --font-display: "Arial Narrow", "Segoe UI", system-ui, sans-serif;
 
+  /* Unified typography scale — v0.39
+     Text throughout the site uses these tokens instead of scattered pixel values.
+     10px is the minimum UI text size; muted/body/button copy stays in the 10–12px range. */
+  --font-size-label: 10px;
+  --font-size-small: 11px;
+  --font-size-body: 12px;
+  --font-size-medium: 14px;
+  --font-size-large: 16px;
+  --font-size-card-title: 18px;
+  --font-size-section-title: 20px;
+  --font-size-heading: 24px;
+  --font-size-heading-large: 28px;
+  --font-size-page-title-static: 32px;
+
+  /* Fluid typography tokens */
+  --font-size-fluid-small: clamp(10px, 0.82vw, 12px);
+  --font-size-fluid-medium: clamp(14px, 1.18vw, 18px);
+  --font-size-fluid-large: clamp(16px, 1.45vw, 21px);
+  --font-size-fluid-heading: clamp(22px, 2vw, 30px);
+  --font-size-page-title: clamp(31px, 3vw, 44px);
+  --font-size-display: clamp(34px, 3.15vw, 48px);
+
+  /* Semantic aliases */
+  --font-size-muted: var(--font-size-body);
+  --font-size-button: var(--font-size-body);
+  --font-size-meta: var(--font-size-label);
+
   /* Base colors */
   --color-black: #050605;
   --color-void: #080a08;
@@ -73,8 +100,8 @@
   --profile-ammo-slot-size: 42px;
   --profile-equipment-gap: 10px;
   --profile-loadout-gap: 14px;
-  --profile-slot-label-size: 7.5px;
-  --profile-ammo-label-size: 6.5px;
+  --profile-slot-label-size: var(--font-size-label);
+  --profile-ammo-label-size: var(--font-size-label);
 
   /* Motion */
   --transition-fast: 150ms ease;

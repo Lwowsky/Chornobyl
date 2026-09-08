@@ -65,14 +65,14 @@
   color: var(--color-gold-bright);
   background: linear-gradient(180deg, rgba(43, 38, 20, 0.88), rgba(15, 17, 12, 0.96));
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.018);
-  font-size: 31px;
+  font-size: var(--font-size-page-title-static);
 }
 
 .rest-room-view__title-row h1 {
   margin: 0;
   color: var(--color-text-strong);
   font-family: var(--font-display);
-  font-size: clamp(31px, 3vw, 44px);
+  font-size: var(--font-size-page-title);
   line-height: 1;
   letter-spacing: -0.035em;
 }
@@ -81,8 +81,8 @@
   max-width: 940px;
   margin: 8px 0 0;
   color: #aaa69b;
-  font-size: 11.5px;
-  line-height: 1.45;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
 }
 
 .rest-room-back {
@@ -97,7 +97,7 @@
   color: var(--color-gold-bright);
   background: linear-gradient(180deg, rgba(29, 27, 18, 0.96), rgba(10, 12, 9, 0.98));
   font-family: var(--font-display);
-  font-size: 11.5px;
+  font-size: var(--font-size-body);
   font-weight: 800;
   white-space: nowrap;
   cursor: pointer;
@@ -127,25 +127,6 @@
   gap: 10px;
 }
 
-/* v0.12: on purchased-room desktop layouts, make the scene exactly as tall as the real sidebar content. */
-.rest-room-view.is-owned .rest-room-view__body {
-  align-items: stretch;
-}
-
-.rest-room-view.is-owned .rest-room-view__main {
-  position: relative;
-  align-self: stretch;
-  min-height: 0;
-}
-
-.rest-room-view.is-owned .rest-room-view__scene {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  aspect-ratio: auto;
-}
-
 .rest-room-sidebar-toggle {
   position: absolute;
   top: 12px;
@@ -164,7 +145,7 @@
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.32);
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: var(--font-size-body);
   font-weight: 800;
   cursor: pointer;
 }
@@ -178,7 +159,7 @@
 .rest-room-sidebar-toggle__icon {
   width: 16px;
   text-align: center;
-  font-size: 14px;
+  font-size: var(--font-size-medium);
   line-height: 1;
 }
 
@@ -247,7 +228,7 @@
 .rest-room-side-card__title {
   color: var(--color-gold);
   font-family: var(--font-display);
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
   font-weight: 800;
   letter-spacing: 0.09em;
 }
@@ -255,15 +236,15 @@
 .rest-room-scene-caption__main strong {
   color: #f2ecde;
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: var(--font-size-heading);
   line-height: 1;
 }
 
 .rest-room-scene-caption__main small {
   max-width: 620px;
   color: #d7d1c5;
-  font-size: 10.5px;
-  line-height: 1.42;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.72);
 }
 
@@ -287,7 +268,7 @@
 }
 
 .rest-room-side-card {
-  padding: 13px 14px;
+  padding: 14px 15px;
   overflow: visible;
 }
 
@@ -305,10 +286,6 @@
     linear-gradient(180deg, rgba(20, 22, 17, 0.98), rgba(9, 11, 8, 0.99));
 }
 
-.rest-room-side-card--summary {
-  border-color: rgba(104, 156, 164, 0.28);
-}
-
 .rest-room-side-card__heading {
   display: flex;
   align-items: center;
@@ -322,7 +299,7 @@
   display: grid;
   place-items: center;
   color: var(--color-gold-bright);
-  font-size: 18px;
+  font-size: var(--font-size-card-title);
   line-height: 1;
 }
 
@@ -330,7 +307,7 @@
   display: block;
   margin-top: 8px;
   color: #f1ebdd;
-  font-size: 17px;
+  font-size: var(--font-size-card-title);
   line-height: 1.2;
 }
 
@@ -338,8 +315,9 @@
   display: block;
   margin: 6px 0 0;
   color: #aba69a;
-  font-size: 10.5px;
-  line-height: 1.42;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .rest-room-side-list {
@@ -358,7 +336,7 @@
 .rest-room-side-list dt,
 .rest-room-side-list dd {
   margin: 0;
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
 }
 
 .rest-room-side-list dt {
@@ -368,12 +346,6 @@
 .rest-room-side-list dd {
   color: #9fe171;
   font-weight: 800;
-}
-
-.rest-room-daily-card__heading {
-  display: grid;
-  gap: 7px;
-  min-width: 0;
 }
 
 .rest-room-daily-card__topline {
@@ -388,81 +360,11 @@
   flex: 1 1 auto;
 }
 
-.rest-room-daily-card__name {
-  display: block;
-  min-width: 0;
-  color: #f0eadb;
-  font-size: 15px;
-  line-height: 1.2;
-  text-wrap: pretty;
-}
-
-.rest-room-daily-card__timer {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 29px;
-  padding: 0 10px;
-  border: 1px solid rgba(216, 167, 51, 0.34);
-  border-radius: 999px;
-  color: #f7d76d;
-  background: linear-gradient(180deg, rgba(84, 64, 19, 0.30), rgba(24, 21, 12, 0.54));
-  box-shadow: inset 0 0 12px rgba(216, 167, 51, 0.035);
-  font-size: 9px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-.rest-room-daily-choice {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 5px;
-  margin-top: 9px;
-}
-
-.rest-room-daily-choice[hidden] {
-  display: none;
-}
-
-.rest-room-daily-choice button {
-  min-width: 0;
-  min-height: 32px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 5px 4px;
-  border: 1px solid rgba(125, 143, 130, 0.22);
-  border-radius: 8px;
-  color: #c0baae;
-  background: rgba(255, 255, 255, 0.018);
-  font-size: 8.5px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.rest-room-choice-icon {
-  flex: 0 0 auto;
-  font-size: 12px;
-}
-
 .rest-room-daily-choice button.is-active {
   color: #ffe18b;
   border-color: rgba(230, 181, 49, 0.62);
   background: rgba(216, 167, 51, 0.11);
   box-shadow: inset 0 0 16px rgba(216, 167, 51, 0.035);
-}
-
-.rest-room-daily-card__reward {
-  margin-top: 9px;
-  padding: 8px 10px;
-  border: 1px solid rgba(216, 167, 51, 0.20);
-  border-radius: 9px;
-  color: #f4df91;
-  background: rgba(0, 0, 0, 0.22);
-  font-size: 10px;
-  font-weight: 800;
 }
 
 .rest-room-daily-claim {
@@ -474,7 +376,7 @@
   color: #fff0ac;
   background: linear-gradient(180deg, rgba(82, 60, 13, 0.94), rgba(31, 25, 9, 0.98));
   font-family: var(--font-display);
-  font-size: 9px;
+  font-size: var(--font-size-small);
   font-weight: 800;
   cursor: pointer;
 }
@@ -489,7 +391,7 @@
   display: block;
   margin-top: 6px;
   color: #9c968b;
-  font-size: 8.5px;
+  font-size: var(--font-size-label);
   line-height: 1.35;
 }
 
@@ -526,15 +428,15 @@
 .rest-room-compact-upgrade__body strong {
   display: block;
   color: #efe9db;
-  font-size: 18px;
+  font-size: var(--font-size-card-title);
   line-height: 1.2;
 }
 
 .rest-room-compact-upgrade__body p {
   margin: 0;
   color: #aaa499;
-  font-size: 10px;
-  line-height: 1.45;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
 }
 
 .rest-room-compact-upgrade__delta {
@@ -553,13 +455,13 @@
 
 .rest-room-compact-upgrade__price small {
   color: #9f9a8e;
-  font-size: 9px;
+  font-size: var(--font-size-small);
 }
 
 .rest-room-compact-upgrade__price span {
   color: var(--color-gold-bright);
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: var(--font-size-large);
   font-weight: 800;
 }
 
@@ -604,29 +506,30 @@
 .rest-room-offer strong {
   display: block;
   color: #efe9db;
-  font-size: 12px;
+  font-size: var(--font-size-body);
   line-height: 1.25;
 }
 
 .rest-room-offer p {
   margin: 4px 0 0;
   color: #aaa499;
-  font-size: 9px;
-  line-height: 1.38;
+  font-size: var(--font-size-body);
+  line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .rest-room-offer__price {
   white-space: nowrap;
   color: var(--color-gold-bright);
   font-family: var(--font-display);
-  font-size: 12px;
+  font-size: var(--font-size-body);
   font-weight: 800;
 }
 
 .rest-room-offer--next {
   grid-column: 1 / -1;
   grid-template-columns: 150px minmax(0, 1fr) auto;
-  padding: 8px;
+  padding: 10px;
   border-color: rgba(103, 159, 169, 0.32);
   background:
     radial-gradient(circle at 0 50%, rgba(58, 125, 133, 0.10), transparent 35%),
@@ -653,7 +556,7 @@
 }
 
 .rest-room-offer__body strong {
-  font-size: 15px;
+  font-size: var(--font-size-large);
 }
 
 .rest-room-offer__delta {
@@ -671,7 +574,7 @@
 
 .rest-room-delta small {
   color: #8f9991;
-  font-size: 8px;
+  font-size: var(--font-size-small);
   line-height: 1;
 }
 
@@ -680,8 +583,9 @@
   align-items: center;
   gap: 4px;
   color: #b8b4a9;
-  font-size: 9.5px;
-  white-space: nowrap;
+  font-size: var(--font-size-body);
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .rest-room-delta b span:last-child {
@@ -703,11 +607,11 @@
   display: block;
   margin-bottom: 5px;
   color: #9f9a8e;
-  font-size: 8.5px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-offer__price-block .rest-room-offer__price {
-  font-size: 16px;
+  font-size: var(--font-size-large);
 }
 
 .rest-room-view__actions {
@@ -738,26 +642,27 @@
   display: grid;
   place-items: center;
   color: var(--color-gold-bright);
-  font-size: 22px;
+  font-size: var(--font-size-heading);
 }
 
 .rest-room-action__copy {
   min-width: 0;
   display: grid;
-  gap: 2px;
+  gap: 3px;
   text-align: left;
 }
 
 .rest-room-action__copy b {
   color: inherit;
-  font-size: 12px;
-  line-height: 1.15;
+  font-size: var(--font-size-button);
+  line-height: 1.2;
 }
 
 .rest-room-action__copy small {
-  color: #aaa498;
-  font-size: 9px;
-  line-height: 1.2;
+  color: #b7b1a4;
+  font-size: var(--font-size-button);
+  line-height: 1.28;
+  overflow-wrap: anywhere;
 }
 
 .rest-room-action--rest {
@@ -836,14 +741,14 @@
   margin: 2px 0 0;
   color: #f1ecde;
   font-family: var(--font-display);
-  font-size: 28px;
+  font-size: var(--font-size-heading-large);
   line-height: 1;
 }
 
 .rest-room-levels-panel__header p {
   margin: 6px 0 0;
   color: #a39f94;
-  font-size: 11px;
+  font-size: var(--font-size-body);
   line-height: 1.4;
 }
 
@@ -856,7 +761,7 @@
   border-radius: 12px;
   color: #ded9cc;
   background: rgba(255, 255, 255, 0.02);
-  font-size: 28px;
+  font-size: var(--font-size-heading-large);
   cursor: pointer;
 }
 
@@ -878,13 +783,13 @@
   margin-bottom: 6px;
   color: var(--color-gold);
   font-family: var(--font-display);
-  font-size: 10px;
+  font-size: var(--font-size-small);
   font-weight: 800;
 }
 
 .rest-room-levels-summary__item strong {
   color: #efe9db;
-  font-size: 18px;
+  font-size: var(--font-size-card-title);
   line-height: 1.25;
 }
 
@@ -912,7 +817,7 @@
   padding: 14px 12px;
   color: #f5e39d;
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: var(--font-size-body);
   font-weight: 800;
   letter-spacing: 0.06em;
   text-align: left;
@@ -940,326 +845,10 @@
   padding: 16px 12px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   vertical-align: middle;
-  font-size: 12px;
+  font-size: var(--font-size-body);
 }
 
-.rest-room-levels-table__level {
-  width: 84px;
-}
-
-.rest-room-levels-table__level span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 42px;
-  height: 42px;
-  padding: 0 10px;
-  border: 1px solid rgba(216, 167, 51, 0.28);
-  border-radius: 999px;
-  color: var(--color-gold-bright);
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 800;
-}
-
-.rest-room-levels-table__preview {
-  width: 200px;
-}
-
-.rest-room-levels-table__preview img {
-  width: 180px;
-  height: 102px;
-  display: block;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 1px solid rgba(216, 167, 51, 0.18);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
-}
-
-.rest-room-levels-table__room strong {
-  display: block;
-  color: #efe9db;
-  font-size: 16px;
-  line-height: 1.2;
-}
-
-.rest-room-levels-table__room p {
-  margin: 9px 0 0;
-  color: #b0aa9d;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.rest-room-levels-table__badge {
-  display: inline-flex;
-  align-items: center;
-  margin-top: 8px;
-  padding: 4px 9px;
-  border-radius: 999px;
-  border: 1px solid rgba(216, 167, 51, 0.22);
-  color: #f5e39d;
-  background: rgba(216, 167, 51, 0.10);
-  font-size: 10px;
-  font-weight: 800;
-}
-
-.rest-room-levels-table__badge--next {
-  color: #c7edf8;
-  border-color: rgba(104, 177, 222, 0.34);
-  background: rgba(104, 177, 222, 0.12);
-}
-
-.rest-room-levels-table__bonuses {
-  width: 220px;
-}
-
-.rest-room-levels-table__bonuses span {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 6px 0;
-  color: #d9d3c7;
-  font-size: 11px;
-}
-
-.rest-room-levels-table__bonuses b {
-  color: #8fca6d;
-  font-size: 11px;
-}
-
-.rest-room-levels-table__daily {
-  width: 320px;
-}
-
-.rest-room-levels-table__daily-item {
-  display: grid;
-  gap: 4px;
-  padding: 7px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.rest-room-levels-table__daily-item:last-child {
-  border-bottom: 0;
-  padding-bottom: 0;
-}
-
-.rest-room-levels-table__daily-item:first-child {
-  padding-top: 0;
-}
-
-.rest-room-levels-table__daily-item b {
-  color: #f2d370;
-  font-size: 10px;
-}
-
-.rest-room-levels-table__daily-item span {
-  color: #d8d1c4;
-  font-size: 10px;
-  line-height: 1.45;
-}
-
-.rest-room-levels-table__price {
-  width: 140px;
-  color: var(--color-gold-bright);
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 800;
-  white-space: nowrap;
-}
-
-
-.game-shell.is-rest-room-screen {
-  grid-template-rows: minmax(0, 1fr);
-}
-
-.game-shell.is-rest-room-screen .top-hud,
-.game-shell.is-rest-room-screen .bottom-nav {
-  display: none;
-}
-
-.game-shell.is-rest-room-screen .game-main {
-  grid-row: 1;
-  min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(216, 167, 51, 0.34) transparent;
-  container-type: inline-size;
-}
-
-.game-shell.is-rest-room-screen .game-main::-webkit-scrollbar {
-  width: 8px;
-}
-
-.game-shell.is-rest-room-screen .game-main::-webkit-scrollbar-thumb {
-  border-radius: 999px;
-  background: rgba(216, 167, 51, 0.30);
-}
-
-@container (max-width: 1180px) {
-  .rest-room-view {
-    padding: 14px;
-    gap: 10px;
-  }
-
-  .rest-room-view__body {
-    grid-template-columns: minmax(0, 1fr) 310px;
-    gap: 10px;
-  }
-
-  .rest-room-side-card {
-    padding: 11px 12px;
-  }
-
-  .rest-room-side-card > strong {
-    font-size: 15px;
-  }
-
-  .rest-room-side-card > p,
-  .rest-room-side-list dt,
-  .rest-room-side-list dd {
-    font-size: 9.5px;
-  }
-
-  .rest-room-daily-card__name {
-    font-size: 14px;
-  }
-
-  .rest-room-daily-choice button {
-    font-size: 8px;
-  }
-}
-
-@container (max-width: 900px) {
-  .rest-room-view__body,
-  .rest-room-view.is-owned .rest-room-view__body {
-    position: static;
-    grid-template-columns: 1fr;
-    align-items: start;
-  }
-
-  .rest-room-view__main,
-  .rest-room-view.is-owned .rest-room-view__main {
-    position: static;
-    min-height: auto;
-    grid-template-rows: auto;
-  }
-
-  .rest-room-view__scene,
-  .rest-room-view.is-owned .rest-room-view__scene {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 10;
-  }
-
-  .rest-room-sidebar-toggle {
-    display: inline-flex;
-  }
-
-  .rest-room-view__sidebar {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    bottom: auto;
-    height: calc(100dvh - 16px);
-    max-height: calc(100dvh - 16px);
-    z-index: 20;
-    width: min(390px, calc(100% - 16px));
-    max-width: 94%;
-    padding: 66px 12px 12px;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    align-content: start;
-    align-items: stretch;
-    gap: 10px;
-    overflow-y: auto;
-    border: 1px solid rgba(216, 167, 51, 0.26);
-    border-radius: 14px;
-    background:
-      linear-gradient(180deg, rgba(11, 14, 12, 0.94), rgba(6, 9, 7, 0.97)),
-      radial-gradient(circle at 100% 0%, rgba(216, 167, 51, 0.06), transparent 48%);
-    backdrop-filter: blur(12px);
-    box-shadow: -18px 0 34px rgba(0, 0, 0, 0.35);
-    transform: translateX(calc(100% + 16px));
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: transform 220ms ease, opacity 180ms ease, visibility 180ms ease;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(216, 167, 51, 0.34) transparent;
-  }
-
-  .rest-room-view__sidebar.is-open {
-    transform: translateX(0);
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  .rest-room-sidebar-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    z-index: 3;
-    min-height: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    padding: 0 12px;
-    border: 1px solid rgba(216, 167, 51, 0.48);
-    border-radius: 11px;
-    color: #fff0b4;
-    background: linear-gradient(180deg, rgba(76, 54, 13, 0.94), rgba(28, 22, 9, 0.98));
-    font-family: var(--font-display);
-    font-size: 10px;
-    font-weight: 800;
-    cursor: pointer;
-  }
-
-  .rest-room-sidebar-close span:first-child {
-    font-size: 22px;
-    line-height: 1;
-  }
-
-  .rest-room-sidebar-toggle.is-open {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-  }
-
-  .rest-room-view.is-owned > .rest-room-main-offers {
-    display: none;
-  }
-
-  .rest-room-view__sidebar::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), transparent 25%);
-  }
-
-  .rest-room-side-card {
-    position: relative;
-    z-index: 1;
-    height: auto;
-  }
-
-  .rest-room-side-card--daily {
-    min-height: auto;
-  }
-
-  .rest-room-side-card--compact-upgrade {
-    display: block;
-  }
-}
+/* Responsive rules for the levels modal retained from the earlier room build. */
 
 @container (max-width: 1100px) {
   .rest-room-levels-table-wrap {
@@ -1311,69 +900,6 @@
     border-bottom: 0;
   }
 
-  .rest-room-levels-table__level {
-    grid-area: level;
-    width: auto;
-    padding-top: 4px;
-  }
-
-  .rest-room-levels-table__preview {
-    grid-area: preview;
-    width: auto;
-  }
-
-  .rest-room-levels-table__preview img {
-    width: 100%;
-    height: 86px;
-  }
-
-  .rest-room-levels-table__room {
-    grid-area: room;
-  }
-
-  .rest-room-levels-table__bonuses {
-    grid-area: bonuses;
-    width: auto;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-  }
-
-  .rest-room-levels-table__bonuses span {
-    padding: 8px 10px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.016);
-  }
-
-  .rest-room-levels-table__daily {
-    grid-area: daily;
-    width: auto;
-  }
-
-  .rest-room-levels-table__daily-item {
-    padding: 8px 0;
-  }
-
-  .rest-room-levels-table__price {
-    grid-area: price;
-    width: auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 2px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-  }
-
-  .rest-room-levels-table__price::before {
-    content: "Вартість покращення";
-    color: #b0aa9d;
-    font-family: var(--font-body);
-    font-size: 10px;
-    font-weight: 400;
-  }
 }
 
 @container (max-width: 900px) {
@@ -1390,7 +916,7 @@
 
   .rest-room-view__sidebar .rest-room-side-list dt,
   .rest-room-view__sidebar .rest-room-side-list dd {
-    font-size: 9px;
+    font-size: var(--font-size-small);
   }
 
   .rest-room-view__sidebar .rest-room-side-list dd {
@@ -1407,11 +933,11 @@
   }
 
   .rest-room-view__sidebar .rest-room-delta small {
-    font-size: 8px;
+    font-size: var(--font-size-label);
   }
 
   .rest-room-view__sidebar .rest-room-delta b {
-    font-size: 8.5px;
+    font-size: var(--font-size-label);
     gap: 3px;
   }
 }
@@ -1424,15 +950,15 @@
   .rest-room-view__title-icon {
     width: 46px;
     height: 46px;
-    font-size: 25px;
+    font-size: var(--font-size-heading);
   }
 
   .rest-room-view__title-row h1 {
-    font-size: 28px;
+    font-size: var(--font-size-heading-large);
   }
 
   .rest-room-view__subtitle {
-    font-size: 10.5px;
+    font-size: var(--font-size-body);
   }
 
   .rest-room-view__sidebar {
@@ -1478,14 +1004,6 @@
       "price";
   }
 
-  .rest-room-levels-table__preview img {
-    width: min(100%, 260px);
-    height: 140px;
-  }
-
-  .rest-room-levels-table__bonuses {
-    grid-template-columns: 1fr;
-  }
 }
 
 @container (max-width: 520px) {
@@ -1523,7 +1041,7 @@
   }
 
   .rest-room-scene-caption__main strong {
-    font-size: 20px;
+    font-size: var(--font-size-section-title);
   }
 
   .rest-room-offer--next {
@@ -1575,17 +1093,6 @@
     flex-wrap: wrap;
   }
 
-  .rest-room-daily-card__timer {
-    margin-left: 27px;
-  }
-
-  .rest-room-daily-choice {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .rest-room-daily-choice button:last-child {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (max-height: 980px) and (min-width: 1181px) {
@@ -1608,22 +1115,18 @@
   }
 
   .rest-room-scene-caption__main strong {
-    font-size: 21px;
+    font-size: var(--font-size-section-title);
   }
 
   .rest-room-scene-caption__main small {
-    font-size: 10px;
+    font-size: var(--font-size-body);
   }
 
   .rest-room-side-card {
     padding: 12px 13px;
   }
 
-  .rest-room-daily-card__name {
-    font-size: 14px;
-  }
-
-  .rest-room-main-offers {
+.rest-room-main-offers {
     padding: 9px 11px;
   }
 
@@ -1637,11 +1140,11 @@
   }
 
   .rest-room-offer__body strong {
-    font-size: 14px;
+    font-size: var(--font-size-medium);
   }
 
   .rest-room-offer p {
-    font-size: 8.8px;
+    font-size: var(--font-size-small);
   }
 
   .rest-room-view__actions {
@@ -1653,7 +1156,7 @@
   }
 
   .rest-room-action__copy small {
-    font-size: 8.5px;
+    font-size: var(--font-size-button);
   }
 }
 
@@ -1670,16 +1173,16 @@
   .rest-room-view__title-icon {
     width: 44px;
     height: 44px;
-    font-size: 24px;
+    font-size: var(--font-size-heading);
   }
 
   .rest-room-view__title-row h1 {
-    font-size: 31px;
+    font-size: var(--font-size-page-title-static);
   }
 
   .rest-room-view__subtitle {
     margin-top: 5px;
-    font-size: 10px;
+    font-size: var(--font-size-body);
   }
 
   .rest-room-back {
@@ -1692,13 +1195,13 @@
 
   .rest-room-side-card > strong {
     margin-top: 6px;
-    font-size: 14px;
+    font-size: var(--font-size-medium);
   }
 
   .rest-room-side-card > p,
   .rest-room-side-list dt,
   .rest-room-side-list dd {
-    font-size: 9px;
+    font-size: var(--font-size-small);
   }
 
   .rest-room-side-list {
@@ -1706,21 +1209,7 @@
     margin-top: 8px;
   }
 
-  .rest-room-daily-card__name {
-    font-size: 13px;
-  }
-
-  .rest-room-daily-choice button {
-    min-height: 28px;
-    font-size: 8px;
-  }
-
-  .rest-room-daily-card__reward {
-    padding: 7px 9px;
-    font-size: 9px;
-  }
-
-  .rest-room-daily-claim {
+.rest-room-daily-claim {
     min-height: 30px;
   }
 
@@ -1738,12 +1227,12 @@
   }
 
   .rest-room-offer__body strong {
-    font-size: 13px;
+    font-size: var(--font-size-medium);
   }
 
   .rest-room-offer p,
   .rest-room-delta b {
-    font-size: 8.5px;
+    font-size: var(--font-size-small);
   }
 
   .rest-room-view__actions {
@@ -1755,11 +1244,11 @@
   }
 
   .rest-room-action__copy b {
-    font-size: 11px;
+    font-size: var(--font-size-button);
   }
 
   .rest-room-action__copy small {
-    font-size: 8px;
+    font-size: var(--font-size-button);
   }
 }
 
@@ -1805,8 +1294,8 @@
 
 .rest-room-farm-meta span {
   color: #918c80;
-  font-size: 8px;
-  line-height: 1.1;
+  font-size: var(--font-size-small);
+  line-height: 1.15;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -1814,17 +1303,9 @@
 .rest-room-farm-meta strong {
   min-width: 0;
   color: #efe7d5;
-  font-size: 9.5px;
-  line-height: 1.2;
+  font-size: var(--font-size-body);
+  line-height: 1.25;
   overflow-wrap: anywhere;
-}
-
-.rest-room-daily-card__reward {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 38px;
-  text-align: center;
 }
 
 .rest-room-level-card__farm-info {
@@ -1845,13 +1326,13 @@
 
 .rest-room-level-card__farm-info span {
   color: #9b9588;
-  font-size: 9px;
-  line-height: 1.15;
+  font-size: var(--font-size-small);
+  line-height: 1.2;
 }
 
 .rest-room-level-card__farm-info b {
   color: #efe8d6;
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
   line-height: 1.2;
 }
 
@@ -1861,7 +1342,7 @@
   border-radius: 9px;
   color: #d8bc62;
   background: rgba(216, 167, 51, 0.055);
-  font-size: 9px;
+  font-size: var(--font-size-small);
   line-height: 1.35;
 }
 
@@ -1907,14 +1388,14 @@
   margin: 3px 0 0;
   color: #f4efdf;
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: var(--font-size-page-title-static);
   line-height: 1;
 }
 
 .rest-room-claim-panel__header p {
   margin: 7px 0 0;
   color: #aaa397;
-  font-size: 11px;
+  font-size: var(--font-size-body);
   line-height: 1.45;
 }
 
@@ -1927,42 +1408,8 @@
   border-radius: 12px;
   color: #dfd9cb;
   background: rgba(255, 255, 255, 0.02);
-  font-size: 27px;
+  font-size: var(--font-size-heading-large);
   cursor: pointer;
-}
-
-.rest-room-claim-summary {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.rest-room-claim-summary__item {
-  min-width: 0;
-  display: grid;
-  gap: 5px;
-  padding: 12px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.018);
-}
-
-.rest-room-claim-summary__item span {
-  color: #979083;
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.rest-room-claim-summary__item strong {
-  color: #eee7d8;
-  font-family: var(--font-display);
-  font-size: 18px;
-  line-height: 1.1;
-}
-
-.rest-room-claim-summary__item--money strong {
-  color: var(--color-gold-bright);
 }
 
 .rest-room-claim-results {
@@ -1999,7 +1446,7 @@
   border-radius: 10px;
   border: 1px solid rgba(216, 167, 51, 0.12);
   background: rgba(0, 0, 0, 0.24);
-  font-size: 20px;
+  font-size: var(--font-size-section-title);
 }
 
 .rest-room-claim-result div {
@@ -2010,21 +1457,21 @@
 
 .rest-room-claim-result small {
   color: #918b7e;
-  font-size: 8.5px;
+  font-size: var(--font-size-label);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .rest-room-claim-result strong {
   color: #eee7d8;
-  font-size: 13px;
+  font-size: var(--font-size-medium);
   line-height: 1.2;
 }
 
 .rest-room-claim-result > b {
   color: #a7e678;
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: var(--font-size-card-title);
 }
 
 .rest-room-claim-result.is-rare > b,
@@ -2038,7 +1485,7 @@
   border-radius: 12px;
   color: #a29b8e;
   text-align: center;
-  font-size: 11px;
+  font-size: var(--font-size-body);
 }
 
 .rest-room-claim-panel__footer {
@@ -2054,7 +1501,7 @@
   color: #fff0ac;
   background: linear-gradient(180deg, rgba(82, 60, 13, 0.96), rgba(31, 25, 9, 0.99));
   font-family: var(--font-display);
-  font-size: 11px;
+  font-size: var(--font-size-body);
   font-weight: 800;
   cursor: pointer;
 }
@@ -2091,26 +1538,10 @@
   }
 
   .rest-room-claim-panel__header h2 {
-    font-size: 24px;
+    font-size: var(--font-size-heading);
   }
 
-  .rest-room-claim-summary {
-    grid-template-columns: 1fr;
-    gap: 7px;
-  }
-
-  .rest-room-claim-summary__item {
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    padding: 9px 11px;
-  }
-
-  .rest-room-claim-summary__item strong {
-    font-size: 16px;
-    text-align: right;
-  }
-
-  .rest-room-claim-result {
+.rest-room-claim-result {
     grid-template-columns: 36px minmax(0, 1fr) auto;
     padding: 9px 10px;
   }
@@ -2118,7 +1549,7 @@
   .rest-room-claim-result__icon {
     width: 34px;
     height: 34px;
-    font-size: 17px;
+    font-size: var(--font-size-card-title);
   }
 
   .rest-room-claim-panel__take {
@@ -2159,7 +1590,7 @@
   color: #928c81;
   background: rgba(255,255,255,.018);
   font-family: var(--font-display);
-  font-size: 7px;
+  font-size: var(--font-size-label);
   font-weight: 800;
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -2200,7 +1631,7 @@
 .rest-room-farm-clock-row span,
 .rest-room-farm-meta span {
   color: #918b80;
-  font-size: 6.4px;
+  font-size: var(--font-size-label);
   letter-spacing: .05em;
   text-transform: uppercase;
 }
@@ -2208,7 +1639,7 @@
 .rest-room-farm-vault__money strong,
 .rest-room-farm-vault__finds strong {
   font-family: var(--font-display);
-  font-size: 15px;
+  font-size: var(--font-size-large);
   line-height: 1;
 }
 
@@ -2227,7 +1658,7 @@
 .rest-room-farm-clock-row strong {
   color: #eee7d8;
   font-family: var(--font-display);
-  font-size: 9px;
+  font-size: var(--font-size-small);
   line-height: 1;
 }
 
@@ -2255,7 +1686,7 @@
 
 .rest-room-farm-meta strong {
   color: #eae4d5;
-  font-size: 7.8px;
+  font-size: var(--font-size-label);
   line-height: 1.15;
   overflow-wrap: anywhere;
 }
@@ -2263,7 +1694,7 @@
 .rest-room-daily-claim {
   min-height: 31px;
   margin-top: 6px;
-  font-size: 8px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-daily-card__message { display: none; }
@@ -2283,8 +1714,6 @@ html.rest-room-levels-open body { overflow: hidden; }
   backdrop-filter: blur(8px);
   overscroll-behavior: contain;
 }
-
-.rest-room-levels-panel[hidden] { display: none; }
 
 .rest-room-levels-panel__sheet {
   width: min(100%, 1380px);
@@ -2317,7 +1746,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   margin: 2px 0 0;
   color: #f3eee0;
   font-family: var(--font-display);
-  font-size: 26px;
+  font-size: var(--font-size-heading-large);
   line-height: 1;
 }
 
@@ -2325,7 +1754,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   max-width: 780px;
   margin: 6px 0 0;
   color: #9e988c;
-  font-size: 10px;
+  font-size: var(--font-size-small);
   line-height: 1.4;
 }
 
@@ -2338,7 +1767,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   border-radius: 12px;
   color: #ded9cc;
   background: rgba(255,255,255,.02);
-  font-size: 27px;
+  font-size: var(--font-size-heading-large);
   cursor: pointer;
 }
 
@@ -2367,7 +1796,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   color: #dfbd53;
   background: #080a08;
   box-shadow: 0 6px 18px rgba(0,0,0,.38);
-  font-size: 15px;
+  font-size: var(--font-size-large);
 }
 
 .rest-room-levels-summary__item {
@@ -2407,7 +1836,7 @@ html.rest-room-levels-open body { overflow: hidden; }
 
 .rest-room-levels-summary__eyebrow span {
   color: #c1a84e;
-  font-size: 7.5px;
+  font-size: var(--font-size-label);
   font-weight: 800;
   letter-spacing: .07em;
   text-transform: uppercase;
@@ -2418,7 +1847,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   padding: 4px 7px;
   border-radius: 999px;
   font-family: var(--font-display);
-  font-size: 6.5px;
+  font-size: var(--font-size-label);
   letter-spacing: .04em;
 }
 
@@ -2439,7 +1868,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   margin-top: 6px;
   color: #f4efe1;
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: var(--font-size-card-title);
   line-height: 1.12;
 }
 
@@ -2447,7 +1876,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   display: block;
   margin-top: 5px;
   color: #9c968b;
-  font-size: 8.5px;
+  font-size: var(--font-size-label);
   line-height: 1.35;
 }
 
@@ -2553,7 +1982,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   border: 1px solid rgba(216,167,51,.48);
   color: var(--color-gold-bright);
   background: rgba(6,8,6,.90);
-  font-size: 16px;
+  font-size: var(--font-size-large);
 }
 
 .rest-room-level-card__state-badge {
@@ -2563,7 +1992,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   border: 1px solid rgba(232,181,49,.42);
   color: #ffe18a;
   background: rgba(55,42,10,.91);
-  font-size: 7px;
+  font-size: var(--font-size-label);
   letter-spacing: .04em;
   text-transform: uppercase;
 }
@@ -2596,14 +2025,14 @@ html.rest-room-levels-open body { overflow: hidden; }
   display: block;
   color: #f2ede0;
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: var(--font-size-card-title);
   line-height: 1.12;
 }
 
 .rest-room-level-card__title-wrap p {
   margin: 5px 0 0;
   color: #aaa397;
-  font-size: 9px;
+  font-size: var(--font-size-small);
   line-height: 1.36;
 }
 
@@ -2621,7 +2050,7 @@ html.rest-room-levels-open body { overflow: hidden; }
 .rest-room-level-card__price small {
   display: block;
   color: #918b80;
-  font-size: 7px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-level-card__price strong {
@@ -2629,7 +2058,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   margin-top: 4px;
   color: var(--color-gold-bright);
   font-family: var(--font-display);
-  font-size: 17px;
+  font-size: var(--font-size-card-title);
   line-height: 1;
 }
 
@@ -2655,13 +2084,13 @@ html.rest-room-levels-open body { overflow: hidden; }
 
 .rest-room-level-card__stat b {
   color: #98df70;
-  font-size: 8px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-level-card__stat span {
   flex: 0 0 auto;
   color: #e9e3d5;
-  font-size: 8.5px;
+  font-size: var(--font-size-label);
   white-space: nowrap;
 }
 
@@ -2689,45 +2118,15 @@ html.rest-room-levels-open body { overflow: hidden; }
 
 .rest-room-level-card__farm-metric span {
   color: #8d877c;
-  font-size: 6.5px;
+  font-size: var(--font-size-label);
   letter-spacing: .04em;
   text-transform: uppercase;
 }
 
 .rest-room-level-card__farm-metric b {
   color: #eee7d8;
-  font-size: 8.5px;
+  font-size: var(--font-size-label);
   line-height: 1.2;
-}
-
-.rest-room-level-card__farm-finds {
-  grid-column: 1 / -1;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 9px;
-  border: 1px solid rgba(216,167,51,.07);
-  border-radius: 9px;
-  background: rgba(216,167,51,.018);
-}
-
-.rest-room-level-card__farm-finds span {
-  flex: 0 0 auto;
-  color: #c1a64b;
-  font-size: 6.5px;
-  font-weight: 800;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-}
-
-.rest-room-level-card__farm-finds b {
-  min-width: 0;
-  color: #c9c3b6;
-  font-size: 8px;
-  font-weight: 500;
-  line-height: 1.3;
-  overflow-wrap: anywhere;
 }
 
 /* ---------- Claim modal ---------- */
@@ -2741,8 +2140,6 @@ html.rest-room-levels-open body { overflow: hidden; }
   background: rgba(0,0,0,.88);
   backdrop-filter: blur(9px);
 }
-
-.rest-room-claim-panel[hidden] { display: none; }
 
 .rest-room-claim-panel__sheet {
   width: min(100%, 450px);
@@ -2772,14 +2169,14 @@ html.rest-room-levels-open body { overflow: hidden; }
   margin: 2px 0 0;
   color: #f4eee0;
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: var(--font-size-heading);
   line-height: 1;
 }
 
 .rest-room-claim-panel__header p {
   margin: 5px 0 0;
   color: #958f84;
-  font-size: 8px;
+  font-size: var(--font-size-label);
   line-height: 1.35;
 }
 
@@ -2792,7 +2189,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   border-radius: 10px;
   color: #ddd7ca;
   background: rgba(255,255,255,.02);
-  font-size: 21px;
+  font-size: var(--font-size-section-title);
   cursor: pointer;
 }
 
@@ -2817,7 +2214,7 @@ html.rest-room-levels-open body { overflow: hidden; }
 .rest-room-claim-hero__money span,
 .rest-room-claim-hero__meta span {
   color: #928c81;
-  font-size: 6.5px;
+  font-size: var(--font-size-label);
   letter-spacing: .05em;
   text-transform: uppercase;
 }
@@ -2825,7 +2222,7 @@ html.rest-room-levels-open body { overflow: hidden; }
 .rest-room-claim-hero__money strong {
   color: var(--color-gold-bright);
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: var(--font-size-heading);
   line-height: 1;
 }
 
@@ -2841,7 +2238,7 @@ html.rest-room-levels-open body { overflow: hidden; }
 .rest-room-claim-hero__meta strong {
   color: #eee7d8;
   font-family: var(--font-display);
-  font-size: 13px;
+  font-size: var(--font-size-medium);
   line-height: 1;
 }
 
@@ -2856,7 +2253,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   margin: 0;
   color: #d8b94f;
   font-family: var(--font-display);
-  font-size: 9px;
+  font-size: var(--font-size-small);
   letter-spacing: .05em;
   text-transform: uppercase;
 }
@@ -2889,13 +2286,13 @@ html.rest-room-levels-open body { overflow: hidden; }
   border: 1px solid rgba(216,167,51,.12);
   border-radius: 8px;
   background: rgba(0,0,0,.22);
-  font-size: 14px;
+  font-size: var(--font-size-medium);
 }
 
 .rest-room-claim-result div { min-width: 0; display: grid; gap: 1px; }
-.rest-room-claim-result small { color: #8f897e; font-size: 6px; text-transform: uppercase; letter-spacing: .04em; }
-.rest-room-claim-result strong { color: #ece6d7; font-size: 9.5px; line-height: 1.2; }
-.rest-room-claim-result > b { color: #9ee474; font-family: var(--font-display); font-size: 13px; }
+.rest-room-claim-result small { color: #8f897e; font-size: var(--font-size-label); text-transform: uppercase; letter-spacing: .04em; }
+.rest-room-claim-result strong { color: #ece6d7; font-size: var(--font-size-small); line-height: 1.2; }
+.rest-room-claim-result > b { color: #9ee474; font-family: var(--font-display); font-size: var(--font-size-medium); }
 .rest-room-claim-result.is-rare { border-color: rgba(216,167,51,.25); background: rgba(216,167,51,.05); }
 .rest-room-claim-result.is-rare strong,
 .rest-room-claim-result.is-rare > b { color: #efcd67; }
@@ -2907,7 +2304,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   border-radius: 9px;
   color: #9a9488;
   text-align: center;
-  font-size: 8px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-claim-panel__footer { display: flex; justify-content: flex-end; }
@@ -2919,7 +2316,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   color: #fff0ac;
   background: linear-gradient(180deg,rgba(82,60,13,.96),rgba(31,25,9,.99));
   font-family: var(--font-display);
-  font-size: 9px;
+  font-size: var(--font-size-small);
   font-weight: 800;
   cursor: pointer;
 }
@@ -2955,7 +2352,7 @@ html.rest-room-levels-open body { overflow: hidden; }
 
   .rest-room-view__sidebar .rest-room-side-card--current > strong,
   .rest-room-view__sidebar .rest-room-compact-upgrade__body > strong {
-    font-size: 13px;
+    font-size: var(--font-size-medium);
   }
 
   .rest-room-view__sidebar .rest-room-side-list {
@@ -2971,8 +2368,8 @@ html.rest-room-levels-open body { overflow: hidden; }
     padding: 5px;
   }
 
-  .rest-room-view__sidebar .rest-room-side-list dt { font-size: 5.8px; line-height: 1.1; }
-  .rest-room-view__sidebar .rest-room-side-list dd { font-size: 8px; }
+  .rest-room-view__sidebar .rest-room-side-list dt { font-size: var(--font-size-label); line-height: 1.1; }
+  .rest-room-view__sidebar .rest-room-side-list dd { font-size: var(--font-size-label); }
 
   .rest-room-view__sidebar .rest-room-compact-upgrade { gap: 7px; }
   .rest-room-view__sidebar .rest-room-compact-upgrade__thumb {
@@ -2997,13 +2394,12 @@ html.rest-room-levels-open body { overflow: hidden; }
     gap: 7px 9px;
   }
 
-  .rest-room-level-card__title-wrap strong { font-size: 15px; }
-  .rest-room-level-card__title-wrap p { font-size: 8px; }
+  .rest-room-level-card__title-wrap strong { font-size: var(--font-size-large); }
+  .rest-room-level-card__title-wrap p { font-size: var(--font-size-label); }
   .rest-room-level-card__price { padding: 7px 8px; }
-  .rest-room-level-card__price strong { font-size: 14px; }
+  .rest-room-level-card__price strong { font-size: var(--font-size-medium); }
   .rest-room-level-card__stat,
   .rest-room-level-card__farm-metric { padding: 6px 7px; }
-  .rest-room-level-card__farm-finds { padding: 5px 7px; }
 }
 
 @media (max-width: 760px) {
@@ -3016,8 +2412,8 @@ html.rest-room-levels-open body { overflow: hidden; }
     border-radius: 14px;
   }
 
-  .rest-room-levels-panel__header h2 { font-size: 22px; }
-  .rest-room-levels-panel__header p { font-size: 9px; }
+  .rest-room-levels-panel__header h2 { font-size: var(--font-size-heading); }
+  .rest-room-levels-panel__header p { font-size: var(--font-size-small); }
   .rest-room-levels-panel__close { width: 39px; height: 39px; }
 
   .rest-room-levels-summary {
@@ -3026,8 +2422,8 @@ html.rest-room-levels-open body { overflow: hidden; }
   }
   .rest-room-levels-summary::after { display: none; }
   .rest-room-levels-summary__item { padding: 9px 10px 9px 13px; }
-  .rest-room-levels-summary__item strong { font-size: 15px; }
-  .rest-room-levels-summary__item small { font-size: 7.5px; }
+  .rest-room-levels-summary__item strong { font-size: var(--font-size-large); }
+  .rest-room-levels-summary__item small { font-size: var(--font-size-label); }
 
   .rest-room-levels-cards { padding: 7px; gap: 8px; }
 
@@ -3058,7 +2454,6 @@ html.rest-room-levels-open body { overflow: hidden; }
     text-align: left;
   }
   .rest-room-level-card__price strong { margin-top: 0; }
-  .rest-room-level-card__farm-finds { display: none; }
 }
 
 @media (max-width: 480px) {
@@ -3071,20 +2466,20 @@ html.rest-room-levels-open body { overflow: hidden; }
     border-radius: 12px;
   }
 
-  .rest-room-levels-panel__header h2 { font-size: 20px; }
-  .rest-room-levels-panel__header p { max-width: 260px; font-size: 8px; }
-  .rest-room-levels-summary__eyebrow b { font-size: 6px; }
-  .rest-room-levels-summary__item strong { font-size: 14px; }
+  .rest-room-levels-panel__header h2 { font-size: var(--font-size-section-title); }
+  .rest-room-levels-panel__header p { max-width: 260px; font-size: var(--font-size-label); }
+  .rest-room-levels-summary__eyebrow b { font-size: var(--font-size-label); }
+  .rest-room-levels-summary__item strong { font-size: var(--font-size-medium); }
   .rest-room-levels-summary__item small { display: none; }
 
-  .rest-room-level-card__title-wrap strong { font-size: 14px; }
-  .rest-room-level-card__title-wrap p { font-size: 8px; }
+  .rest-room-level-card__title-wrap strong { font-size: var(--font-size-medium); }
+  .rest-room-level-card__title-wrap p { font-size: var(--font-size-label); }
   .rest-room-level-card__media { aspect-ratio: 16 / 9; }
   .rest-room-level-card__stats,
   .rest-room-level-card__farm-info { grid-template-columns: 1fr; gap: 5px; }
   .rest-room-level-card__stat,
   .rest-room-level-card__farm-metric { padding: 6px 8px; }
-  .rest-room-level-card__price strong { font-size: 16px; }
+  .rest-room-level-card__price strong { font-size: var(--font-size-large); }
 }
 
 @media (max-width: 620px) {
@@ -3096,7 +2491,7 @@ html.rest-room-levels-open body { overflow: hidden; }
     gap: 8px;
     border-radius: 13px;
   }
-  .rest-room-claim-panel__header h2 { font-size: 20px; }
+  .rest-room-claim-panel__header h2 { font-size: var(--font-size-section-title); }
   .rest-room-claim-hero { grid-template-columns: 1fr; }
   .rest-room-claim-hero__meta { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .rest-room-claim-panel__take { width: 100%; min-width: 0; }
@@ -3110,11 +2505,11 @@ html.rest-room-levels-open body { overflow: hidden; }
 
 /* --- MAIN ROOM: restore readable typography --- */
 .rest-room-view__title-row h1 {
-  font-size: clamp(34px, 3.15vw, 48px);
+  font-size: var(--font-size-display);
 }
 
 .rest-room-view__subtitle {
-  font-size: 12.5px;
+  font-size: var(--font-size-body);
   line-height: 1.5;
 }
 
@@ -3124,19 +2519,19 @@ html.rest-room-levels-open body { overflow: hidden; }
 
 .rest-room-side-card__icon,
 .rest-room-main-offers__icon {
-  font-size: 20px;
+  font-size: var(--font-size-section-title);
 }
 
 .rest-room-side-card > strong {
   margin-top: 9px;
-  font-size: 19px;
+  font-size: var(--font-size-section-title);
   line-height: 1.18;
 }
 
 .rest-room-side-card > p {
   margin-top: 7px;
-  font-size: 11.5px;
-  line-height: 1.45;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
 }
 
 .rest-room-side-list {
@@ -3146,17 +2541,17 @@ html.rest-room-levels-open body { overflow: hidden; }
 
 .rest-room-side-list dt,
 .rest-room-side-list dd {
-  font-size: 11.5px;
+  font-size: var(--font-size-body);
 }
 
 .rest-room-side-list dd {
-  font-size: 12.5px;
+  font-size: var(--font-size-body);
 }
 
 .rest-room-farm-status {
   min-height: 24px;
   padding: 0 9px;
-  font-size: 8px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-farm-vault {
@@ -3173,16 +2568,16 @@ html.rest-room-levels-open body { overflow: hidden; }
 .rest-room-farm-vault__finds span,
 .rest-room-farm-clock-row span,
 .rest-room-farm-meta span {
-  font-size: 7.8px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-farm-vault__money strong,
 .rest-room-farm-vault__finds strong {
-  font-size: 18px;
+  font-size: var(--font-size-card-title);
 }
 
 .rest-room-farm-clock-row strong {
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
 }
 
 .rest-room-farm-progress {
@@ -3200,25 +2595,25 @@ html.rest-room-levels-open body { overflow: hidden; }
 }
 
 .rest-room-farm-meta strong {
-  font-size: 9.5px;
+  font-size: var(--font-size-small);
   line-height: 1.2;
 }
 
 .rest-room-daily-claim {
   min-height: 36px;
   margin-top: 7px;
-  font-size: 9.5px;
+  font-size: var(--font-size-small);
 }
 
 .rest-room-compact-upgrade__body > strong,
 .rest-room-offer__body > strong {
-  font-size: 18px;
+  font-size: var(--font-size-card-title);
 }
 
 .rest-room-compact-upgrade__body > p,
 .rest-room-offer__body > p,
 .rest-room-offer p {
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
   line-height: 1.42;
 }
 
@@ -3228,59 +2623,59 @@ html.rest-room-levels-open body { overflow: hidden; }
 }
 
 .rest-room-delta small {
-  font-size: 8.5px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-delta b {
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
 }
 
 /* --- ALL LEVELS: larger heading and summary --- */
 .rest-room-levels-panel__header h2 {
-  font-size: 30px;
+  font-size: var(--font-size-page-title-static);
 }
 
 .rest-room-levels-panel__header p {
-  font-size: 11.5px;
-  line-height: 1.45;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
 }
 
 .rest-room-levels-summary__eyebrow span {
-  font-size: 9px;
+  font-size: var(--font-size-small);
 }
 
 .rest-room-levels-summary__eyebrow b {
   padding: 5px 8px;
-  font-size: 8px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-levels-summary__item strong {
-  font-size: 21px;
+  font-size: var(--font-size-section-title);
 }
 
 .rest-room-levels-summary__item small {
-  font-size: 10px;
+  font-size: var(--font-size-small);
   line-height: 1.4;
 }
 
 /* --- Level cards: typography first, always readable --- */
 .rest-room-level-card__title-wrap strong {
-  font-size: 20px;
+  font-size: var(--font-size-section-title);
   line-height: 1.12;
 }
 
 .rest-room-level-card__title-wrap p {
   margin-top: 7px;
-  font-size: 11px;
+  font-size: var(--font-size-body);
   line-height: 1.42;
 }
 
 .rest-room-level-card__price small {
-  font-size: 8.5px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-level-card__price strong {
-  font-size: 20px;
+  font-size: var(--font-size-section-title);
 }
 
 .rest-room-level-card__stats,
@@ -3296,58 +2691,50 @@ html.rest-room-levels-open body { overflow: hidden; }
 }
 
 .rest-room-level-card__stat b {
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
 }
 
 .rest-room-level-card__stat span {
-  font-size: 11px;
+  font-size: var(--font-size-body);
 }
 
 .rest-room-level-card__farm-metric span {
-  font-size: 8px;
+  font-size: var(--font-size-label);
   line-height: 1.1;
 }
 
 .rest-room-level-card__farm-metric b {
   margin-top: 2px;
-  font-size: 11px;
+  font-size: var(--font-size-body);
   line-height: 1.2;
-}
-
-.rest-room-level-card__farm-finds span {
-  font-size: 8px;
-}
-
-.rest-room-level-card__farm-finds b {
-  font-size: 10px;
 }
 
 /* --- Tablet: keep both metric groups in a single row --- */
 @media (max-width: 1000px) {
-  .rest-room-level-card__title-wrap strong { font-size: 18px; }
-  .rest-room-level-card__title-wrap p { font-size: 10.5px; }
-  .rest-room-level-card__price strong { font-size: 18px; }
+  .rest-room-level-card__title-wrap strong { font-size: var(--font-size-card-title); }
+  .rest-room-level-card__title-wrap p { font-size: var(--font-size-body); }
+  .rest-room-level-card__price strong { font-size: var(--font-size-card-title); }
   .rest-room-level-card__stat,
   .rest-room-level-card__farm-metric { padding: 8px 9px; }
-  .rest-room-level-card__stat b { font-size: 10px; }
+  .rest-room-level-card__stat b { font-size: var(--font-size-small); }
   .rest-room-level-card__stat span,
-  .rest-room-level-card__farm-metric b { font-size: 10.5px; }
-  .rest-room-level-card__farm-metric span { font-size: 7.5px; }
+  .rest-room-level-card__farm-metric b { font-size: var(--font-size-body); }
+  .rest-room-level-card__farm-metric span { font-size: var(--font-size-label); }
 }
 
 /* --- Mobile all-levels modal: exact approved composition --- */
 @media (max-width: 760px) {
-  .rest-room-levels-panel__header h2 { font-size: 27px; }
-  .rest-room-levels-panel__header p { font-size: 10.5px; }
+  .rest-room-levels-panel__header h2 { font-size: var(--font-size-heading-large); }
+  .rest-room-levels-panel__header p { font-size: var(--font-size-body); }
 
   .rest-room-levels-summary__item {
     padding: 11px 12px 11px 15px;
   }
 
-  .rest-room-levels-summary__eyebrow span { font-size: 8.5px; }
-  .rest-room-levels-summary__eyebrow b { font-size: 7.5px; }
-  .rest-room-levels-summary__item strong { font-size: 19px; }
-  .rest-room-levels-summary__item small { font-size: 9.5px; }
+  .rest-room-levels-summary__eyebrow span { font-size: var(--font-size-label); }
+  .rest-room-levels-summary__eyebrow b { font-size: var(--font-size-label); }
+  .rest-room-levels-summary__item strong { font-size: var(--font-size-section-title); }
+  .rest-room-levels-summary__item small { font-size: var(--font-size-small); }
 
   .rest-room-level-card {
     gap: 10px;
@@ -3355,12 +2742,12 @@ html.rest-room-levels-open body { overflow: hidden; }
   }
 
   .rest-room-level-card__title-wrap strong {
-    font-size: 19px;
+    font-size: var(--font-size-section-title);
   }
 
   .rest-room-level-card__title-wrap p {
     margin-top: 6px;
-    font-size: 10.5px;
+    font-size: var(--font-size-body);
   }
 
   .rest-room-level-card__media {
@@ -3393,21 +2780,21 @@ html.rest-room-levels-open body { overflow: hidden; }
   }
 
   .rest-room-level-card__stat b {
-    font-size: 10px;
+    font-size: var(--font-size-small);
   }
 
   .rest-room-level-card__stat span {
-    font-size: 11px;
+    font-size: var(--font-size-body);
     white-space: nowrap;
   }
 
   .rest-room-level-card__farm-metric span {
-    font-size: 7px;
+    font-size: var(--font-size-label);
     line-height: 1.12;
   }
 
   .rest-room-level-card__farm-metric b {
-    font-size: 10px;
+    font-size: var(--font-size-small);
     line-height: 1.18;
   }
 
@@ -3415,20 +2802,20 @@ html.rest-room-levels-open body { overflow: hidden; }
     padding: 10px 11px;
   }
 
-  .rest-room-level-card__price small { font-size: 8.5px; }
-  .rest-room-level-card__price strong { font-size: 19px; }
+  .rest-room-level-card__price small { font-size: var(--font-size-label); }
+  .rest-room-level-card__price strong { font-size: var(--font-size-section-title); }
 }
 
 /* Narrow phones: still keep three columns; reduce spacing, NOT column count. */
 @media (max-width: 480px) {
-  .rest-room-levels-panel__header h2 { font-size: 26px; }
-  .rest-room-levels-panel__header p { font-size: 10px; }
+  .rest-room-levels-panel__header h2 { font-size: var(--font-size-heading-large); }
+  .rest-room-levels-panel__header p { font-size: var(--font-size-small); }
 
-  .rest-room-levels-summary__item strong { font-size: 18px; }
-  .rest-room-levels-summary__item small { display: block; font-size: 9px; }
+  .rest-room-levels-summary__item strong { font-size: var(--font-size-card-title); }
+  .rest-room-levels-summary__item small { display: block; font-size: var(--font-size-small); }
 
-  .rest-room-level-card__title-wrap strong { font-size: 18px; }
-  .rest-room-level-card__title-wrap p { font-size: 10px; }
+  .rest-room-level-card__title-wrap strong { font-size: var(--font-size-card-title); }
+  .rest-room-level-card__title-wrap p { font-size: var(--font-size-small); }
 
   .rest-room-level-card__stats,
   .rest-room-level-card__farm-info {
@@ -3442,18 +2829,18 @@ html.rest-room-levels-open body { overflow: hidden; }
     padding: 8px 6px;
   }
 
-  .rest-room-level-card__stat b { font-size: 9px; }
-  .rest-room-level-card__stat span { font-size: 10px; }
-  .rest-room-level-card__farm-metric span { font-size: 6.5px; letter-spacing: .025em; }
-  .rest-room-level-card__farm-metric b { font-size: 9.5px; }
-  .rest-room-level-card__price strong { font-size: 18px; }
+  .rest-room-level-card__stat b { font-size: var(--font-size-small); }
+  .rest-room-level-card__stat span { font-size: var(--font-size-small); }
+  .rest-room-level-card__farm-metric span { font-size: var(--font-size-label); letter-spacing: .025em; }
+  .rest-room-level-card__farm-metric b { font-size: var(--font-size-small); }
+  .rest-room-level-card__price strong { font-size: var(--font-size-card-title); }
 }
 
 /* Compact sidebar: increase readability without increasing overall card height too much. */
 @container (max-width: 900px) {
   .rest-room-view__sidebar .rest-room-side-card--current > strong,
   .rest-room-view__sidebar .rest-room-compact-upgrade__body > strong {
-    font-size: 16px;
+    font-size: var(--font-size-large);
   }
 
   .rest-room-view__sidebar .rest-room-side-list {
@@ -3466,28 +2853,28 @@ html.rest-room-levels-open body { overflow: hidden; }
   }
 
   .rest-room-view__sidebar .rest-room-side-list dt {
-    font-size: 7px;
+    font-size: var(--font-size-label);
     line-height: 1.15;
   }
 
   .rest-room-view__sidebar .rest-room-side-list dd {
-    font-size: 10px;
+    font-size: var(--font-size-small);
   }
 
   .rest-room-view__sidebar .rest-room-farm-vault__money span,
   .rest-room-view__sidebar .rest-room-farm-vault__finds span,
   .rest-room-view__sidebar .rest-room-farm-clock-row span,
   .rest-room-view__sidebar .rest-room-farm-meta span {
-    font-size: 7px;
+    font-size: var(--font-size-label);
   }
 
   .rest-room-view__sidebar .rest-room-farm-vault__money strong,
   .rest-room-view__sidebar .rest-room-farm-vault__finds strong {
-    font-size: 16px;
+    font-size: var(--font-size-large);
   }
 
   .rest-room-view__sidebar .rest-room-farm-clock-row strong {
-    font-size: 9.5px;
+    font-size: var(--font-size-small);
   }
 
   .rest-room-view__sidebar .rest-room-farm-meta > div {
@@ -3495,11 +2882,11 @@ html.rest-room-levels-open body { overflow: hidden; }
   }
 
   .rest-room-view__sidebar .rest-room-farm-meta strong {
-    font-size: 8.5px;
+    font-size: var(--font-size-label);
   }
 
   .rest-room-view__sidebar .rest-room-daily-claim {
-    font-size: 9px;
+    font-size: var(--font-size-small);
   }
 }
 
@@ -3543,11 +2930,6 @@ html.rest-room-levels-open body { overflow: hidden; }
   align-items: start;
 }
 
-.rest-room-level-card__title-wrap {
-  grid-area: title;
-  min-width: 0;
-}
-
 .rest-room-level-card__media {
   grid-area: media;
 }
@@ -3585,7 +2967,7 @@ html.rest-room-levels-open body { overflow: hidden; }
 
 .rest-room-level-card__finds span {
   color: #c9ae57;
-  font-size: 8px;
+  font-size: var(--font-size-label);
   font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
@@ -3593,7 +2975,7 @@ html.rest-room-levels-open body { overflow: hidden; }
 
 .rest-room-level-card__finds b {
   color: #ded6c8;
-  font-size: 10px;
+  font-size: var(--font-size-small);
   line-height: 1.35;
   font-weight: 500;
   overflow-wrap: anywhere;
@@ -3658,9 +3040,6 @@ html.rest-room-levels-open body { overflow: hidden; }
     text-align: left;
   }
 
-  .rest-room-level-card__price strong {
-    margin-top: 0;
-  }
 }
 
 @media (max-width: 480px) {
@@ -3669,11 +3048,11 @@ html.rest-room-levels-open body { overflow: hidden; }
   }
 
   .rest-room-level-card__finds span {
-    font-size: 7.5px;
+    font-size: var(--font-size-label);
   }
 
   .rest-room-level-card__finds b {
-    font-size: 9.5px;
+    font-size: var(--font-size-small);
   }
 }
 
@@ -3693,11 +3072,6 @@ html.rest-room-levels-open body { overflow: hidden; }
     'media content';
   gap: 12px 14px;
   align-items: start;
-}
-
-.rest-room-level-card__title-wrap {
-  grid-area: title;
-  min-width: 0;
 }
 
 .rest-room-level-card__media {
@@ -3756,17 +3130,9 @@ html.rest-room-levels-open body { overflow: hidden; }
   padding: 9px 11px;
 }
 
-.rest-room-level-card__finds span {
-  color: #c9ae57;
-  font-size: 8px;
-  font-weight: 800;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-}
-
 .rest-room-level-card__finds b {
   color: #ded6c8;
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
   font-weight: 500;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -3781,12 +3147,12 @@ html.rest-room-levels-open body { overflow: hidden; }
 }
 
 .rest-room-level-card__price small {
-  font-size: 8px;
+  font-size: var(--font-size-label);
 }
 
 .rest-room-level-card__price strong {
   margin-top: 4px;
-  font-size: 20px;
+  font-size: var(--font-size-section-title);
 }
 
 @media (max-width: 1100px) {
@@ -3845,7 +3211,7 @@ html.rest-room-levels-open body { overflow: hidden; }
 
   .rest-room-level-card__price strong {
     margin-top: 3px;
-    font-size: 18px;
+    font-size: var(--font-size-card-title);
   }
 }
 
@@ -3864,17 +3230,14 @@ html.rest-room-levels-open body { overflow: hidden; }
 
   .rest-room-level-card__finds span,
   .rest-room-level-card__price small {
-    font-size: 7px;
+    font-size: var(--font-size-label);
   }
 
   .rest-room-level-card__finds b {
-    font-size: 9px;
+    font-size: var(--font-size-small);
     line-height: 1.3;
   }
 
-  .rest-room-level-card__price strong {
-    font-size: 16px;
-  }
 }
 
 /* ---------- SIDEBAR: next upgrade stats ---------- */
@@ -3899,7 +3262,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   display: block;
   min-width: 0;
   color: #8f9991;
-  font-size: 8.5px;
+  font-size: var(--font-size-label);
   line-height: 1.15;
   white-space: nowrap;
 }
@@ -3911,7 +3274,7 @@ html.rest-room-levels-open body { overflow: hidden; }
   justify-content: flex-start;
   gap: 3px;
   color: #b8b4a9;
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
   line-height: 1.2;
   white-space: nowrap;
 }
@@ -3933,12 +3296,8 @@ html.rest-room-levels-open body { overflow: hidden; }
     gap: 4px;
   }
 
-  .rest-room-view__sidebar .rest-room-delta small {
-    font-size: 8px;
-  }
-
-  .rest-room-view__sidebar .rest-room-delta b {
-    font-size: 10px;
+.rest-room-view__sidebar .rest-room-delta b {
+    font-size: var(--font-size-small);
     gap: 2px;
   }
 }
@@ -3951,11 +3310,11 @@ html.rest-room-levels-open body { overflow: hidden; }
   }
 
   .rest-room-view__sidebar .rest-room-delta small {
-    font-size: 7px;
+    font-size: var(--font-size-label);
   }
 
   .rest-room-view__sidebar .rest-room-delta b {
-    font-size: 8.5px;
+    font-size: var(--font-size-label);
     gap: 1px;
   }
 }
@@ -3979,4 +3338,560 @@ html.rest-room-levels-open body { overflow: hidden; }
       'stats'
       'farm';
   }
+}
+
+/* ================================================================
+   v0.37 — CLEAN REST ROOM SHELL
+   One authoritative layout for the room screen.
+   Desktop: left scene is static; only the right information column
+   can scroll. No percentage-height cards and no overlapping sectors.
+   Mobile/tablet: right column becomes an independent slide drawer.
+   ================================================================ */
+.game-shell.is-rest-room-screen {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.game-shell.is-rest-room-screen .top-hud,
+.game-shell.is-rest-room-screen .bottom-nav {
+  display: grid;
+}
+
+.game-shell.is-rest-room-screen .game-main {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.rest-room-view {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 10px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 55% 0%, rgba(216, 167, 51, 0.045), transparent 34%),
+    #090b09;
+}
+
+.rest-room-view.is-owned {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.rest-room-view.is-owned > .rest-room-main-offers {
+  display: none;
+}
+
+.rest-room-view__header {
+  min-width: 0;
+  min-height: 0;
+}
+
+.rest-room-view__title-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.rest-room-view__title-group {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rest-room-view__title-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  font-size: var(--font-size-heading);
+}
+
+.rest-room-view__title-row h1 {
+  font-size: var(--font-size-fluid-heading);
+  line-height: 1;
+}
+
+.rest-room-view__subtitle {
+  max-width: 920px;
+  margin-top: 4px;
+  font-size: var(--font-size-fluid-small);
+  line-height: 1.35;
+}
+
+.rest-room-back {
+  min-height: 38px;
+  padding-inline: 11px;
+  border-radius: 9px;
+  font-size: var(--font-size-small);
+}
+
+/* Main center area: the left and right columns share the same outer height. */
+.rest-room-view__body,
+.rest-room-view.is-owned .rest-room-view__body {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.52fr) minmax(328px, .82fr);
+  gap: 10px;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN — never scrolls independently. */
+.rest-room-view__main,
+.rest-room-view.is-owned .rest-room-view__main {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+  display: block;
+  overflow: hidden;
+}
+
+.rest-room-view__scene,
+.rest-room-view.is-owned .rest-room-view__scene {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: auto;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.rest-room-view__scene img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* RIGHT COLUMN — the only desktop scroll container. */
+.rest-room-view__sidebar {
+  position: relative;
+  inset: auto;
+  z-index: 2;
+  box-sizing: border-box;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0 5px 2px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(216, 167, 51, .50) rgba(255, 255, 255, .025);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.rest-room-view__sidebar::-webkit-scrollbar { width: 6px; }
+.rest-room-view__sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, .018);
+  border-radius: 999px;
+}
+.rest-room-view__sidebar::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: rgba(216, 167, 51, .50);
+  background-clip: padding-box;
+}
+
+/* Every right-side sector owns its natural height; no sector can sit on another. */
+.rest-room-view__sidebar .rest-room-side-card,
+.rest-room-view__sidebar .rest-room-side-card--current,
+.rest-room-view__sidebar .rest-room-side-card--daily,
+.rest-room-view__sidebar .rest-room-side-card--compact-upgrade {
+  position: relative;
+  z-index: auto;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  margin: 0;
+  padding: 12px 13px;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 12px;
+}
+
+.rest-room-side-card__heading {
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.rest-room-side-card__icon { font-size: var(--font-size-medium); }
+.rest-room-side-card__title { font-size: var(--font-size-small); }
+
+.rest-room-view__sidebar .rest-room-side-card > strong,
+.rest-room-view__sidebar .rest-room-compact-upgrade__body > strong {
+  font-size: var(--font-size-card-title);
+  line-height: 1.18;
+}
+
+.rest-room-view__sidebar .rest-room-side-card > p,
+.rest-room-view__sidebar .rest-room-compact-upgrade__body > p {
+  margin-top: 5px;
+  font-size: var(--font-size-small);
+  line-height: 1.4;
+}
+
+.rest-room-view__sidebar .rest-room-side-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.rest-room-view__sidebar .rest-room-side-list div {
+  display: grid;
+  gap: 4px;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, .04);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .015);
+}
+
+.rest-room-view__sidebar .rest-room-side-list dt,
+.rest-room-view__sidebar .rest-room-side-list dd { margin: 0; }
+.rest-room-view__sidebar .rest-room-side-list dt {
+  font-size: var(--font-size-label);
+  line-height: 1.2;
+}
+.rest-room-view__sidebar .rest-room-side-list dd {
+  font-size: var(--font-size-body);
+  line-height: 1.2;
+}
+
+/* Passive farm card — compact, readable, no absolute/percentage heights. */
+.rest-room-view__sidebar .rest-room-side-card--daily {
+  display: block;
+  overflow: hidden;
+}
+
+.rest-room-view__sidebar .rest-room-daily-card__topline {
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.rest-room-view__sidebar .rest-room-farm-vault { gap: 6px; }
+.rest-room-view__sidebar .rest-room-farm-vault__money,
+.rest-room-view__sidebar .rest-room-farm-vault__finds { padding: 7px 8px; }
+
+.rest-room-view__sidebar .rest-room-farm-vault__money span,
+.rest-room-view__sidebar .rest-room-farm-vault__finds span,
+.rest-room-view__sidebar .rest-room-farm-clock-row span,
+.rest-room-view__sidebar .rest-room-farm-meta span { font-size: var(--font-size-label); }
+
+.rest-room-view__sidebar .rest-room-farm-vault__money strong,
+.rest-room-view__sidebar .rest-room-farm-vault__finds strong { font-size: var(--font-size-large); }
+
+.rest-room-view__sidebar .rest-room-farm-clock-row {
+  margin-top: 6px;
+}
+.rest-room-view__sidebar .rest-room-farm-clock-row strong { font-size: var(--font-size-label); }
+.rest-room-view__sidebar .rest-room-farm-progress {
+  height: 6px;
+  margin-top: 4px;
+}
+
+.rest-room-view__sidebar .rest-room-farm-meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 6px;
+}
+.rest-room-view__sidebar .rest-room-farm-meta > div {
+  min-width: 0;
+  padding: 6px;
+}
+.rest-room-view__sidebar .rest-room-farm-meta strong { font-size: var(--font-size-label); }
+.rest-room-view__sidebar .rest-room-daily-claim {
+  position: static;
+  width: 100%;
+  min-height: 36px;
+  margin-top: 7px;
+  font-size: var(--font-size-label);
+}
+
+/* Next upgrade — always below the farm card in normal document flow. */
+.rest-room-view.is-owned .rest-room-side-card--compact-upgrade { display: block; }
+.rest-room-view__sidebar .rest-room-side-card--compact-upgrade {
+  display: block;
+  align-self: auto;
+  overflow: hidden;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: 98px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__thumb {
+  width: 98px;
+  height: 82px;
+  min-height: 0;
+  max-height: none;
+  object-fit: cover;
+  border-radius: 9px;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__body {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  align-content: start;
+  gap: 5px;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__body > strong {
+  font-size: var(--font-size-medium);
+  line-height: 1.18;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__body > p { display: none; }
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__delta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.rest-room-view__sidebar .rest-room-delta {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  padding: 5px 6px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, .015);
+}
+.rest-room-view__sidebar .rest-room-delta small { font-size: var(--font-size-label); }
+.rest-room-view__sidebar .rest-room-delta b {
+  min-width: 0;
+  gap: 3px;
+  font-size: var(--font-size-label);
+  white-space: nowrap;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 6px;
+}
+.rest-room-view__sidebar .rest-room-compact-upgrade__price small { font-size: var(--font-size-label); }
+.rest-room-view__sidebar .rest-room-compact-upgrade__price span { font-size: var(--font-size-medium); }
+
+.rest-room-main-offers {
+  min-width: 0;
+  min-height: 0;
+  max-height: 96px;
+  margin: 0;
+  overflow: hidden;
+}
+
+.rest-room-view__actions {
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.rest-room-action { min-height: 46px; padding: 6px 9px; }
+.rest-room-action__copy b { font-size: var(--font-size-button); }
+.rest-room-action__copy small { font-size: var(--font-size-button); }
+
+/* Drawer mode: the drawer itself scrolls, while the scene remains fixed. */
+@media (max-width: 900px) {
+  .rest-room-view {
+    padding: 8px;
+    gap: 7px;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+  }
+  .rest-room-view.is-owned { grid-template-rows: auto minmax(0, 1fr) auto; }
+
+  .rest-room-view__body,
+  .rest-room-view.is-owned .rest-room-view__body {
+    position: relative;
+    height: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr);
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .rest-room-view__main,
+  .rest-room-view.is-owned .rest-room-view__main,
+  .rest-room-view__scene,
+  .rest-room-view.is-owned .rest-room-view__scene {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .rest-room-sidebar-toggle { display: inline-flex; }
+
+  .rest-room-view__sidebar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    z-index: 20;
+    width: min(390px, 94%);
+    max-width: none;
+    height: 100%;
+    min-height: 0;
+    max-height: 100%;
+    padding: 8px 8px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border: 1px solid rgba(216, 167, 51, .28);
+    border-radius: 12px 0 0 12px;
+    background:
+      linear-gradient(180deg, rgba(11, 14, 12, .98), rgba(6, 9, 7, .99)),
+      radial-gradient(circle at 100% 0%, rgba(216, 167, 51, .06), transparent 48%);
+    backdrop-filter: blur(12px);
+    box-shadow: -18px 0 34px rgba(0, 0, 0, .42);
+    transform: translateX(calc(100% + 14px));
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 220ms ease, opacity 180ms ease, visibility 180ms ease;
+  }
+
+  .rest-room-view__sidebar.is-open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .rest-room-sidebar-close {
+    position: sticky;
+    top: 0;
+    right: auto;
+    z-index: 8;
+    flex: 0 0 auto;
+    align-self: flex-end;
+    min-height: 36px;
+    margin: 0 0 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 10px;
+    border: 1px solid rgba(216, 167, 51, .46);
+    border-radius: 9px;
+    color: #fff0b4;
+    background: linear-gradient(180deg, rgba(76, 54, 13, .94), rgba(28, 22, 9, .98));
+    font-family: var(--font-display);
+    font-size: var(--font-size-small);
+    font-weight: 800;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .34);
+  }
+
+  .rest-room-sidebar-toggle.is-open {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-card,
+  .rest-room-view__sidebar .rest-room-side-card--current,
+  .rest-room-view__sidebar .rest-room-side-card--daily,
+  .rest-room-view__sidebar .rest-room-side-card--compact-upgrade {
+    flex: 0 0 auto;
+    min-height: max-content;
+    height: auto;
+    max-height: none;
+  }
+
+  .rest-room-view__sidebar .rest-room-compact-upgrade {
+    height: auto;
+    grid-template-columns: 100px minmax(0, 1fr);
+  }
+  .rest-room-view__sidebar .rest-room-compact-upgrade__thumb {
+    width: 100px;
+    height: 88px;
+  }
+
+  .rest-room-main-offers { max-height: 82px; }
+  .rest-room-action__copy small { display: none; }
+}
+
+@media (max-width: 560px) {
+  .rest-room-view { padding: 7px; gap: 6px; }
+  .rest-room-view__title-row { gap: 7px; }
+  .rest-room-view__title-icon { display: none; }
+  .rest-room-view__title-row h1 { font-size: var(--font-size-card-title); }
+  .rest-room-view__subtitle { display: none; }
+  .rest-room-back { min-height: 32px; padding-inline: 8px; font-size: var(--font-size-label); }
+  .rest-room-view__sidebar { width: 100%; border-radius: 0; padding: 7px 7px 12px; }
+  .rest-room-sidebar-close { min-height: 34px; }
+  .rest-room-view__actions { gap: 5px; }
+  .rest-room-action { min-height: 40px; gap: 4px; padding: 4px 5px; }
+  .rest-room-action__icon { font-size: var(--font-size-large); }
+  .rest-room-action__copy b { font-size: var(--font-size-button); line-height: 1.1; text-align: center; }
+}
+
+.rest-room-offer__body p,
+.rest-room-action__copy small,
+.rest-room-side-card > p,
+.rest-room-side-list dt,
+.rest-room-side-list dd,
+.rest-room-farm-meta span,
+.rest-room-farm-meta strong,
+.rest-room-level-card__farm-info span,
+.rest-room-level-card__farm-info strong {
+  overflow-wrap: anywhere;
 }

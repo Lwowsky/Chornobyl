@@ -262,7 +262,7 @@
         <div class="bar-view__shell">
           <article class="bar-feature bar-feature--hero">
             <div class="bar-feature__media">
-              <img src="assets/hub/bar-casino-view.webp" alt="Бар 1037" draggable="false">
+              <img src="assets/hub/bar-main-npcs.webp" alt="Бар 1037 з барменом і чотирма відвідувачами" draggable="false">
               <div class="bar-feature__shade" aria-hidden="true"></div>
             </div>
             <div class="bar-feature__content">
@@ -281,32 +281,24 @@
             <article class="bar-side-card">
               <div class="bar-side-card__header">
                 <strong>Пропозиція дня</strong>
-                <span>оновиться через 07:12:25</span>
+                <span id="barDailyTimer">оновиться через --:--:--</span>
               </div>
               <div class="bar-side-card__body">
-                <h3>Тушонка + міцна кава</h3>
-                <p>Класика, яка тримає у Зоні довше та допомагає перед виходом.</p>
-                <ul class="bar-side-card__list bar-side-card__list--positive">
-                  <li>HP +20%</li>
-                  <li>Енергія +30%</li>
-                  <li>EXP +5% на 2 год</li>
-                </ul>
-                <div class="bar-price-tag">₴ 180</div>
+                <h3 id="barDailyName">Завантаження...</h3>
+                <p id="barDailyDescription"></p>
+                <ul class="bar-side-card__list bar-side-card__list--positive" id="barDailyEffects"></ul>
+                <button class="bar-price-tag bar-price-tag--button" id="barDailyBuy" type="button">₴ 0</button>
               </div>
             </article>
 
             <article class="bar-side-card">
               <div class="bar-side-card__header">
-                <strong>Активний баф</strong>
-                <span>залишилось 01:48</span>
+                <strong>Активні бонуси</strong>
+                <span id="barBuffTimer">немає</span>
               </div>
-              <div class="bar-side-card__body">
-                <h3>Ситість сталкера</h3>
-                <p>Добра їжа робить день легшим і дає невеликий бойовий бонус.</p>
-                <ul class="bar-side-card__list bar-side-card__list--positive">
-                  <li>Атака +5%</li>
-                  <li>Регенерація +10%</li>
-                </ul>
+              <div class="bar-side-card__body" id="barActiveBuffBody">
+                <h3>Немає активних бонусів</h3>
+                <p>Купи їжу або напій у меню бару. Одночасно працює одна їжа та один напій.</p>
               </div>
             </article>
 

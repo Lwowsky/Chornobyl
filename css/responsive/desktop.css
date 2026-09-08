@@ -23,11 +23,11 @@
   }
 
   .player-copy > strong {
-    font-size: 20px;
+    font-size: var(--font-size-section-title);
   }
 
   .player-level-row {
-    font-size: 11px;
+    font-size: var(--font-size-body);
   }
 
   .xp-meter {
@@ -35,7 +35,7 @@
   }
 
   .xp-meter b {
-    font-size: 9px;
+    font-size: var(--font-size-small);
   }
 
   .resource-grid {
@@ -55,7 +55,7 @@
   }
 
   .resource-name {
-    font-size: 10px;
+    font-size: var(--font-size-small);
   }
 
   .resource-meter {
@@ -63,7 +63,7 @@
   }
 
   .resource-meter b {
-    font-size: 9px;
+    font-size: var(--font-size-small);
   }
 
   .money-card {
@@ -71,11 +71,11 @@
   }
 
   .money-card strong {
-    font-size: 27px;
+    font-size: var(--font-size-heading-large);
   }
 
   .money-symbol {
-    font-size: 20px;
+    font-size: var(--font-size-section-title);
   }
 
   .world-screen {
@@ -84,12 +84,12 @@
   }
 
   .screen-header h1 {
-    font-size: 34px;
+    font-size: var(--font-size-page-title-static);
   }
 
   .screen-kicker,
   .screen-time {
-    font-size: 10px;
+    font-size: var(--font-size-small);
   }
 
   .bottom-nav {
@@ -108,6 +108,6 @@
   }
 
   .nav-button > span:last-child {
-    font-size: 11px;
+    font-size: var(--font-size-body);
   }
 }

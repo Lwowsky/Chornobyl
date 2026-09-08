@@ -82,7 +82,7 @@
 
 .profile-modal__eyebrow {
   color: var(--color-gold);
-  font-size: 8px;
+  font-size: var(--font-size-label);
   font-weight: 800;
   letter-spacing: 0.14em;
 }
@@ -91,7 +91,7 @@
   margin-top: 1px;
   color: var(--color-text-strong);
   font-family: var(--font-display);
-  font-size: 23px;
+  font-size: var(--font-size-heading);
   text-transform: uppercase;
   letter-spacing: 0.045em;
 }
@@ -105,7 +105,7 @@
   border-radius: 9px;
   color: #bdb5a3;
   background: rgba(255, 255, 255, 0.018);
-  font-size: 24px;
+  font-size: var(--font-size-heading);
   line-height: 1;
   cursor: pointer;
   transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
@@ -136,7 +136,7 @@
   border-radius: 8px;
   color: #86867d;
   background: linear-gradient(180deg, rgba(19, 23, 17, 0.9), rgba(10, 13, 9, 0.9));
-  font-size: 9px;
+  font-size: var(--font-size-small);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.035em;
@@ -239,7 +239,7 @@
 
 .equipment-slot__empty > span {
   color: rgba(216, 167, 51, 0.36);
-  font-size: 21px;
+  font-size: var(--font-size-section-title);
   line-height: 1;
 }
 
@@ -252,7 +252,7 @@
   border-radius: 4px;
   color: var(--color-text-strong);
   background: rgba(2, 4, 2, 0.80);
-  font-size: 8px;
+  font-size: var(--font-size-label);
   line-height: 1;
 }
 
@@ -289,17 +289,6 @@
   box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.28);
 }
 
-.hero-background {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  filter: saturate(0.82) contrast(1.03) brightness(0.90);
-}
-
-
 .profile-live-background {
   position: absolute;
   z-index: 0;
@@ -327,88 +316,6 @@
   transform: scale(1.018);
   filter: saturate(0.72) contrast(1.06) brightness(0.78);
 }
-
-.live-radiation-stream,
-
-
-
-
-
-
-
-
-
-
-.live-reactor-beam {
-  z-index: 3;
-  top: 3%;
-  left: 59.5%;
-  width: 3.3%;
-  height: 43%;
-  transform: translateX(-50%);
-  transform-origin: 50% 100%;
-  opacity: 0.42;
-  border-radius: 50% 50% 34% 34%;
-  background:
-    linear-gradient(
-      180deg,
-      transparent 0%,
-      rgba(165, 255, 142, 0.24) 18%,
-      rgba(101, 255, 91, 0.62) 58%,
-      rgba(85, 238, 76, 0.86) 92%,
-      rgba(173, 255, 151, 0.22) 100%
-    );
-  box-shadow:
-    0 0 7px rgba(96, 255, 83, 0.34),
-    0 0 20px rgba(62, 223, 55, 0.24);
-  filter: blur(1.1px);
-  animation: profileBeamPulse var(--profile-reactor-pulse-duration) ease-in-out infinite;
-}
-
-.live-reactor-beam::before::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 50%;
-}
-
-.live-reactor-beam::before {
-  top: -4%;
-  width: 590%;
-  height: 17%;
-  opacity: 0.72;
-  background: radial-gradient(ellipse, rgba(118, 255, 105, 0.46), rgba(67, 204, 61, 0.12) 46%, transparent 74%);
-  filter: blur(8px);
-}
-
-.live-reactor-beam::after {
-  bottom: -4%;
-  width: 430%;
-  height: 11%;
-  opacity: 0.58;
-  background: radial-gradient(ellipse, rgba(119, 255, 103, 0.58), rgba(63, 202, 57, 0.12) 48%, transparent 76%);
-  filter: blur(6px);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .hero-layer-stack {
   position: absolute;
@@ -569,7 +476,7 @@
 .profile-summary__title-row h3 {
   color: var(--color-gold);
   font-family: var(--font-display);
-  font-size: 10.5px;
+  font-size: var(--font-size-body);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -604,13 +511,13 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   color: var(--color-text-muted);
-  font-size: 9.5px;
+  font-size: var(--font-size-small);
 }
 
 .summary-row__value {
   flex: 0 0 auto;
   color: var(--color-text-strong);
-  font-size: 12.5px;
+  font-size: var(--font-size-body);
 }
 
 .summary-row--attack .summary-row__value,
@@ -638,7 +545,7 @@
 .stat-card span {
   display: block;
   color: var(--color-text-muted);
-  font-size: 8px;
+  font-size: var(--font-size-label);
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -647,14 +554,14 @@
   display: block;
   margin-top: 7px;
   color: var(--color-text-strong);
-  font-size: 20px;
+  font-size: var(--font-size-section-title);
 }
 
 .stat-card em {
   display: block;
   margin-top: 3px;
   color: var(--color-gold);
-  font-size: 8px;
+  font-size: var(--font-size-label);
   font-style: normal;
 }
 
@@ -685,7 +592,7 @@
 .future-panel p {
   margin-top: 6px;
   color: var(--color-text-muted);
-  font-size: 10px;
+  font-size: var(--font-size-small);
   line-height: 1.5;
 }
 .profile-modal[hidden],
