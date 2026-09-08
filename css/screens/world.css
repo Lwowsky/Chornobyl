@@ -1370,3 +1370,33 @@
   .bar-menu-grid { grid-template-columns: 1fr; }
   .hub-modal[data-mode="bar-menu"] .hub-modal__dialog { width: min(94vw, 520px); }
 }
+
+
+/* ================================================================
+   v0.43 — one purchase per menu rotation
+   ================================================================ */
+.bar-menu-item.is-purchased {
+  opacity: 0.76;
+  border-color: rgba(139, 151, 112, 0.22);
+}
+
+.bar-menu-item__buy:disabled,
+.bar-menu-item__buy.is-purchased,
+.bar-price-tag--button:disabled,
+.bar-price-tag--button.is-purchased {
+  cursor: default;
+  color: #aaa393;
+  border-color: rgba(170, 163, 147, 0.16);
+  background: rgba(255, 255, 255, 0.035);
+  box-shadow: none;
+  filter: none;
+}
+
+.bar-menu-item__buy:disabled:hover,
+.bar-menu-item__buy:disabled:focus-visible,
+.bar-price-tag--button:disabled:hover,
+.bar-price-tag--button:disabled:focus-visible {
+  border-color: rgba(170, 163, 147, 0.16);
+  background: rgba(255, 255, 255, 0.035);
+  filter: none;
+}

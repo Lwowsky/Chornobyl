@@ -416,17 +416,59 @@
   let barState = loadBarState();
   let barTimerId = null;
 
+  function createDefaultBarState() {
+    return {
+      activeFood: null,
+      activeDrink: null,
+      activeDaily: null,
+      menuPurchaseSlot: null,
+      purchasedMenuItems: [],
+      dailyPurchaseSlot: null,
+      dailyPurchased: false
+    };
+  }
+
   function loadBarState() {
     try {
       const saved = JSON.parse(localStorage.getItem(BAR_STATE_KEY) || "null");
-      return saved && typeof saved === "object" ? saved : { activeFood: null, activeDrink: null, activeDaily: null };
+      if (!saved || typeof saved !== "object") return createDefaultBarState();
+      return {
+        ...createDefaultBarState(),
+        ...saved,
+        purchasedMenuItems: Array.isArray(saved.purchasedMenuItems) ? saved.purchasedMenuItems : []
+      };
     } catch {
-      return { activeFood: null, activeDrink: null, activeDaily: null };
+      return createDefaultBarState();
     }
   }
 
   function saveBarState() {
     localStorage.setItem(BAR_STATE_KEY, JSON.stringify(barState));
+  }
+
+  function syncBarPurchaseLocks() {
+    const menuSlot = getRefreshSlot(BAR_MENU_REFRESH_MS);
+    const dailySlot = getRefreshSlot(BAR_DAILY_REFRESH_MS);
+    let changed = false;
+
+    if (barState.menuPurchaseSlot !== menuSlot) {
+      barState.menuPurchaseSlot = menuSlot;
+      barState.purchasedMenuItems = [];
+      changed = true;
+    }
+
+    if (barState.dailyPurchaseSlot !== dailySlot) {
+      barState.dailyPurchaseSlot = dailySlot;
+      barState.dailyPurchased = false;
+      changed = true;
+    }
+
+    if (changed) saveBarState();
+  }
+
+  function hasPurchasedMenuItem(itemId) {
+    syncBarPurchaseLocks();
+    return barState.purchasedMenuItems.includes(itemId);
   }
 
   function seededRandom(seed) {
@@ -517,40 +559,51 @@
   }
 
   function buyBarItem(itemId) {
+    syncBarPurchaseLocks();
     const item = BAR_MENU_ITEMS.find((candidate) => candidate.id === itemId);
     const player = window.GameState?.player;
     if (!item || !player) return { ok: false, message: "Не вдалося знайти позицію меню." };
     if (player.level < item.minLevel) return { ok: false, message: `Потрібен рівень ${item.minLevel}.` };
+    if (hasPurchasedMenuItem(item.id)) {
+      return { ok: false, message: `Цю позицію вже куплено. Повторна покупка стане доступна після оновлення меню через ${formatCountdown(getTimeUntilNext(BAR_MENU_REFRESH_MS))}.` };
+    }
     const price = getBarPrice(item.basePrice);
     if (player.money < price) return { ok: false, message: `Недостатньо грошей. Потрібно ₴ ${price}.` };
     player.money = Math.round((player.money - price) * 100) / 100;
     const buff = { id: item.id, name: item.name, category: item.category, effects: item.effects, expiresAt: Date.now() + item.duration * 60 * 1000 };
     if (item.category === "food") barState.activeFood = buff;
     else barState.activeDrink = buff;
+    barState.purchasedMenuItems.push(item.id);
     saveBarState();
     window.GameHud?.render?.();
     renderBarSideCards();
-    return { ok: true, message: `${item.name}: бонус активний ${item.duration} хв.` };
+    return { ok: true, message: `${item.name}: бонус активний ${item.duration} хв. Цю позицію вже не можна купити до наступного оновлення меню.` };
   }
 
   function buyDailyOffer() {
+    syncBarPurchaseLocks();
     const offer = getDailyOffer();
     const player = window.GameState?.player;
     if (!player) return { ok: false, message: "Гравця не знайдено." };
+    if (barState.dailyPurchased) {
+      return { ok: false, message: `Пропозицію дня вже куплено. Наступна стане доступна через ${formatCountdown(getTimeUntilNext(BAR_DAILY_REFRESH_MS))}.` };
+    }
     const price = getBarPrice(offer.basePrice);
     if (player.money < price) return { ok: false, message: `Недостатньо грошей. Потрібно ₴ ${price}.` };
     player.money = Math.round((player.money - price) * 100) / 100;
     barState.activeFood = null;
     barState.activeDrink = null;
     barState.activeDaily = { id: offer.id, name: offer.name, category: "daily", effects: offer.effects, expiresAt: Date.now() + offer.duration * 60 * 1000 };
+    barState.dailyPurchased = true;
     saveBarState();
     window.GameHud?.render?.();
     renderBarSideCards();
-    return { ok: true, message: `${offer.name}: комплект активний ${offer.duration} хв. Він замінив окрему їжу та напій.` };
+    return { ok: true, message: `${offer.name}: комплект активний ${offer.duration} хв. Пропозицію дня вже не можна купити повторно до її оновлення.` };
   }
 
   function renderBarSideCards() {
     cleanupExpiredBuffs();
+    syncBarPurchaseLocks();
     const offer = getDailyOffer();
     const dailyName = document.getElementById("barDailyName");
     const dailyDescription = document.getElementById("barDailyDescription");
@@ -561,7 +614,11 @@
     if (dailyDescription) dailyDescription.textContent = `${offer.description} · ${offer.duration} хв`;
     if (dailyEffects) dailyEffects.innerHTML = offer.effects.map((effect) => `<li>${formatEffect(effect)}</li>`).join("");
     if (dailyTimer) dailyTimer.textContent = `оновиться через ${formatCountdown(getTimeUntilNext(BAR_DAILY_REFRESH_MS))}`;
-    if (dailyBuy) dailyBuy.textContent = `Купити · ₴ ${getBarPrice(offer.basePrice)}`;
+    if (dailyBuy) {
+      dailyBuy.disabled = Boolean(barState.dailyPurchased);
+      dailyBuy.classList.toggle("is-purchased", Boolean(barState.dailyPurchased));
+      dailyBuy.textContent = barState.dailyPurchased ? "Куплено · до оновлення" : `Купити · ₴ ${getBarPrice(offer.basePrice)}`;
+    }
 
     const buffs = getActiveBarBuffs();
     const body = document.getElementById("barActiveBuffBody");
@@ -582,6 +639,7 @@
   }
 
   function renderBarMenuModal(message = "") {
+    syncBarPurchaseLocks();
     const title = document.getElementById("hubModalTitle");
     const description = document.getElementById("hubModalDescription");
     const status = document.getElementById("hubModalStatus");
@@ -590,16 +648,18 @@
     const level = window.GameState?.player?.level || 1;
     const items = getMenuItems();
     title.textContent = "Меню бару";
-    description.textContent = `4 позиції оновлюються кожні 4 години. Бонуси відсоткові й корисні на будь-якому рівні. Одночасно активна 1 їжа + 1 напій.`;
+    description.textContent = `4 позиції оновлюються кожні 4 години. Кожну позицію можна купити лише 1 раз за поточну ротацію. Одночасно активна 1 їжа + 1 напій.`;
     status.textContent = message || `Нове меню через ${formatCountdown(getTimeUntilNext(BAR_MENU_REFRESH_MS))} · Рівень героя ${level} · ціни масштабуються кожні 10 рівнів.`;
     extra.innerHTML = `
       <div class="bar-menu-toolbar">
         <span>Нове меню через <strong>${formatCountdown(getTimeUntilNext(BAR_MENU_REFRESH_MS))}</strong></span>
-        <span>Їжа 1/1 · Напій 1/1</span>
+        <span>1 покупка кожної позиції · Їжа 1/1 · Напій 1/1</span>
       </div>
       <div class="bar-menu-grid">
-        ${items.map((item) => `
-          <article class="bar-menu-item bar-menu-item--${item.rarity}">
+        ${items.map((item) => {
+          const purchased = hasPurchasedMenuItem(item.id);
+          return `
+          <article class="bar-menu-item bar-menu-item--${item.rarity}${purchased ? " is-purchased" : ""}">
             <div class="bar-menu-item__top">
               <span class="bar-menu-item__icon">${item.icon}</span>
               <div><span class="bar-menu-item__rarity">${rarityLabel(item.rarity)}</span><h3>${item.name}</h3></div>
@@ -607,8 +667,9 @@
             </div>
             <p>${item.description}</p>
             <ul>${item.effects.map((effect) => `<li>${formatEffect(effect)}</li>`).join("")}</ul>
-            <button class="bar-menu-item__buy" type="button" data-bar-buy="${item.id}">Купити · ₴ ${getBarPrice(item.basePrice)}</button>
-          </article>`).join("")}
+            <button class="bar-menu-item__buy${purchased ? " is-purchased" : ""}" type="button" data-bar-buy="${item.id}" ${purchased ? "disabled" : ""}>${purchased ? "Куплено · до оновлення" : `Купити · ₴ ${getBarPrice(item.basePrice)}`}</button>
+          </article>`;
+        }).join("")}
       </div>
       <div class="bar-menu-unlocks">
         <strong>Прогрес меню</strong>
@@ -903,6 +964,7 @@
     getModifier: getBarModifier,
     getMenuItems,
     getDailyOffer,
+    hasPurchasedMenuItem,
     render: renderBarSideCards
   };
 
