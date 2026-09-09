@@ -54,3 +54,36 @@
 - Open crate / Store / Take remain in a dedicated visible footer.
 - Desktop dialog uses a stable viewport-aware height; right upgrade panel scrolls independently when needed.
 - Tablet/mobile keep buttons visible with compact responsive sizing.
+
+## v0.76 — Quest board + full integration audit
+- Dedicated quest files added; no quest definitions are hard-coded in `index.html` or `js/ui/quest-board.js`.
+- Initial catalog: 12 quests in 3 independent packs (4 daily, 5 contracts, 3 story).
+- Registry validation: duplicate quest IDs are rejected at registration time.
+- Quest reward/objective inventory references checked against the inventory registry: 0 missing item IDs.
+- Quest runtime smoke test: accept → event/inventory progress → ready → track → claim passed.
+- JavaScript/i18n syntax check: 57 files, 0 syntax errors.
+- Static translation audit: 344 referenced keys checked, 0 missing.
+- Translation override audit: 0 existing translation keys overwritten by later chunks.
+- Duplicate HTML IDs: 0.
+- Duplicate `<script src>` includes: 0.
+- Duplicate stylesheet includes: 0.
+- Missing local HTML assets/scripts/styles: 0.
+- Broken `aria-labelledby` / `aria-controls` references: 0.
+- Duplicate `window.Game*` module globals: 0.
+- Quest module globals are unique: `GameQuestRegistry`, `GameQuests`, `GameQuestBoard`.
+- Exact identical CSS rules duplicated across different CSS files: 0.
+- Existing cross-file selector reuse belongs to base + responsive/cascade layers; quest-board CSS uses its own scoped selectors and introduces no selector collisions.
+- `!important`: 0.
+- The old generic Hub placeholder no longer handles `questBoard`; Hub now delegates directly to `GameQuestBoard.open()`, so the new UI is not overlaid or overridden by the old modal path.
+
+## v0.77 — Hospital audit
+- Duplicate HTML IDs: 0.
+- Duplicate `<script src>` references: 0.
+- Duplicate stylesheet references: 0.
+- Missing local script/stylesheet references: 0.
+- JS/i18n syntax: 61 files checked, 0 errors.
+- Static translation audit: 298 referenced keys checked, 0 missing; hospital contributes 15 static keys plus dynamic service subkeys from one translation namespace.
+- Hospital selectors use the isolated `hospital-*` prefix and a dedicated stylesheet.
+- The old generic `hubModal` no longer handles the `hospital` hotspot. `hub-map.js` routes directly to `GameHospital.open()`.
+- `GameHospitalData`, `GameHospitalRuntime`, and `GameHospital` are defined once and loaded once.
+- Runtime price test: HP 100/4000 => missing 3900 => ₴7,800; radiation 67 => 42 for ₴250; radiation 67 => 0 for ₴600.

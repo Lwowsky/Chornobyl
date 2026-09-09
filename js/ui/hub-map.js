@@ -1,11 +1,9 @@
 (function () {
   const mainModalPoints = new Set([
     "shop",
-    "hospital",
     "workshop",
     "arena",
-    "expeditions",
-    "questBoard"
+    "expeditions"
   ]);
 
   const barModalPoints = new Set();
@@ -476,6 +474,16 @@
 
     if (pointId === "storage") {
       window.GameWarehouse?.open?.();
+      return;
+    }
+
+    if (pointId === "hospital") {
+      window.GameHospital?.open?.();
+      return;
+    }
+
+    if (pointId === "questBoard") {
+      window.GameQuestBoard?.open?.();
       return;
     }
 

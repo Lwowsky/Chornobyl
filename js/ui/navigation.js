@@ -19,7 +19,10 @@
     if (route === "world") show("hubScreen");
     else if (route === "inventory") show("inventoryView");
     else if (route === "bunker") show("bunkerView");
-    else return false;
+    else if (route === "quests") {
+      window.GameQuestBoard?.open?.();
+      return true;
+    } else return false;
     document.querySelectorAll(".nav-button").forEach((button) => button.classList.toggle("is-active", button.dataset.route === route));
     return true;
   }

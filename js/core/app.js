@@ -12,6 +12,8 @@ window.addEventListener("DOMContentLoaded", () => {
   window.GameBunker?.bind?.();
   window.GameRestRoom.bind();
   window.GameWarehouse?.bind?.();
+  window.GameHospital?.bind?.();
+  window.GameQuestBoard?.bind?.();
   window.GameHub.bind();
   window.GameStateStore.save();
 });

@@ -38,6 +38,7 @@
       inventory: {},
       storage: {},
       warehouse: { level: 1 },
+      questBoard: { entries: {}, trackedId: "", unlocked: {}, dailyKey: "", factionRep: 0 },
       equipment: {},
       equipmentUpgrades: {},
       equipmentRolls: {},
@@ -56,6 +57,16 @@
     base.warehouse = saved.warehouse && typeof saved.warehouse === "object"
       ? { ...base.warehouse, ...saved.warehouse, level: Math.max(1, Math.min(5, Number(saved.warehouse.level) || 1)) }
       : base.warehouse;
+    base.questBoard = saved.questBoard && typeof saved.questBoard === "object"
+      ? {
+          ...base.questBoard,
+          ...saved.questBoard,
+          entries: saved.questBoard.entries && typeof saved.questBoard.entries === "object" ? saved.questBoard.entries : {},
+          unlocked: saved.questBoard.unlocked && typeof saved.questBoard.unlocked === "object" ? saved.questBoard.unlocked : {},
+          trackedId: String(saved.questBoard.trackedId || ""),
+          factionRep: Math.max(0, Number(saved.questBoard.factionRep) || 0)
+        }
+      : base.questBoard;
     base.equipment = saved.equipment && typeof saved.equipment === "object" ? saved.equipment : {};
     base.equipmentUpgrades = saved.equipmentUpgrades && typeof saved.equipmentUpgrades === "object" ? saved.equipmentUpgrades : {};
     base.equipmentRolls = saved.equipmentRolls && typeof saved.equipmentRolls === "object" ? saved.equipmentRolls : {};

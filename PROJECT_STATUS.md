@@ -60,3 +60,23 @@ Attack: white +25 = 10; green +1 = 11. A found green +1 and a promoted green +1 
 - Inventory grid is the scrolling region; action buttons are a normal footer below it.
 - Removed sticky/floating behavior that could visually overlap item cards.
 - Bag / Storage tabs and their filtering logic are unchanged.
+
+## v0.76 — Quest Board
+- Safe Zone quest-board hotspot now opens the full quest manager instead of the placeholder modal.
+- Bottom navigation `Завдання` is enabled and opens the same quest board.
+- Tabs: Щоденні / Контракти / Сюжетні / Виконані.
+- Filters: Усі / Нові / Активні / Готові, plus search.
+- Selected quest shows objectives, location, level, time, rewards, reputation and action controls.
+- Contract active limit: 5.
+- Daily quest state resets on a new local day.
+- Data architecture is prepared for 1,000+ quests through registry packs and incremental list rendering.
+
+
+## v0.77 — Hospital
+- Replaced the Safe Zone hospital placeholder with an isolated `hospital-*` modal component.
+- Hospital now has one focused role: instant paid HP recovery and radiation removal.
+- Full healing cost is calculated from missing HP: `missing HP × 2`, minimum ₴100.
+- Radiation options: -25 for ₴250 or full removal for ₴600.
+- Added separate data, runtime, UI, CSS and Ukrainian translation files.
+- Hospital no longer passes through the old generic `hubModal`, preventing generic modal CSS/JS from overriding it.
+- Added compact mobile layouts for 370–430 px and short-height devices; the dialog fits the viewport and scrolls only internally.

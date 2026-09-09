@@ -25,6 +25,8 @@
   <link rel="stylesheet" href="css/components/rest-room-layout.css">
   <link rel="stylesheet" href="css/components/rest-room-shell.css">
   <link rel="stylesheet" href="css/components/warehouse.css">
+  <link rel="stylesheet" href="css/components/quest-board.css">
+  <link rel="stylesheet" href="css/components/hospital.css">
   <!-- Current screen -->
   <link rel="stylesheet" href="css/screens/world.css">
   <link rel="stylesheet" href="css/screens/bar.css">
@@ -672,6 +674,92 @@
       </div>
     </section>
 
+    <section class="quest-board-modal" id="questBoardModal" hidden aria-modal="true" role="dialog" aria-labelledby="questBoardTitle">
+      <button class="quest-board-modal__backdrop" id="questBoardBackdrop" type="button" data-i18n-aria-label="questBoard.close"></button>
+      <div class="quest-board-modal__dialog">
+        <header class="quest-board-header">
+          <div class="quest-board-header__copy">
+            <span data-i18n="questBoard.kicker">БЕЗПЕЧНА ЗОНА</span>
+            <h2 id="questBoardTitle" data-i18n="questBoard.title">Дошка завдань</h2>
+            <p data-i18n="questBoard.subtitle">Контракти, побічні завдання, щоденні цілі та винагороди за виконання.</p>
+          </div>
+          <button class="quest-board-close" id="questBoardClose" type="button" data-i18n-aria-label="questBoard.close">×</button>
+        </header>
+
+        <nav class="quest-board-tabs" id="questBoardTabs" data-i18n-aria-label="questBoard.tabsLabel">
+          <button class="quest-board-tab is-active" type="button" data-quest-tab="daily" aria-selected="true"><span aria-hidden="true">☀</span><b data-i18n="questBoard.tabs.daily">Щоденні</b><em data-quest-tab-count>0</em></button>
+          <button class="quest-board-tab" type="button" data-quest-tab="contract" aria-selected="false"><span aria-hidden="true">▤</span><b data-i18n="questBoard.tabs.contract">Контракти</b><em data-quest-tab-count>0</em></button>
+          <button class="quest-board-tab" type="button" data-quest-tab="story" aria-selected="false"><span aria-hidden="true">△</span><b data-i18n="questBoard.tabs.story">Сюжетні</b><em data-quest-tab-count>0</em></button>
+          <button class="quest-board-tab" type="button" data-quest-tab="completed" aria-selected="false"><span aria-hidden="true">✓</span><b data-i18n="questBoard.tabs.completed">Виконані</b><em data-quest-tab-count>0</em></button>
+        </nav>
+
+        <div class="quest-board-statusbar">
+          <div class="quest-board-status-chip"><span data-i18n="questBoard.activeTasks">Активні завдання</span><b id="questBoardActiveCount">0</b></div>
+          <div class="quest-board-status-chip"><span data-i18n="questBoard.dailyReset">До оновлення щоденних</span><b id="questBoardDailyTimer">00:00:00</b></div>
+        </div>
+
+        <div class="quest-board-layout">
+          <section class="quest-board-list-panel">
+            <div class="quest-board-list-head"><strong data-i18n="questBoard.listTitle">Завдання</strong><small id="questBoardShownCount"></small></div>
+            <input class="quest-board-search" id="questBoardSearch" type="search" autocomplete="off" data-i18n-placeholder="questBoard.searchPlaceholder" placeholder="Пошук завдань...">
+            <div class="quest-board-filters" id="questBoardFilters">
+              <button class="quest-board-filter is-active" type="button" data-quest-filter="all" aria-pressed="true" data-i18n="questBoard.filters.all">Усі</button>
+              <button class="quest-board-filter" type="button" data-quest-filter="new" aria-pressed="false" data-i18n="questBoard.filters.new">Нові</button>
+              <button class="quest-board-filter" type="button" data-quest-filter="active" aria-pressed="false" data-i18n="questBoard.filters.active">Активні</button>
+              <button class="quest-board-filter" type="button" data-quest-filter="ready" aria-pressed="false" data-i18n="questBoard.filters.ready">Готові</button>
+            </div>
+            <div class="quest-board-list" id="questBoardList"></div>
+            <div class="quest-board-empty" id="questBoardEmpty" hidden data-i18n="questBoard.empty">За цим фільтром завдань поки немає.</div>
+            <div class="quest-board-list-foot"><span></span><button class="quest-board-load-more" id="questBoardLoadMore" type="button" hidden data-i18n="questBoard.loadMore">Показати ще</button></div>
+          </section>
+
+          <section class="quest-board-detail" id="questBoardDetail" aria-live="polite"></section>
+          <aside class="quest-board-rewards" id="questBoardRewards"></aside>
+        </div>
+        <div class="quest-board-message" id="questBoardMessage" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="hospital-modal" id="hospitalModal" hidden aria-modal="true" role="dialog" aria-labelledby="hospitalTitle">
+      <button class="hospital-modal__backdrop" id="hospitalBackdrop" type="button" data-i18n-aria-label="hospital.close"></button>
+      <div class="hospital-modal__dialog">
+        <header class="hospital-modal__header">
+          <div class="hospital-modal__heading">
+            <span data-i18n="hospital.kicker">БЕЗПЕЧНА ЗОНА</span>
+            <h2 id="hospitalTitle" data-i18n="hospital.title">Лікарня</h2>
+            <p data-i18n="hospital.subtitle">Миттєве лікування та дезактивація після небезпечних вилазок.</p>
+          </div>
+          <button class="hospital-modal__close" id="hospitalClose" type="button" data-i18n-aria-label="hospital.close">×</button>
+        </header>
+
+        <div class="hospital-modal__body">
+          <strong class="hospital-section-title" data-i18n="hospital.currentState">ПОТОЧНИЙ СТАН</strong>
+          <div class="hospital-status-grid">
+            <article class="hospital-status-card hospital-status-card--hp">
+              <div class="hospital-status-card__icon" aria-hidden="true">♥</div>
+              <div class="hospital-status-card__copy">
+                <div class="hospital-status-card__top"><strong data-i18n="hospital.hp">HP</strong><b id="hospitalHpValue">0 / 0</b></div>
+                <div class="hospital-status-card__bar"><i id="hospitalHpBar"></i></div>
+              </div>
+            </article>
+            <article class="hospital-status-card hospital-status-card--radiation">
+              <div class="hospital-status-card__icon" aria-hidden="true">☢</div>
+              <div class="hospital-status-card__copy">
+                <div class="hospital-status-card__top"><strong data-i18n="hospital.radiation">Радіація</strong><b id="hospitalRadiationValue">0 / 100</b></div>
+                <div class="hospital-status-card__bar"><i id="hospitalRadiationBar"></i></div>
+              </div>
+            </article>
+          </div>
+
+          <div class="hospital-wallet"><span data-i18n="hospital.money">Гроші</span><b id="hospitalMoney">₴ 0</b></div>
+          <strong class="hospital-section-title" data-i18n="hospital.availableServices">ДОСТУПНІ ПОСЛУГИ</strong>
+          <div class="hospital-services" id="hospitalServices"></div>
+          <div class="hospital-message" id="hospitalMessage" role="status" aria-live="polite" hidden></div>
+          <div class="hospital-note"><span aria-hidden="true">ⓘ</span><p data-i18n="hospital.note">Кімната відпочинку відновлює поступово. Лікарня працює миттєво.</p></div>
+        </div>
+      </div>
+    </section>
+
     <section class="hub-modal" id="hubModal" hidden aria-modal="true" role="dialog" aria-labelledby="hubModalTitle">
       <button class="hub-modal__backdrop" id="hubModalBackdrop" type="button" data-i18n-aria-label="hub.close"></button>
       <div class="hub-modal__dialog">
@@ -857,7 +945,7 @@
         <span class="nav-button__icon"><img src="assets/nav/expeditions.webp" alt=""></span>
         <span data-i18n="nav.expeditions">Вилазки</span>
       </button>
-      <button class="nav-button" type="button" data-route="quests" aria-disabled="true">
+      <button class="nav-button" type="button" data-route="quests">
         <span class="nav-button__icon"><img src="assets/nav/tasks.webp" alt=""></span>
         <span data-i18n="nav.quests">Завдання</span>
       </button>
@@ -1029,6 +1117,11 @@
   <script src="i18n/uk/room-rewards.js" defer></script>
   <script src="i18n/uk/bunker.js" defer></script>
   <script src="i18n/uk/warehouse.js" defer></script>
+  <script src="i18n/uk/hospital.js" defer></script>
+  <script src="i18n/uk/quests/ui.js" defer></script>
+  <script src="i18n/uk/quests/daily.js" defer></script>
+  <script src="i18n/uk/quests/contracts.js" defer></script>
+  <script src="i18n/uk/quests/story.js" defer></script>
 
   <script src="js/data/inventory/registry.js" defer></script>
   <script src="js/data/inventory/categories.js" defer></script>
@@ -1044,6 +1137,11 @@
   <script src="js/data/bar-data.js" defer></script>
   <script src="js/data/rest-room-data.js" defer></script>
   <script src="js/data/warehouse-data.js" defer></script>
+  <script src="js/data/hospital-data.js" defer></script>
+  <script src="js/data/quests/registry.js" defer></script>
+  <script src="js/data/quests/daily.js" defer></script>
+  <script src="js/data/quests/contracts.js" defer></script>
+  <script src="js/data/quests/story.js" defer></script>
   <script src="js/core/equipment-rarity.js" defer></script>
   <script src="js/data/bunker-test-sets.js" defer></script>
 
@@ -1056,6 +1154,8 @@
   <script src="js/core/vitals.js" defer></script>
   <script src="js/core/rewards.js" defer></script>
   <script src="js/core/bar-runtime.js" defer></script>
+  <script src="js/core/hospital-runtime.js" defer></script>
+  <script src="js/core/quest-runtime.js" defer></script>
   <script src="js/ui/hud.js" defer></script>
   <script src="js/ui/profile-modal.js" defer></script>
   <script src="js/ui/profile-equipment-picker.js" defer></script>
@@ -1067,6 +1167,8 @@
   <script src="js/ui/bar-ui.js" defer></script>
   <script src="js/ui/rest-room.js" defer></script>
   <script src="js/ui/warehouse.js" defer></script>
+  <script src="js/ui/hospital.js" defer></script>
+  <script src="js/ui/quest-board.js" defer></script>
   <script src="js/ui/hub-map.js" defer></script>
   <script src="js/core/app.js" defer></script></body>
 </html>
