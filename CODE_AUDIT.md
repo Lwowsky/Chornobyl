@@ -1,39 +1,56 @@
-# THE 1037 SIGNAL — Code Audit v0.37
+# Code audit — v0.56
 
-## Що реально очищено
+- JavaScript syntax: OK for all JS/i18n files.
+- Duplicate HTML IDs: 0.
+- Duplicate JS includes: 0.
+- Duplicate CSS includes: 0.
+- Missing local HTML assets/includes: 0.
+- Broken aria-labelledby / aria-controls references: 0.
+- `!important`: 0.
+- Rarity stat count test: 2 / 3 / 4 / 5 / 7 / 9 — OK.
+- Random white roll uniqueness test: OK.
+- Stat inheritance white → green → blue → purple → gold → red: OK.
+- Power continuity test: Attack white +25 = 10, green +1 = 11 — OK.
+- Existing repeated declarations inside different responsive media ranges were left intact because they are breakpoint-specific cascade rules, not duplicate includes or duplicated game logic.
 
-- Rest Room: видалено застарілий shell-код v0.31 та весь стек shell-патчів v0.33–v0.36.
-- Rest Room: замість них залишено один авторитетний `v0.37 — CLEAN REST ROOM SHELL`.
-- Rest Room: прибрано старі v0.12 правила з `position:absolute` для викупленої кімнати, які могли конфліктувати з новою сіткою.
-- Bar: два послідовні набори стилів v0.29/v0.30 об'єднано в один canonical Bar block.
-- По CSS сайту прибрано 67 правил, селектори яких більше не використовуються в HTML/JS (старі table/daily-choice/claim-summary та застарілі profile/live ефекти).
-- По всіх CSS-файлах прибрано byte-identical дублікати правил.
+## v0.57 responsive audit
+- HUD values constrained with min-width/overflow-safe responsive typography.
+- Rest Room unowned layout no longer reserves space for inactive farm/upgrade cards.
+- Existing JS state/render architecture reused; only state classes were added, no duplicated Rest Room logic.
 
-## Перевірки
+## v0.58 rest-room regression fix
+- Fixed regression from v0.57 where compact layouts could hide the available-room information behind the responsive Info drawer before purchase.
+- Unowned compact state now uses a persistent current-room card; drawer behaviour remains for owned rooms only.
 
-- Duplicate HTML IDs: 0
-- Duplicate `<script src>`: 0
-- Duplicate CSS `<link>`: 0
-- Missing ID refs у `rest-room.js`: 0
-- `!important`: 0
-- CSS parse errors: 0
-- Exact duplicate CSS rules: 0
-- Усі JS-файли: `node --check` OK
+## v0.59 rest-room rollback
+- Removed the v0.58 unowned-room CSS override that converted the sidebar into an inline block.
+- Removed the v0.58 JS branch that disabled the compact sidebar toggle for unowned rooms.
+- Sidebar behavior is now identical to v0.57.
 
-## Про повторні селектори у rest-room.css
+## v0.61 rest-room sidebar regression fix
+- Unowned state no longer renders the passive-farm/supplies card in the compact sidebar.
+- Owned state markup and farm/upgrade logic were not changed.
+- Compact sidebar scroll position resets to the top on open so the room-level card is immediately visible.
+- v0.60 mobile XP typography remains intact.
 
-У `rest-room.css` залишаються повтори селекторів з РІЗНИМИ деклараціями. Це не byte-identical дублікати: частина з них є базовими стилями + responsive/feature refinements для модалки рівнів, пасивного фарму та claim modal. Їх не видалено масово, бо це змінило б поточний вигляд цих окремих компонентів.
+## v0.66 warehouse UI + i18n audit
+- Warehouse is implemented as a dedicated module: `js/ui/warehouse.js`.
+- Warehouse progression/data is isolated in `js/data/warehouse-data.js`.
+- Warehouse styles are isolated in `css/components/warehouse.css`.
+- Warehouse translation chunk is isolated in `i18n/uk/warehouse.js` and loaded after the base Ukrainian dictionary.
+- The modal HTML remains in `index.html` to avoid an extra runtime fetch and keep the single-page build reliable.
+- Static i18n references checked: 249 used keys, 0 missing.
+- Dynamic inventory/category/slot/backpack translation references checked against all registered item data: 0 missing.
+- Warehouse dynamic filter and bonus keys checked: 0 missing.
+- JavaScript/i18n syntax check: 47 files OK.
+- Duplicate HTML IDs: 0.
+- Duplicate JS includes: 0.
+- Duplicate CSS includes: 0.
+- Missing local JS/CSS includes: 0.
+- `!important`: 0.
 
-Критичний стек, який впливавав саме на layout кімнати та спричиняв накладання секторів, прибрано і замінено одним v0.37 блоком.
-
-
-## v0.39 typography audit
-- CSS files converted to centralized typography tokens: 8
-- Converted files: css/responsive/desktop.css, css/responsive/mobile.css, css/responsive/mobile-small.css, css/components/rest-room.css, css/components/hud.css, css/components/navigation.css, css/components/profile-modal.css, css/screens/world.css
-- No direct `font-size: Npx` declarations are intended outside `css/core/variables.css`.
-- Small UI typography now has a 10px minimum token instead of legacy 5.8–9px values.
-
-
-## v0.41
-- Bar hero overlay hidden via CSS only; source artwork unchanged.
-- Right Bar column uses isolated vertical overflow.
+## v0.67 — Warehouse layout fix
+- Inventory grid now scrolls inside its own area and cannot overlap action buttons.
+- Open crate / Store / Take remain in a dedicated visible footer.
+- Desktop dialog uses a stable viewport-aware height; right upgrade panel scrolls independently when needed.
+- Tablet/mobile keep buttons visible with compact responsive sizing.

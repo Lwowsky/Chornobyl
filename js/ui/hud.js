@@ -19,7 +19,6 @@
 
     setText("hudNickname", p.nickname);
     setText("hudLevel", p.level);
-    setText("playerLevelBadge", p.level);
     setText("hudXpText", `${p.xp} / ${p.xpNext}`);
     setBar("hudXpBar", p.xp, p.xpNext);
 

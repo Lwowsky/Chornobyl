@@ -1,0 +1,838 @@
+/* =========================================================
+   v0.24 — readable rest room UI + fixed 3-column metric rows
+   Visual target: approved mockups from the v0.23 review.
+   ========================================================= */
+
+/* --- MAIN ROOM: restore readable typography --- */
+.rest-room-view__title-row h1 {
+  font-size: var(--font-size-display);
+}
+
+.rest-room-view__subtitle {
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+}
+
+.rest-room-side-card__heading {
+  gap: 10px;
+}
+
+.rest-room-side-card__icon,
+.rest-room-main-offers__icon {
+  font-size: var(--font-size-section-title);
+}
+
+.rest-room-side-card > strong {
+  margin-top: 9px;
+  font-size: var(--font-size-section-title);
+  line-height: 1.18;
+}
+
+.rest-room-side-card > p {
+  margin-top: 7px;
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+}
+
+.rest-room-side-list {
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.rest-room-side-list dt,
+.rest-room-side-list dd {
+  font-size: var(--font-size-body);
+}
+
+.rest-room-side-list dd {
+  font-size: var(--font-size-body);
+}
+
+.rest-room-farm-status {
+  min-height: 24px;
+  padding: 0 9px;
+  font-size: var(--font-size-label);
+}
+
+.rest-room-farm-vault {
+  grid-template-columns: minmax(0,1fr) 72px;
+  gap: 7px;
+}
+
+.rest-room-farm-vault__money,
+.rest-room-farm-vault__finds {
+  padding: 8px 9px;
+}
+
+.rest-room-farm-vault__money span,
+.rest-room-farm-vault__finds span,
+.rest-room-farm-clock-row span,
+.rest-room-farm-meta span {
+  font-size: var(--font-size-label);
+}
+
+.rest-room-farm-vault__money strong,
+.rest-room-farm-vault__finds strong {
+  font-size: var(--font-size-card-title);
+}
+
+.rest-room-farm-clock-row strong {
+  font-size: var(--font-size-body);
+}
+
+.rest-room-farm-progress {
+  height: 7px;
+  margin-top: 5px;
+}
+
+.rest-room-farm-meta {
+  gap: 6px;
+  margin-top: 7px;
+}
+
+.rest-room-farm-meta > div {
+  padding: 7px 8px;
+}
+
+.rest-room-farm-meta strong {
+  font-size: var(--font-size-small);
+  line-height: 1.2;
+}
+
+.rest-room-daily-claim {
+  min-height: 36px;
+  margin-top: 7px;
+  font-size: var(--font-size-small);
+}
+
+.rest-room-compact-upgrade__body > strong,
+.rest-room-offer__body > strong {
+  font-size: var(--font-size-card-title);
+}
+
+.rest-room-compact-upgrade__body > p,
+.rest-room-offer__body > p,
+.rest-room-offer p {
+  font-size: var(--font-size-body);
+  line-height: 1.42;
+}
+
+.rest-room-compact-upgrade__delta,
+.rest-room-offer__delta {
+  gap: 8px;
+}
+
+.rest-room-delta small {
+  font-size: var(--font-size-label);
+}
+
+.rest-room-delta b {
+  font-size: var(--font-size-body);
+}
+
+/* --- ALL LEVELS: larger heading and summary --- */
+.rest-room-levels-panel__header h2 {
+  font-size: var(--font-size-page-title-static);
+}
+
+.rest-room-levels-panel__header p {
+  font-size: var(--font-size-body);
+  line-height: 1.5;
+}
+
+.rest-room-levels-summary__eyebrow span {
+  font-size: var(--font-size-small);
+}
+
+.rest-room-levels-summary__eyebrow b {
+  padding: 5px 8px;
+  font-size: var(--font-size-label);
+}
+
+.rest-room-levels-summary__item strong {
+  font-size: var(--font-size-section-title);
+}
+
+.rest-room-levels-summary__item small {
+  font-size: var(--font-size-small);
+  line-height: 1.4;
+}
+
+/* --- Level cards: typography first, always readable --- */
+.rest-room-level-card__title-wrap strong {
+  font-size: var(--font-size-section-title);
+  line-height: 1.12;
+}
+
+.rest-room-level-card__title-wrap p {
+  margin-top: 7px;
+  font-size: var(--font-size-body);
+  line-height: 1.42;
+}
+
+.rest-room-level-card__price small {
+  font-size: var(--font-size-label);
+}
+
+.rest-room-level-card__price strong {
+  font-size: var(--font-size-section-title);
+}
+
+.rest-room-level-card__stats,
+.rest-room-level-card__farm-info {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.rest-room-level-card__stat,
+.rest-room-level-card__farm-metric {
+  min-height: 46px;
+  padding: 9px 10px;
+}
+
+.rest-room-level-card__stat b {
+  font-size: var(--font-size-body);
+}
+
+.rest-room-level-card__stat span {
+  font-size: var(--font-size-body);
+}
+
+.rest-room-level-card__farm-metric span {
+  font-size: var(--font-size-label);
+  line-height: 1.1;
+}
+
+.rest-room-level-card__farm-metric b {
+  margin-top: 2px;
+  font-size: var(--font-size-body);
+  line-height: 1.2;
+}
+
+/* --- Tablet: keep both metric groups in a single row --- */
+@media (max-width: 1000px) {
+  .rest-room-level-card__title-wrap strong { font-size: var(--font-size-card-title); }
+  .rest-room-level-card__title-wrap p { font-size: var(--font-size-body); }
+  .rest-room-level-card__price strong { font-size: var(--font-size-card-title); }
+  .rest-room-level-card__stat,
+  .rest-room-level-card__farm-metric { padding: 8px 9px; }
+  .rest-room-level-card__stat b { font-size: var(--font-size-small); }
+  .rest-room-level-card__stat span,
+  .rest-room-level-card__farm-metric b { font-size: var(--font-size-body); }
+  .rest-room-level-card__farm-metric span { font-size: var(--font-size-label); }
+}
+
+/* --- Mobile all-levels modal: exact approved composition --- */
+@media (max-width: 760px) {
+  .rest-room-levels-panel__header h2 { font-size: var(--font-size-heading-large); }
+  .rest-room-levels-panel__header p { font-size: var(--font-size-body); }
+
+  .rest-room-levels-summary__item {
+    padding: 11px 12px 11px 15px;
+  }
+
+  .rest-room-levels-summary__eyebrow span { font-size: var(--font-size-label); }
+  .rest-room-levels-summary__eyebrow b { font-size: var(--font-size-label); }
+  .rest-room-levels-summary__item strong { font-size: var(--font-size-section-title); }
+  .rest-room-levels-summary__item small { font-size: var(--font-size-small); }
+
+  .rest-room-level-card {
+    gap: 10px;
+    padding: 11px;
+  }
+
+  .rest-room-level-card__title-wrap strong {
+    font-size: var(--font-size-section-title);
+  }
+
+  .rest-room-level-card__title-wrap p {
+    margin-top: 6px;
+    font-size: var(--font-size-body);
+  }
+
+  .rest-room-level-card__media {
+    aspect-ratio: 16 / 8.7;
+  }
+
+  /* User requirement: HP / Energy / Radiation ALWAYS one row. */
+  .rest-room-level-card__stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  /* User requirement: Max farm / Income / Find chance ALWAYS one row. */
+  .rest-room-level-card__farm-info {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+  }
+
+  .rest-room-level-card__stat,
+  .rest-room-level-card__farm-metric {
+    min-width: 0;
+    min-height: 52px;
+    padding: 9px 8px;
+  }
+
+  .rest-room-level-card__stat {
+    display: grid;
+    gap: 4px;
+    align-content: center;
+  }
+
+  .rest-room-level-card__stat b {
+    font-size: var(--font-size-small);
+  }
+
+  .rest-room-level-card__stat span {
+    font-size: var(--font-size-body);
+    white-space: nowrap;
+  }
+
+  .rest-room-level-card__farm-metric span {
+    font-size: var(--font-size-label);
+    line-height: 1.12;
+  }
+
+  .rest-room-level-card__farm-metric b {
+    font-size: var(--font-size-small);
+    line-height: 1.18;
+  }
+
+  .rest-room-level-card__price {
+    padding: 10px 11px;
+  }
+
+  .rest-room-level-card__price small { font-size: var(--font-size-label); }
+  .rest-room-level-card__price strong { font-size: var(--font-size-section-title); }
+}
+
+/* Narrow phones: still keep three columns; reduce spacing, NOT column count. */
+@media (max-width: 480px) {
+  .rest-room-levels-panel__header h2 { font-size: var(--font-size-heading-large); }
+  .rest-room-levels-panel__header p { font-size: var(--font-size-small); }
+
+  .rest-room-levels-summary__item strong { font-size: var(--font-size-card-title); }
+  .rest-room-levels-summary__item small { display: block; font-size: var(--font-size-small); }
+
+  .rest-room-level-card__title-wrap strong { font-size: var(--font-size-card-title); }
+  .rest-room-level-card__title-wrap p { font-size: var(--font-size-small); }
+
+  .rest-room-level-card__stats,
+  .rest-room-level-card__farm-info {
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 5px;
+  }
+
+  .rest-room-level-card__stat,
+  .rest-room-level-card__farm-metric {
+    min-height: 50px;
+    padding: 8px 6px;
+  }
+
+  .rest-room-level-card__stat b { font-size: var(--font-size-small); }
+  .rest-room-level-card__stat span { font-size: var(--font-size-small); }
+  .rest-room-level-card__farm-metric span { font-size: var(--font-size-label); letter-spacing: .025em; }
+  .rest-room-level-card__farm-metric b { font-size: var(--font-size-small); }
+  .rest-room-level-card__price strong { font-size: var(--font-size-card-title); }
+}
+
+/* Compact sidebar: increase readability without increasing overall card height too much. */
+@container (max-width: 900px) {
+  .rest-room-view__sidebar .rest-room-side-card--current > strong,
+  .rest-room-view__sidebar .rest-room-compact-upgrade__body > strong {
+    font-size: var(--font-size-large);
+  }
+
+  .rest-room-view__sidebar .rest-room-side-list {
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 5px;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-list div {
+    padding: 7px 6px;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-list dt {
+    font-size: var(--font-size-label);
+    line-height: 1.15;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-list dd {
+    font-size: var(--font-size-small);
+  }
+
+  .rest-room-view__sidebar .rest-room-farm-vault__money span,
+  .rest-room-view__sidebar .rest-room-farm-vault__finds span,
+  .rest-room-view__sidebar .rest-room-farm-clock-row span,
+  .rest-room-view__sidebar .rest-room-farm-meta span {
+    font-size: var(--font-size-label);
+  }
+
+  .rest-room-view__sidebar .rest-room-farm-vault__money strong,
+  .rest-room-view__sidebar .rest-room-farm-vault__finds strong {
+    font-size: var(--font-size-large);
+  }
+
+  .rest-room-view__sidebar .rest-room-farm-clock-row strong {
+    font-size: var(--font-size-small);
+  }
+
+  .rest-room-view__sidebar .rest-room-farm-meta > div {
+    padding: 6px;
+  }
+
+  .rest-room-view__sidebar .rest-room-farm-meta strong {
+    font-size: var(--font-size-label);
+  }
+
+  .rest-room-view__sidebar .rest-room-daily-claim {
+    font-size: var(--font-size-small);
+  }
+}
+
+
+/* =========================================================
+   v0.25 — levels card hierarchy cleanup + tighter main screen
+   User feedback: room title above image, possible finds inline with price,
+   and less dead space under the main actions.
+   ========================================================= */
+
+.rest-room-view {
+  padding-bottom: 10px;
+  gap: 10px;
+  align-self: start;
+}
+
+.rest-room-main-offers {
+  margin-bottom: 0;
+}
+
+.rest-room-view__actions {
+  margin-top: -1px;
+  margin-bottom: 0;
+}
+
+/* Main view: slightly taller scene / slightly tighter bottom rhythm. */
+.rest-room-view.is-owned .rest-room-view__body {
+  min-height: clamp(370px, 58vh, 470px);
+}
+
+.rest-room-view.is-owned .rest-room-view__scene {
+  border-radius: 15px;
+}
+
+/* All levels modal: clearer information hierarchy. */
+.rest-room-level-card {
+  grid-template-columns: 250px minmax(0,1fr);
+  grid-template-areas:
+    'title title'
+    'media content';
+  align-items: start;
+}
+
+.rest-room-level-card__media {
+  grid-area: media;
+}
+
+.rest-room-level-card__content {
+  grid-area: content;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 9px;
+  align-content: start;
+}
+
+.rest-room-level-card__daily {
+  min-width: 0;
+}
+
+.rest-room-level-card__footer {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.rest-room-level-card__finds {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+  padding: 9px 10px;
+  border: 1px solid rgba(216,167,51,.08);
+  border-radius: 10px;
+  background: rgba(216,167,51,.018);
+}
+
+.rest-room-level-card__finds span {
+  color: #c9ae57;
+  font-size: var(--font-size-label);
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.rest-room-level-card__finds b {
+  color: #ded6c8;
+  font-size: var(--font-size-small);
+  line-height: 1.35;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.rest-room-level-card__price {
+  min-width: 154px;
+  display: grid;
+  align-content: center;
+}
+
+@media (max-width: 1000px) {
+  .rest-room-view.is-owned .rest-room-view__body {
+    min-height: clamp(340px, 54vh, 440px);
+  }
+
+  .rest-room-level-card {
+    grid-template-columns: 210px minmax(0,1fr);
+  }
+
+  .rest-room-level-card__footer {
+    gap: 8px;
+  }
+
+  .rest-room-level-card__price {
+    min-width: 138px;
+  }
+}
+
+@media (max-width: 760px) {
+  .rest-room-view {
+    padding-bottom: 8px;
+    gap: 9px;
+  }
+
+  .rest-room-view.is-owned .rest-room-view__body {
+    min-height: 0;
+  }
+
+  .rest-room-level-card {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'title'
+      'media'
+      'content';
+  }
+
+  .rest-room-level-card__footer {
+    grid-template-columns: 1fr;
+  }
+
+  .rest-room-level-card__finds,
+  .rest-room-level-card__price {
+    min-width: 0;
+  }
+
+  .rest-room-level-card__price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    text-align: left;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .rest-room-level-card__finds {
+    padding: 8px 9px;
+  }
+
+  .rest-room-level-card__finds span {
+    font-size: var(--font-size-label);
+  }
+
+  .rest-room-level-card__finds b {
+    font-size: var(--font-size-small);
+  }
+}
+
+
+/* =========================================================
+   v0.27 — exact alignment fix requested in review
+   - Possible finds + price always share one row.
+   - HP / Energy / Radiation stay three columns in compact upgrade,
+     with the label above and the current → target values below.
+   ========================================================= */
+
+/* ---------- ALL LEVELS: stable card layout ---------- */
+.rest-room-level-card {
+  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-areas:
+    'title title'
+    'media content';
+  gap: 12px 14px;
+  align-items: start;
+}
+
+.rest-room-level-card__media {
+  grid-area: media;
+  align-self: start;
+}
+
+.rest-room-level-card__content {
+  grid-area: content;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'footer'
+    'stats'
+    'farm';
+  gap: 10px;
+  align-content: start;
+}
+
+.rest-room-level-card__stats {
+  grid-area: stats;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.rest-room-level-card__daily {
+  grid-area: farm;
+}
+
+.rest-room-level-card__farm-info {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+/* Finds and price are ONE row at every width. */
+.rest-room-level-card__footer {
+  grid-area: footer;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 154px;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.rest-room-level-card__finds,
+.rest-room-level-card__price {
+  grid-area: auto;
+  min-width: 0;
+  min-height: 62px;
+  box-sizing: border-box;
+}
+
+.rest-room-level-card__finds {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding: 9px 11px;
+}
+
+.rest-room-level-card__finds b {
+  color: #ded6c8;
+  font-size: var(--font-size-body);
+  font-weight: 500;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.rest-room-level-card__price {
+  display: grid;
+  align-content: center;
+  justify-items: end;
+  padding: 9px 11px;
+  text-align: right;
+}
+
+
+.rest-room-level-card__price strong {
+  margin-top: 4px;
+  font-size: var(--font-size-section-title);
+}
+
+@media (max-width: 1100px) {
+  .rest-room-level-card {
+    grid-template-columns: 260px minmax(0, 1fr);
+  }
+
+  .rest-room-level-card__footer {
+    grid-template-columns: minmax(0, 1fr) 142px;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 760px) {
+  .rest-room-level-card {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'title'
+      'media'
+      'content';
+    gap: 9px;
+  }
+
+  .rest-room-level-card__content {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'footer'
+      'stats'
+      'farm';
+    gap: 9px;
+  }
+
+  .rest-room-level-card__stats,
+  .rest-room-level-card__farm-info {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .rest-room-level-card__footer {
+    grid-template-columns: minmax(0, 1fr) 126px;
+    gap: 7px;
+  }
+
+  .rest-room-level-card__finds,
+  .rest-room-level-card__price {
+    min-height: 58px;
+  }
+
+  .rest-room-level-card__price {
+    display: grid;
+    align-content: center;
+    justify-items: end;
+    text-align: right;
+  }
+
+  .rest-room-level-card__price strong {
+    margin-top: 3px;
+    font-size: var(--font-size-card-title);
+  }
+}
+
+@media (max-width: 480px) {
+  .rest-room-level-card__footer {
+    /* Still ONE row: finds left, price right. */
+    grid-template-columns: minmax(0, 1fr) 112px;
+    gap: 6px;
+  }
+
+  .rest-room-level-card__finds,
+  .rest-room-level-card__price {
+    min-height: 56px;
+    padding: 8px;
+  }
+
+  .rest-room-level-card__finds span,
+  .rest-room-level-card__price small {
+    font-size: var(--font-size-label);
+  }
+
+  .rest-room-level-card__finds b {
+    font-size: var(--font-size-small);
+    line-height: 1.3;
+  }
+
+}
+
+/* ---------- SIDEBAR: next upgrade stats ---------- */
+/* Always one row: HP | Energy | Radiation. Each column has label above values. */
+.rest-room-view__sidebar .rest-room-compact-upgrade__delta {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+}
+
+.rest-room-view__sidebar .rest-room-delta {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto;
+  gap: 5px;
+  align-content: start;
+}
+
+.rest-room-view__sidebar .rest-room-delta small {
+  display: block;
+  min-width: 0;
+  color: #8f9991;
+  font-size: var(--font-size-label);
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+.rest-room-view__sidebar .rest-room-delta b {
+  min-width: 0;
+  display: inline-flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 3px;
+  color: #b8b4a9;
+  font-size: var(--font-size-body);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.rest-room-view__sidebar .rest-room-delta b span,
+.rest-room-view__sidebar .rest-room-delta i {
+  flex: 0 0 auto;
+}
+
+@container (max-width: 900px) {
+  .rest-room-view__sidebar .rest-room-compact-upgrade__delta {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .rest-room-view__sidebar .rest-room-delta {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 4px;
+  }
+
+.rest-room-view__sidebar .rest-room-delta b {
+    font-size: var(--font-size-small);
+    gap: 2px;
+  }
+}
+
+@container (max-width: 390px) {
+  .rest-room-view__sidebar .rest-room-compact-upgrade__delta {
+    /* Do NOT stack vertically on narrow phones. */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .rest-room-view__sidebar .rest-room-delta small {
+    font-size: var(--font-size-label);
+  }
+
+  .rest-room-view__sidebar .rest-room-delta b {
+    font-size: var(--font-size-label);
+    gap: 1px;
+  }
+}
+
+
+/* =========================================================
+   v0.28 — exact top-row order for level cards
+   title/description -> finds + price -> bonuses -> farm metrics.
+   ========================================================= */
+.rest-room-level-card__content {
+  grid-template-areas:
+    'footer'
+    'stats'
+    'farm';
+}
+
+@media (max-width: 760px) {
+  .rest-room-level-card__content {
+    grid-template-areas:
+      'footer'
+      'stats'
+      'farm';
+  }
+}

@@ -69,23 +69,6 @@
   border-radius: inherit;
 }
 
-.player-level-badge {
-  position: absolute;
-  left: -5px;
-  bottom: -5px;
-  min-width: 24px;
-  height: 24px;
-  padding-inline: 6px;
-  display: grid;
-  place-items: center;
-  border-radius: 999px;
-  border: 1px solid var(--color-gold);
-  background: #11150f;
-  color: var(--color-gold-bright);
-  font-size: var(--font-size-body);
-  font-weight: 800;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.6);
-}
 
 .player-copy { min-width: 0; display: grid; gap: 3px; }
 .player-copy > strong {
@@ -186,3 +169,116 @@
 }
 .money-symbol { font-weight: 900; }
 .money-card strong { font-size: var(--font-size-card-title); }
+
+/* v0.57 — resilient HUD metrics on narrow and intermediate widths */
+.resource-card,
+.resource-name,
+.resource-meter {
+  min-width: 0;
+}
+
+.resource-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.resource-meter b,
+.xp-meter b {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: clip;
+  line-height: 1;
+  padding-inline: 2px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1180px) {
+  .resource-card {
+    grid-template-columns: 21px minmax(0, .8fr) minmax(48px, 1.2fr);
+    gap: 3px;
+    padding-inline: 4px;
+  }
+
+  .resource-icon {
+    width: 21px;
+    height: 21px;
+  }
+
+  .resource-name {
+    font-size: clamp(8px, .8vw, var(--font-size-label));
+    letter-spacing: .02em;
+  }
+
+  .resource-meter b {
+    font-size: clamp(8px, .78vw, var(--font-size-label));
+  }
+}
+
+@media (max-width: 699px) {
+  .resource-card {
+    min-width: 0;
+  }
+
+  .resource-name {
+    font-size: clamp(7px, 1.7vw, 10px);
+    letter-spacing: 0;
+  }
+
+  .resource-meter b,
+  .xp-meter b {
+    font-size: clamp(7px, 1.65vw, 10px);
+  }
+}
+
+@media (max-width: 560px) {
+  .resource-grid {
+    gap: 3px;
+  }
+
+  .resource-card {
+    grid-template-columns: 17px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 1px 3px;
+    padding: 3px;
+  }
+
+  .resource-icon {
+    grid-row: 1 / 3;
+    width: 17px;
+    height: 17px;
+  }
+
+  .resource-name {
+    font-size: clamp(7px, 1.85vw, 9px);
+  }
+
+  .resource-meter {
+    height: 10px;
+  }
+
+  .resource-meter b {
+    font-size: clamp(7px, 1.8vw, 9px);
+  }
+}
+
+@media (max-width: 380px) {
+  .resource-card {
+    grid-template-columns: 16px minmax(0, 1fr);
+    padding: 2px;
+  }
+
+  .resource-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .resource-meter {
+    height: 11px;
+  }
+
+  .resource-meter b {
+    font-size: 7px;
+  }
+}

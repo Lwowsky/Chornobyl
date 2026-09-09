@@ -1,0 +1,359 @@
+/* ================================================================
+   v0.46 — Compact rumor tabs + bartender dialogue choices
+   ================================================================ */
+.hub-modal[data-mode="bar-rumors"] .hub-modal__dialog,
+.hub-modal[data-mode="bar-bartender"] .hub-modal__dialog {
+  width: min(920px, calc(100vw - 28px));
+  max-height: min(760px, calc(100dvh - 20px));
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.hub-modal[data-mode="bar-rumors"] .hub-modal__body,
+.hub-modal[data-mode="bar-bartender"] .hub-modal__body {
+  min-height: 0;
+  overflow: hidden;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.hub-modal[data-mode="bar-rumors"] .hub-modal__extra,
+.hub-modal[data-mode="bar-bartender"] .hub-modal__extra {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.bar-rumors-shell {
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
+}
+
+.bar-rumors-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.bar-rumors-tabs button {
+  min-width: 0;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 1px solid rgba(216, 167, 51, .16);
+  border-radius: 9px;
+  color: #aaa69a;
+  background: rgba(255, 255, 255, .018);
+  font-size: var(--font-size-button);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.bar-rumors-tabs button span {
+  color: #858074;
+  font-size: var(--font-size-label);
+}
+
+.bar-rumors-tabs button.is-active {
+  color: var(--color-gold-bright);
+  border-color: rgba(241, 203, 82, .52);
+  background: linear-gradient(180deg, rgba(89, 64, 7, .58), rgba(39, 29, 7, .74));
+}
+
+.bar-rumors-tabpanel {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding-right: 3px;
+}
+
+.bar-rumors-shortcuts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.bar-rumors-shortcuts button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 9px;
+  text-align: left;
+  padding: 10px;
+  border: 1px solid rgba(216, 167, 51, .16);
+  border-radius: 10px;
+  color: #e9e3d6;
+  background: rgba(255, 255, 255, .018);
+  cursor: pointer;
+}
+
+.bar-rumors-shortcuts button > span {
+  grid-row: 1 / 3;
+  align-self: center;
+  font-size: var(--font-size-card-title);
+}
+
+.bar-rumors-shortcuts strong { font-size: var(--font-size-body); }
+.bar-rumors-shortcuts small { color: #928c80; font-size: var(--font-size-label); }
+.bar-rumor-journal__item.is-quest { border-color: rgba(216, 167, 51, .28); background: rgba(216, 167, 51, .035); }
+
+.hub-modal[data-mode="bar-bartender"] .hub-modal__dialog { width: min(1020px, calc(100vw - 28px)); }
+
+.bar-dialogue-layout {
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(250px, .75fr);
+  gap: 10px;
+}
+
+.bar-dialogue-main,
+.bar-dialogue-consequences {
+  min-height: 0;
+  border: 1px solid rgba(216, 167, 51, .16);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(16, 19, 14, .97), rgba(7, 9, 7, .98));
+}
+
+.bar-dialogue-main {
+  display: grid;
+  grid-template-rows: minmax(130px, 1fr) auto;
+  overflow: hidden;
+}
+
+.bar-dialogue-log {
+  min-height: 0;
+  max-height: 310px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: grid;
+  align-content: start;
+  gap: 7px;
+  padding: 11px;
+  border-bottom: 1px solid rgba(216, 167, 51, .12);
+}
+
+.bar-dialogue-message {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+
+.bar-dialogue-message > span {
+  color: #a69f91;
+  font-size: var(--font-size-label);
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.bar-dialogue-message p {
+  margin: 0;
+  padding: 7px 9px;
+  border: 1px solid rgba(255, 255, 255, .055);
+  border-radius: 8px;
+  color: #d8d2c6;
+  background: rgba(255, 255, 255, .022);
+  font-size: var(--font-size-small);
+  line-height: 1.4;
+}
+
+.bar-dialogue-message--player p { border-color: rgba(216, 167, 51, .15); background: rgba(216, 167, 51, .035); }
+.bar-dialogue-message--npc > span { color: var(--color-gold-bright); }
+
+.bar-dialogue-options {
+  display: grid;
+  gap: 9px;
+  padding: 11px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.bar-dialogue-choice-title {
+  color: var(--color-gold-bright);
+  font-family: var(--font-display);
+  font-size: var(--font-size-body);
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.bar-dialogue-topics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.bar-dialogue-topics button,
+.bar-dialogue-choices button,
+.bar-dialogue-back,
+.bar-dialogue-reward button,
+.bar-dialogue-special button,
+.bar-dialogue-cooldown button {
+  min-width: 0;
+  border: 1px solid rgba(216, 167, 51, .18);
+  border-radius: 9px;
+  color: #e7e1d5;
+  background: rgba(255, 255, 255, .02);
+  font-size: var(--font-size-button);
+  cursor: pointer;
+}
+
+.bar-dialogue-topics button {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 2px 8px;
+  text-align: left;
+  padding: 9px 10px;
+}
+
+.bar-dialogue-topics button > span { grid-row: 1 / 3; align-self: center; font-size: var(--font-size-large); }
+.bar-dialogue-topics strong { align-self: end; font-size: var(--font-size-small); }
+.bar-dialogue-topics small { color: #8f897c; font-size: var(--font-size-label); }
+.bar-dialogue-topics button:last-child { grid-column: 1 / -1; }
+
+.bar-dialogue-choices { display: grid; gap: 7px; }
+.bar-dialogue-choices--grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.bar-dialogue-choices button { min-height: 38px; padding: 8px 10px; }
+.bar-dialogue-choices button:hover,
+.bar-dialogue-topics button:hover,
+.bar-dialogue-reward button:hover,
+.bar-dialogue-special button:hover { border-color: rgba(241, 203, 82, .58); background: rgba(216, 167, 51, .06); }
+.bar-dialogue-choices button:disabled,
+.bar-dialogue-special button:disabled { cursor: default; opacity: .52; }
+
+.bar-dialogue-back { justify-self: start; padding: 7px 10px; color: #aaa395; }
+
+.bar-dialogue-job-summary,
+.bar-dialogue-reward,
+.bar-dialogue-special,
+.bar-dialogue-cooldown {
+  border: 1px solid rgba(216, 167, 51, .14);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .018);
+}
+
+.bar-dialogue-job-summary,
+.bar-dialogue-reward { display: grid; gap: 3px; padding: 9px 10px; }
+.bar-dialogue-job-summary span,
+.bar-dialogue-reward span,
+.bar-dialogue-special span { color: #9f998d; font-size: var(--font-size-label); text-transform: uppercase; }
+.bar-dialogue-job-summary strong,
+.bar-dialogue-reward strong,
+.bar-dialogue-special strong { color: #efe8db; font-size: var(--font-size-body); }
+.bar-dialogue-job-summary p,
+.bar-dialogue-reward p,
+.bar-dialogue-special p { color: #aaa397; font-size: var(--font-size-small); line-height: 1.38; }
+.bar-dialogue-reward button { justify-self: start; margin-top: 4px; padding: 8px 11px; color: var(--color-gold-bright); }
+
+.bar-dialogue-special {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+}
+.bar-dialogue-special__icon { font-size: var(--font-size-card-title); }
+.bar-dialogue-special > div:nth-child(2) { display: grid; gap: 3px; }
+.bar-dialogue-special b { color: #86d773; font-size: var(--font-size-small); }
+.bar-dialogue-special button { padding: 8px 10px; color: var(--color-gold-bright); }
+
+.bar-dialogue-cooldown { padding: 8px 10px; color: #999286; font-size: var(--font-size-small); line-height: 1.4; }
+.bar-dialogue-cooldown button { margin-left: 6px; padding: 4px 7px; color: #d9b961; }
+
+.bar-dialogue-consequences {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  padding: 11px;
+  overflow-y: auto;
+}
+
+.bar-dialogue-result,
+.bar-dialogue-empty {
+  display: grid;
+  gap: 3px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, .06);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .018);
+}
+.bar-dialogue-result > span { color: #a39d90; font-size: var(--font-size-label); text-transform: uppercase; }
+.bar-dialogue-result strong { color: #eee7da; font-size: var(--font-size-body); }
+.bar-dialogue-result p { color: #86d773; font-size: var(--font-size-small); }
+.bar-dialogue-result small { color: #938c80; font-size: var(--font-size-label); }
+.bar-dialogue-result--quest { border-color: rgba(216, 167, 51, .24); }
+.bar-dialogue-result--special { border-color: rgba(91, 153, 220, .22); }
+.bar-dialogue-empty { color: #8f897e; font-size: var(--font-size-small); }
+
+@media (max-width: 700px) {
+  .hub-modal[data-mode="bar-rumors"],
+  .hub-modal[data-mode="bar-bartender"] { padding: 6px; }
+
+  .hub-modal[data-mode="bar-rumors"] .hub-modal__dialog,
+  .hub-modal[data-mode="bar-bartender"] .hub-modal__dialog {
+    width: min(100%, 540px);
+    max-height: calc(100dvh - 12px);
+  }
+
+  .hub-modal[data-mode="bar-rumors"] .hub-modal__header,
+  .hub-modal[data-mode="bar-bartender"] .hub-modal__header { padding: 9px 10px; }
+
+  .hub-modal[data-mode="bar-rumors"] .hub-modal__body,
+  .hub-modal[data-mode="bar-bartender"] .hub-modal__body {
+    gap: 8px;
+    padding: 9px 10px;
+  }
+
+  .hub-modal[data-mode="bar-rumors"] #hubModalDescription,
+  .hub-modal[data-mode="bar-bartender"] #hubModalDescription {
+    font-size: var(--font-size-small);
+    line-height: 1.35;
+  }
+
+  .hub-modal[data-mode="bar-rumors"] .hub-modal__status,
+  .hub-modal[data-mode="bar-bartender"] .hub-modal__status { padding: 7px 9px; }
+
+  .bar-rumors-tabs button { padding: 7px 5px; font-size: var(--font-size-small); }
+  .bar-rumors-shortcuts { grid-template-columns: 1fr; }
+  .bar-rumors-listen { padding: 10px; gap: 8px; }
+
+  .bar-dialogue-layout { grid-template-columns: 1fr; overflow-y: auto; }
+  .bar-dialogue-main { min-height: 0; grid-template-rows: minmax(150px, 42dvh) auto; }
+  .bar-dialogue-log { max-height: none; }
+  .bar-dialogue-options { max-height: none; }
+  .bar-dialogue-consequences { overflow: visible; }
+  .bar-dialogue-topics { grid-template-columns: 1fr; }
+  .bar-dialogue-topics button:last-child { grid-column: auto; }
+  .bar-dialogue-choices--grid { grid-template-columns: 1fr; }
+  .bar-dialogue-special { grid-template-columns: auto minmax(0, 1fr); }
+  .bar-dialogue-special button { grid-column: 1 / -1; width: 100%; }
+  .bar-dialogue-message { grid-template-columns: 52px minmax(0, 1fr); }
+}
+
+/* ================================================================
+   v0.64 — Fix collapsed Bar Rumors content
+   The v0.46 compact modal grid used a flexible middle row inside a
+   max-height-only container. On some viewport sizes that row collapsed
+   to 0px, leaving only the description and status visible.
+   Keep the rumors content at its natural height and let the modal body
+   scroll when needed.
+   ================================================================ */
+.hub-modal[data-mode="bar-rumors"] .hub-modal__body {
+  grid-template-rows: auto auto auto;
+  overflow-y: auto;
+}
+
+.hub-modal[data-mode="bar-rumors"] .hub-modal__extra {
+  min-height: auto;
+  overflow: visible;
+}
+
+.hub-modal[data-mode="bar-rumors"] .bar-rumors-shell {
+  height: auto;
+  min-height: 0;
+  grid-template-rows: auto auto;
+}

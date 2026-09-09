@@ -1,0 +1,317 @@
+/* ================================================================
+   Canonical Bar screen — consolidated from the old v0.29/v0.30 stack.
+   ================================================================ */
+.bar-view {
+  grid-template-rows: auto minmax(0, 1fr);
+  min-height: 0;
+  overflow: hidden;
+}
+.bar-view .screen-header { min-height: 0; }
+.bar-view__title-wrap { display: grid; gap: 2px; }
+.bar-view__title-wrap h1 { font-size: var(--font-size-fluid-heading); }
+.bar-view__intro {
+  color: #beb9ab;
+  font-size: var(--font-size-fluid-small);
+  line-height: 1.35;
+}
+.bar-view__shell {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: minmax(0, 1.56fr) minmax(330px, .88fr);
+  grid-template-rows: minmax(0, 1fr) 68px;
+  gap: 10px;
+}
+.bar-feature,
+.bar-side-card,
+.bar-action-card {
+  border: 1px solid rgba(216, 167, 51, .20);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(13, 17, 13, .98), rgba(7, 9, 7, .98));
+  box-shadow: var(--shadow-panel), inset 0 0 0 1px rgba(255, 255, 255, .015);
+}
+.bar-feature--hero {
+  position: relative;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+.bar-feature__media {
+  position: absolute;
+  inset: 0;
+  min-height: 0;
+  aspect-ratio: auto;
+}
+.bar-feature__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(.92) brightness(.88);
+}
+.bar-feature__shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.16) 42%, rgba(0,0,0,.78) 100%);
+}
+.bar-feature__content {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 14px;
+  z-index: 1;
+  display: grid;
+  gap: 5px;
+}
+.bar-pill {
+  width: fit-content;
+  padding: 4px 8px;
+  border: 1px solid rgba(236, 193, 75, .24);
+  border-radius: 999px;
+  color: var(--color-gold-bright);
+  background: rgba(7, 10, 7, .84);
+  font-family: var(--font-display);
+  font-size: var(--font-size-label);
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.bar-feature__content h2 {
+  color: #f2eee2;
+  font-family: var(--font-display);
+  font-size: var(--font-size-fluid-heading);
+}
+.bar-feature__content p {
+  max-width: 620px;
+  color: #d2cbbb;
+  font-size: var(--font-size-fluid-small);
+  line-height: 1.4;
+}
+.bar-feature__facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  color: #f0cf72;
+  font-size: var(--font-size-fluid-small);
+  line-height: 1.45;
+}
+.bar-view__aside {
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1.12fr .95fr .86fr;
+  gap: 8px;
+  align-content: stretch;
+}
+.bar-side-card {
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+.bar-side-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(216, 167, 51, .12);
+}
+.bar-side-card__header strong {
+  color: var(--color-gold-bright);
+  font-family: var(--font-display);
+  font-size: var(--font-size-fluid-small);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.bar-side-card__header span {
+  color: #918a7b;
+  font-size: var(--font-size-fluid-small);
+  white-space: nowrap;
+}
+.bar-side-card__body { display: grid; gap: 4px; }
+.bar-side-card__body h3 {
+  color: #f2eee2;
+  font-family: var(--font-display);
+  font-size: var(--font-size-fluid-large);
+  line-height: 1.08;
+}
+.bar-side-card__body p,
+.bar-side-card__list li {
+  color: #bbb5a6;
+  font-size: var(--font-size-fluid-small);
+  line-height: 1.35;
+}
+.bar-side-card__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px 8px;
+  margin-top: 2px;
+}
+.bar-side-card__list--positive li { color: #86d773; font-weight: 700; }
+.bar-price-tag,
+.bar-rumor-bonus {
+  width: fit-content;
+  margin-top: 2px;
+  padding: 5px 8px;
+  border: 1px solid rgba(216, 167, 51, .22);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, .018);
+  color: var(--color-gold-bright);
+  font-family: var(--font-display);
+  font-size: var(--font-size-body);
+}
+.bar-rumor-bonus { color: #f0cf72; }
+.bar-view__actions {
+  grid-column: 1 / -1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.bar-action-card {
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 12px;
+  transition: transform var(--transition-ui), border-color var(--transition-ui), box-shadow var(--transition-ui);
+}
+.bar-action-card:hover,
+.bar-action-card:focus-visible {
+  border-color: rgba(235, 195, 76, .56);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 28px rgba(0,0,0,.42);
+}
+.bar-action-card__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border: 1px solid rgba(216, 167, 51, .24);
+  border-radius: 10px;
+  font-size: var(--font-size-card-title);
+  background: rgba(255, 255, 255, .018);
+}
+.bar-action-card__body { display: grid; gap: 1px; flex: 1; }
+.bar-action-card__body strong {
+  color: #f2eee2;
+  font-family: var(--font-display);
+  font-size: var(--font-size-fluid-medium);
+}
+.bar-action-card__body small {
+  color: #b5b0a1;
+  font-size: var(--font-size-fluid-small);
+  line-height: 1.25;
+}
+.bar-action-card__arrow { color: var(--color-gold-bright); font-size: var(--font-size-card-title); }
+
+@media (max-width: 1180px) and (min-width: 761px) {
+  .bar-view__shell {
+    grid-template-columns: minmax(0, 1.35fr) minmax(300px, .9fr);
+    grid-template-rows: minmax(0, 1fr) 62px;
+  }
+  .bar-feature__facts { grid-template-columns: 1fr; gap: 2px; }
+  .bar-side-card__list { grid-template-columns: 1fr; gap: 2px; }
+}
+
+@media (max-width: 760px) {
+  .bar-view { overflow: hidden; }
+  .bar-view__shell {
+    overflow-y: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    padding-right: 3px;
+  }
+  .bar-feature--hero { min-height: 300px; }
+  .bar-feature__media { position: absolute; }
+  .bar-view__aside { height: auto; grid-template-rows: auto; }
+  .bar-view__actions { grid-column: auto; grid-template-columns: 1fr; }
+  .bar-feature__facts,
+  .bar-side-card__list { grid-template-columns: 1fr; }
+  .bar-side-card__header { flex-wrap: wrap; }
+  .bar-feature__content { left: 14px; right: 14px; bottom: 14px; }
+  .bar-feature__content h2 { font-size: var(--font-size-heading); }
+}
+
+@media (max-height: 760px) and (min-width: 761px) {
+  .bar-view__shell { grid-template-rows: minmax(0, 1fr) 58px; gap: 8px; }
+  .bar-feature__content { bottom: 10px; }
+  .bar-feature__facts { display: none; }
+  .bar-side-card { padding: 8px 10px; }
+  .bar-side-card__body p { max-height: 2.7em; overflow: hidden; }
+  .bar-action-card { padding: 7px 10px; }
+}
+
+/* ================================================================
+   v0.41 — Bar cleanup
+   - hide the website overlay copy from the hero image;
+   - keep the artwork untouched;
+   - let only the right column scroll when its text needs more room.
+   ================================================================ */
+.bar-feature__content {
+  display: none;
+}
+
+.bar-feature__shade {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.10));
+}
+
+@media (min-width: 761px) {
+  .bar-view__aside {
+    min-height: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+    padding-right: 4px;
+  }
+
+  .bar-side-card {
+    flex: 0 0 auto;
+    min-height: max-content;
+    overflow: visible;
+  }
+
+  .bar-side-card__header {
+    align-items: flex-start;
+  }
+
+  .bar-side-card__header span {
+    white-space: normal;
+    text-align: right;
+    overflow-wrap: anywhere;
+  }
+
+  .bar-side-card__body p,
+  .bar-side-card__list li,
+  .bar-rumor-bonus {
+    overflow-wrap: anywhere;
+  }
+
+  .bar-view__aside::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .bar-view__aside::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.025);
+    border-radius: 999px;
+  }
+
+  .bar-view__aside::-webkit-scrollbar-thumb {
+    background: rgba(216, 167, 51, 0.42);
+    border-radius: 999px;
+  }
+}

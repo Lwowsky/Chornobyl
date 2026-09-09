@@ -1,0 +1,936 @@
+/* v0.23 — Rest Room levels modal stability rebuild
+   IMPORTANT: this section replaces the previous visual patch instead of stacking on top of it. */
+
+/* ---------- Compact passive farm card ---------- */
+.rest-room-side-card--daily {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 11px;
+}
+
+.rest-room-daily-card__topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rest-room-farm-status {
+  flex: 0 0 auto;
+  min-height: 21px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 999px;
+  color: #928c81;
+  background: rgba(255,255,255,.018);
+  font-family: var(--font-display);
+  font-size: var(--font-size-label);
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.rest-room-side-card--daily.is-active .rest-room-farm-status {
+  border-color: rgba(133,196,94,.25);
+  color: #a9eb80;
+  background: rgba(94,145,67,.10);
+}
+
+.rest-room-side-card--daily.is-full .rest-room-farm-status {
+  border-color: rgba(216,167,51,.36);
+  color: #f0c75b;
+  background: rgba(216,167,51,.11);
+}
+
+.rest-room-farm-vault {
+  margin-top: 7px;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 62px;
+  gap: 6px;
+}
+
+.rest-room-farm-vault__money,
+.rest-room-farm-vault__finds {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  padding: 7px 8px;
+  border: 1px solid rgba(216,167,51,.10);
+  border-radius: 9px;
+  background: linear-gradient(180deg, rgba(216,167,51,.035), rgba(255,255,255,.012));
+}
+
+.rest-room-farm-vault__money span,
+.rest-room-farm-vault__finds span,
+.rest-room-farm-clock-row span,
+.rest-room-farm-meta span {
+  color: #918b80;
+  font-size: var(--font-size-label);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.rest-room-farm-vault__money strong,
+.rest-room-farm-vault__finds strong {
+  font-family: var(--font-display);
+  font-size: var(--font-size-large);
+  line-height: 1;
+}
+
+.rest-room-farm-vault__money strong { color: var(--color-gold-bright); }
+.rest-room-farm-vault__finds { text-align: center; }
+.rest-room-farm-vault__finds strong { color: #a6e67d; }
+
+.rest-room-farm-clock-row {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.rest-room-farm-clock-row strong {
+  color: #eee7d8;
+  font-family: var(--font-display);
+  font-size: var(--font-size-small);
+  line-height: 1;
+}
+
+.rest-room-farm-progress {
+  height: 6px;
+  margin-top: 4px;
+}
+
+.rest-room-farm-meta {
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 5px;
+}
+
+.rest-room-farm-meta > div {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  padding: 5px 6px;
+  border: 1px solid rgba(255,255,255,.045);
+  border-radius: 8px;
+  background: rgba(255,255,255,.014);
+}
+
+.rest-room-farm-meta strong {
+  color: #eae4d5;
+  font-size: var(--font-size-label);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.rest-room-daily-claim {
+  min-height: 31px;
+  margin-top: 6px;
+  font-size: var(--font-size-label);
+}
+
+.rest-room-daily-card__message { display: none; }
+
+/* ---------- ALL LEVELS: true viewport modal ---------- */
+html.rest-room-levels-open,
+html.rest-room-levels-open body { overflow: hidden; }
+
+.rest-room-levels-panel {
+  position: fixed;
+  z-index: 18000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+  background: rgba(0,0,0,.84);
+  backdrop-filter: blur(8px);
+  overscroll-behavior: contain;
+}
+
+.rest-room-levels-panel__sheet {
+  width: min(100%, 1380px);
+  height: calc(100dvh - 20px);
+  max-height: calc(100dvh - 20px);
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0,1fr);
+  gap: 10px;
+  padding: 14px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: 1px solid rgba(216,167,51,.42);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(216,167,51,.07), transparent 36%),
+    linear-gradient(180deg,#0a0d0a,#060806);
+  box-shadow: 0 30px 90px rgba(0,0,0,.82), inset 0 0 0 1px rgba(255,255,255,.015);
+}
+
+.rest-room-levels-panel__header {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.rest-room-levels-panel__header h2 {
+  margin: 2px 0 0;
+  color: #f3eee0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-heading-large);
+  line-height: 1;
+}
+
+.rest-room-levels-panel__header p {
+  max-width: 780px;
+  margin: 6px 0 0;
+  color: #9e988c;
+  font-size: var(--font-size-small);
+  line-height: 1.4;
+}
+
+.rest-room-levels-panel__close {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(216,167,51,.28);
+  border-radius: 12px;
+  color: #ded9cc;
+  background: rgba(255,255,255,.02);
+  font-size: var(--font-size-heading-large);
+  cursor: pointer;
+}
+
+/* Current -> next */
+.rest-room-levels-summary {
+  position: relative;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 14px;
+}
+
+.rest-room-levels-summary::after {
+  content: '→';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%,-50%);
+  border: 1px solid rgba(216,167,51,.25);
+  border-radius: 999px;
+  color: #dfbd53;
+  background: #080a08;
+  box-shadow: 0 6px 18px rgba(0,0,0,.38);
+  font-size: var(--font-size-large);
+}
+
+.rest-room-levels-summary__item {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  padding: 12px 14px 12px 17px;
+  border-radius: 14px;
+  background: linear-gradient(180deg,rgba(10,13,10,.98),rgba(6,8,6,.98));
+}
+
+.rest-room-levels-summary__item::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+}
+
+.rest-room-levels-summary__item--current {
+  border: 1px solid rgba(232,181,49,.44);
+  box-shadow: inset 0 0 0 1px rgba(232,181,49,.05);
+}
+.rest-room-levels-summary__item--current::before { background: #e8b531; }
+
+.rest-room-levels-summary__item--next {
+  border: 1px solid rgba(96,157,170,.40);
+  box-shadow: inset 0 0 0 1px rgba(96,157,170,.05);
+}
+.rest-room-levels-summary__item--next::before { background: #649daa; }
+
+.rest-room-levels-summary__eyebrow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.rest-room-levels-summary__eyebrow span {
+  color: #c1a84e;
+  font-size: var(--font-size-label);
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.rest-room-levels-summary__eyebrow b {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-size: var(--font-size-label);
+  letter-spacing: .04em;
+}
+
+.rest-room-levels-summary__item--current .rest-room-levels-summary__eyebrow b {
+  color: #ffe28a;
+  border: 1px solid rgba(232,181,49,.28);
+  background: rgba(232,181,49,.10);
+}
+
+.rest-room-levels-summary__item--next .rest-room-levels-summary__eyebrow b {
+  color: #d9f3f7;
+  border: 1px solid rgba(96,157,170,.28);
+  background: rgba(96,157,170,.09);
+}
+
+.rest-room-levels-summary__item strong {
+  display: block;
+  margin-top: 6px;
+  color: #f4efe1;
+  font-family: var(--font-display);
+  font-size: var(--font-size-card-title);
+  line-height: 1.12;
+}
+
+.rest-room-levels-summary__item small {
+  display: block;
+  margin-top: 5px;
+  color: #9c968b;
+  font-size: var(--font-size-label);
+  line-height: 1.35;
+}
+
+/* Scroll area always owns the remaining height */
+.rest-room-levels-table-wrap {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(216,167,51,.42) transparent;
+  border: 1px solid rgba(216,167,51,.11);
+  border-radius: 15px;
+  background: rgba(4,6,4,.64);
+}
+
+.rest-room-levels-table-wrap::-webkit-scrollbar { width: 8px; }
+.rest-room-levels-table-wrap::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(216,167,51,.34);
+}
+
+.rest-room-levels-cards {
+  min-width: 0;
+  display: grid;
+  gap: 10px;
+  padding: 10px;
+}
+
+/* One level = one simple card. No table-like columns. */
+.rest-room-level-card {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 250px minmax(0,1fr);
+  grid-template-areas: 'media content';
+  gap: 14px;
+  padding: 12px;
+  box-sizing: border-box;
+  border: 1px solid rgba(216,167,51,.12);
+  border-radius: 16px;
+  background: linear-gradient(180deg,rgba(9,12,9,.99),rgba(6,8,6,.99));
+}
+
+.rest-room-level-card.is-current {
+  border-color: rgba(232,181,49,.46);
+  box-shadow: inset 3px 0 0 rgba(232,181,49,.72);
+}
+
+.rest-room-level-card.is-next {
+  border-color: rgba(96,157,170,.42);
+  box-shadow: inset 3px 0 0 rgba(96,157,170,.70);
+}
+
+.rest-room-level-card__media {
+  grid-area: media;
+  position: relative;
+  min-width: 0;
+  width: 100%;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  border: 1px solid rgba(216,167,51,.15);
+  border-radius: 13px;
+  background: #060806;
+}
+
+.rest-room-level-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.rest-room-level-card__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg,transparent 58%,rgba(0,0,0,.28));
+}
+
+.rest-room-level-card__level-badge,
+.rest-room-level-card__state-badge {
+  position: absolute;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 800;
+}
+
+.rest-room-level-card__level-badge {
+  top: 9px;
+  left: 9px;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 9px;
+  border: 1px solid rgba(216,167,51,.48);
+  color: var(--color-gold-bright);
+  background: rgba(6,8,6,.90);
+  font-size: var(--font-size-large);
+}
+
+.rest-room-level-card__state-badge {
+  top: 9px;
+  right: 9px;
+  padding: 5px 8px;
+  border: 1px solid rgba(232,181,49,.42);
+  color: #ffe18a;
+  background: rgba(55,42,10,.91);
+  font-size: var(--font-size-label);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.rest-room-level-card__state-badge--next {
+  color: #d8f2f6;
+  border-color: rgba(96,157,170,.44);
+  background: rgba(18,42,47,.92);
+}
+
+.rest-room-level-card__content {
+  grid-area: content;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 126px;
+  grid-template-areas:
+    'title price'
+    'stats stats'
+    'farm farm';
+  gap: 9px 12px;
+  align-content: center;
+}
+
+.rest-room-level-card__title-wrap {
+  grid-area: title;
+  min-width: 0;
+}
+
+.rest-room-level-card__title-wrap strong {
+  display: block;
+  color: #f2ede0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-card-title);
+  line-height: 1.12;
+}
+
+.rest-room-level-card__title-wrap p {
+  margin: 5px 0 0;
+  color: #aaa397;
+  font-size: var(--font-size-small);
+  line-height: 1.36;
+}
+
+.rest-room-level-card__price {
+  grid-area: price;
+  min-width: 0;
+  align-self: start;
+  padding: 8px 9px;
+  border: 1px solid rgba(216,167,51,.14);
+  border-radius: 11px;
+  background: rgba(216,167,51,.035);
+  text-align: right;
+}
+
+.rest-room-level-card__price small {
+  display: block;
+  color: #918b80;
+  font-size: var(--font-size-label);
+}
+
+.rest-room-level-card__price strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--color-gold-bright);
+  font-family: var(--font-display);
+  font-size: var(--font-size-card-title);
+  line-height: 1;
+}
+
+.rest-room-level-card__stats {
+  grid-area: stats;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 6px;
+}
+
+.rest-room-level-card__stat {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 9px;
+  border: 1px solid rgba(255,255,255,.045);
+  border-radius: 9px;
+  background: rgba(255,255,255,.014);
+}
+
+.rest-room-level-card__stat b {
+  color: #98df70;
+  font-size: var(--font-size-label);
+}
+
+.rest-room-level-card__stat span {
+  flex: 0 0 auto;
+  color: #e9e3d5;
+  font-size: var(--font-size-label);
+  white-space: nowrap;
+}
+
+.rest-room-level-card__daily {
+  grid-area: farm;
+  min-width: 0;
+}
+
+.rest-room-level-card__farm-info {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(3,minmax(0,1fr));
+  gap: 6px;
+}
+
+.rest-room-level-card__farm-metric {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  padding: 7px 9px;
+  border: 1px solid rgba(255,255,255,.045);
+  border-radius: 9px;
+  background: rgba(255,255,255,.014);
+}
+
+.rest-room-level-card__farm-metric span {
+  color: #8d877c;
+  font-size: var(--font-size-label);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.rest-room-level-card__farm-metric b {
+  color: #eee7d8;
+  font-size: var(--font-size-label);
+  line-height: 1.2;
+}
+
+/* ---------- Claim modal ---------- */
+.rest-room-claim-panel {
+  position: fixed;
+  z-index: 20000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 14px;
+  background: rgba(0,0,0,.88);
+  backdrop-filter: blur(9px);
+}
+
+.rest-room-claim-panel__sheet {
+  width: min(100%, 450px);
+  max-height: min(82dvh,520px);
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0,1fr) auto;
+  gap: 9px;
+  padding: 13px;
+  overflow: hidden;
+  border: 1px solid rgba(216,167,51,.42);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(216,167,51,.07),transparent 40%),
+    linear-gradient(180deg,#0b0e0b,#060806);
+  box-shadow: 0 28px 80px rgba(0,0,0,.86);
+}
+
+.rest-room-claim-panel__header {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: 10px;
+  align-items: start;
+}
+
+.rest-room-claim-panel__header h2 {
+  margin: 2px 0 0;
+  color: #f4eee0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-heading);
+  line-height: 1;
+}
+
+.rest-room-claim-panel__header p {
+  margin: 5px 0 0;
+  color: #958f84;
+  font-size: var(--font-size-label);
+  line-height: 1.35;
+}
+
+.rest-room-claim-panel__close {
+  width: 35px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(216,167,51,.24);
+  border-radius: 10px;
+  color: #ddd7ca;
+  background: rgba(255,255,255,.02);
+  font-size: var(--font-size-section-title);
+  cursor: pointer;
+}
+
+.rest-room-claim-hero {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 120px;
+  gap: 8px;
+}
+
+.rest-room-claim-hero__money {
+  min-height: 70px;
+  display: grid;
+  place-content: center;
+  gap: 4px;
+  padding: 9px;
+  border: 1px solid rgba(216,167,51,.20);
+  border-radius: 11px;
+  background: rgba(216,167,51,.035);
+  text-align: center;
+}
+
+.rest-room-claim-hero__money span,
+.rest-room-claim-hero__meta span {
+  color: #928c81;
+  font-size: var(--font-size-label);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.rest-room-claim-hero__money strong {
+  color: var(--color-gold-bright);
+  font-family: var(--font-display);
+  font-size: var(--font-size-heading);
+  line-height: 1;
+}
+
+.rest-room-claim-hero__meta { display: grid; gap: 6px; }
+.rest-room-claim-hero__meta > div {
+  display: grid;
+  gap: 3px;
+  padding: 7px 8px;
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: 9px;
+  background: rgba(255,255,255,.014);
+}
+.rest-room-claim-hero__meta strong {
+  color: #eee7d8;
+  font-family: var(--font-display);
+  font-size: var(--font-size-medium);
+  line-height: 1;
+}
+
+.rest-room-claim-loot {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0,1fr);
+  gap: 6px;
+}
+
+.rest-room-claim-loot h3 {
+  margin: 0;
+  color: #d8b94f;
+  font-family: var(--font-display);
+  font-size: var(--font-size-small);
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+.rest-room-claim-results {
+  min-height: 0;
+  display: grid;
+  gap: 5px;
+  align-content: start;
+  overflow-y: auto;
+}
+
+.rest-room-claim-result {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 28px minmax(0,1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 8px;
+  border: 1px solid rgba(255,255,255,.05);
+  border-radius: 9px;
+  background: rgba(255,255,255,.014);
+}
+
+.rest-room-claim-result__icon {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(216,167,51,.12);
+  border-radius: 8px;
+  background: rgba(0,0,0,.22);
+  font-size: var(--font-size-medium);
+}
+
+.rest-room-claim-result div { min-width: 0; display: grid; gap: 1px; }
+.rest-room-claim-result small { color: #8f897e; font-size: var(--font-size-label); text-transform: uppercase; letter-spacing: .04em; }
+.rest-room-claim-result strong { color: #ece6d7; font-size: var(--font-size-small); line-height: 1.2; }
+.rest-room-claim-result > b { color: #9ee474; font-family: var(--font-display); font-size: var(--font-size-medium); }
+.rest-room-claim-result.is-rare { border-color: rgba(216,167,51,.25); background: rgba(216,167,51,.05); }
+.rest-room-claim-result.is-rare strong,
+.rest-room-claim-result.is-rare > b { color: #efcd67; }
+.rest-room-claim-result.is-crate { border-color: rgba(234,190,63,.40); }
+
+.rest-room-claim-empty {
+  padding: 12px 9px;
+  border: 1px dashed rgba(216,167,51,.15);
+  border-radius: 9px;
+  color: #9a9488;
+  text-align: center;
+  font-size: var(--font-size-label);
+}
+
+.rest-room-claim-panel__take {
+  min-width: 132px;
+  min-height: 36px;
+  border: 1px solid rgba(230,181,49,.44);
+  border-radius: 10px;
+  color: #fff0ac;
+  background: linear-gradient(180deg,rgba(82,60,13,.96),rgba(31,25,9,.99));
+  font-family: var(--font-display);
+  font-size: var(--font-size-small);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* ---------- Responsive: rest-room sidebar ---------- */
+@container (max-width: 900px) {
+  .rest-room-view__sidebar {
+    width: min(390px, calc(100% - 16px));
+    max-width: 96%;
+    height: calc(100dvh - 16px);
+    max-height: calc(100dvh - 16px);
+    padding: 56px 10px 10px;
+    gap: 7px;
+    overflow-y: auto;
+  }
+
+  .rest-room-sidebar-close {
+    top: 9px;
+    right: 9px;
+    min-height: 35px;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-card--current,
+  .rest-room-view__sidebar .rest-room-side-card--daily,
+  .rest-room-view__sidebar .rest-room-side-card--compact-upgrade {
+    padding: 8px 9px;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-card--current > p,
+  .rest-room-view__sidebar .rest-room-compact-upgrade__body > p {
+    display: none;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-card--current > strong,
+  .rest-room-view__sidebar .rest-room-compact-upgrade__body > strong {
+    font-size: var(--font-size-medium);
+  }
+
+  .rest-room-view__sidebar .rest-room-side-list {
+    margin-top: 5px;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    gap: 4px;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-list div {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+    padding: 5px;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-list dt { font-size: var(--font-size-label); line-height: 1.1; }
+  .rest-room-view__sidebar .rest-room-side-list dd { font-size: var(--font-size-label); }
+
+  .rest-room-view__sidebar .rest-room-compact-upgrade { gap: 7px; }
+  .rest-room-view__sidebar .rest-room-compact-upgrade__thumb {
+    height: 92px;
+    object-fit: cover;
+  }
+  .rest-room-view__sidebar .rest-room-compact-upgrade__delta { margin-top: 5px; }
+}
+
+/* ---------- Responsive: levels modal (viewport based, not container based) ---------- */
+@media (max-width: 1000px) {
+  .rest-room-levels-panel__sheet { padding: 12px; gap: 9px; }
+
+  .rest-room-level-card {
+    grid-template-columns: 190px minmax(0,1fr);
+    gap: 11px;
+    padding: 10px;
+  }
+
+  .rest-room-level-card__content {
+    grid-template-columns: minmax(0,1fr) 105px;
+    gap: 7px 9px;
+  }
+
+  .rest-room-level-card__title-wrap strong { font-size: var(--font-size-large); }
+  .rest-room-level-card__title-wrap p { font-size: var(--font-size-label); }
+  .rest-room-level-card__price { padding: 7px 8px; }
+  .rest-room-level-card__price strong { font-size: var(--font-size-medium); }
+  .rest-room-level-card__stat,
+  .rest-room-level-card__farm-metric { padding: 6px 7px; }
+}
+
+@media (max-width: 760px) {
+  .rest-room-levels-panel { padding: 7px; }
+  .rest-room-levels-panel__sheet {
+    width: 100%;
+    height: calc(100dvh - 14px);
+    max-height: calc(100dvh - 14px);
+    padding: 10px;
+    border-radius: 14px;
+  }
+
+  .rest-room-levels-panel__header h2 { font-size: var(--font-size-heading); }
+  .rest-room-levels-panel__header p { font-size: var(--font-size-small); }
+  .rest-room-levels-panel__close { width: 39px; height: 39px; }
+
+  .rest-room-levels-summary {
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+  .rest-room-levels-summary::after { display: none; }
+  .rest-room-levels-summary__item { padding: 9px 10px 9px 13px; }
+  .rest-room-levels-summary__item strong { font-size: var(--font-size-large); }
+  .rest-room-levels-summary__item small { font-size: var(--font-size-label); }
+
+  .rest-room-levels-cards { padding: 7px; gap: 8px; }
+
+  .rest-room-level-card {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'title'
+      'media'
+      'stats'
+      'farm'
+      'price';
+    gap: 8px;
+    padding: 9px;
+    border-radius: 14px;
+  }
+
+  .rest-room-level-card__content { display: contents; }
+  .rest-room-level-card__title-wrap { grid-area: title; }
+  .rest-room-level-card__media { grid-area: media; aspect-ratio: 16 / 8.5; }
+  .rest-room-level-card__stats { grid-area: stats; }
+  .rest-room-level-card__daily { grid-area: farm; }
+  .rest-room-level-card__price {
+    grid-area: price;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    text-align: left;
+  }
+  .rest-room-level-card__price strong { margin-top: 0; }
+}
+
+@media (max-width: 480px) {
+  .rest-room-levels-panel { padding: 4px; }
+  .rest-room-levels-panel__sheet {
+    height: calc(100dvh - 8px);
+    max-height: calc(100dvh - 8px);
+    padding: 9px;
+    gap: 8px;
+    border-radius: 12px;
+  }
+
+  .rest-room-levels-panel__header h2 { font-size: var(--font-size-section-title); }
+  .rest-room-levels-panel__header p { max-width: 260px; font-size: var(--font-size-label); }
+  .rest-room-levels-summary__eyebrow b { font-size: var(--font-size-label); }
+  .rest-room-levels-summary__item strong { font-size: var(--font-size-medium); }
+  .rest-room-levels-summary__item small { display: none; }
+
+  .rest-room-level-card__title-wrap strong { font-size: var(--font-size-medium); }
+  .rest-room-level-card__title-wrap p { font-size: var(--font-size-label); }
+  .rest-room-level-card__media { aspect-ratio: 16 / 9; }
+  .rest-room-level-card__stats,
+  .rest-room-level-card__farm-info { grid-template-columns: 1fr; gap: 5px; }
+  .rest-room-level-card__stat,
+  .rest-room-level-card__farm-metric { padding: 6px 8px; }
+  .rest-room-level-card__price strong { font-size: var(--font-size-large); }
+}
+
+@media (max-width: 620px) {
+  .rest-room-claim-panel { padding: 10px; }
+  .rest-room-claim-panel__sheet {
+    width: 100%;
+    max-height: calc(100dvh - 20px);
+    padding: 11px;
+    gap: 8px;
+    border-radius: 13px;
+  }
+  .rest-room-claim-panel__header h2 { font-size: var(--font-size-section-title); }
+  .rest-room-claim-hero { grid-template-columns: 1fr; }
+  .rest-room-claim-hero__meta { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .rest-room-claim-panel__take { width: 100%; min-width: 0; }
+}
+
+

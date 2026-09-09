@@ -76,8 +76,8 @@
 
   .player-copy > strong { font-size: var(--font-size-medium); }
   .player-level-row { font-size: var(--font-size-small); }
-  .xp-meter { height: 11px; }
-  .xp-meter b { font-size: var(--font-size-label); }
+  .xp-meter { height: 13px; }
+  .xp-meter b { font-size: var(--font-size-small); }
 
   .resource-grid {
     grid-template-columns: 1fr 1fr;
@@ -130,6 +130,15 @@
     grid-column: 1;
     grid-row: 1;
     min-height: 72px;
+  }
+
+  .xp-meter {
+    height: 13px;
+  }
+
+  .xp-meter b {
+    font-size: var(--font-size-body);
+    line-height: 1;
   }
 
   .money-card {

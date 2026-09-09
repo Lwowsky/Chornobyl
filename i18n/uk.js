@@ -2,7 +2,7 @@ window.I18N = window.I18N || {};
 
 window.I18N.uk = {
   meta: {
-    title: "THE 1037 SIGNAL — v0.37"
+    title: "THE 1037 SIGNAL — v0.66"
   },
   hud: {
     level: "Рівень",

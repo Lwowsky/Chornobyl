@@ -599,3 +599,103 @@
 .profile-panel[hidden] {
   display: none;
 }
+
+/* v0.50 — connected level/vitals/stat overview. */
+.profile-panel--stats {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 8px;
+  overflow: hidden;
+}
+.profile-panel--stats .stats-grid {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 2px;
+}
+.profile-progression-card {
+  display: grid;
+  gap: 7px;
+  padding: 9px;
+  border: 1px solid rgba(216, 167, 51, .2);
+  border-radius: 9px;
+  background: linear-gradient(180deg, rgba(19,24,17,.96), rgba(9,12,8,.96));
+}
+.profile-progression-card__head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.profile-progression-card__head > div,
+.profile-vitals-grid > div {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.profile-progression-card span { color: var(--color-text-muted); font-size: var(--font-size-label); }
+.profile-progression-card strong,
+.profile-progression-card b { color: var(--color-text-strong); font-size: var(--font-size-small); }
+.profile-progress-row { display: grid; grid-template-columns: auto 1fr auto; gap: 6px; align-items: center; }
+.profile-progress-row b { text-align: right; }
+.profile-progress-row > i,
+.profile-vitals-grid i {
+  position: relative;
+  display: block;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #050805;
+  border: 1px solid rgba(255,255,255,.05);
+}
+.profile-progress-row > i { grid-column: 1 / -1; }
+.profile-progress-row u,
+.profile-vitals-grid u {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #9f6812, var(--color-gold-bright));
+  text-decoration: none;
+}
+.profile-vitals-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.profile-vitals-grid > div { display: grid; grid-template-columns: 1fr auto; }
+.profile-vitals-grid i { grid-column: 1 / -1; width: 100%; }
+.profile-vitals-grid > div:nth-child(1) u { background: linear-gradient(90deg, #9e2e2b, #e14942); }
+.profile-vitals-grid > div:nth-child(2) u { background: linear-gradient(90deg, #1d7090, #48b6d9); }
+
+.stat-card em {
+  line-height: 1.35;
+}
+
+/* v0.55 — real upgrade level badge on equipped profile items. */
+.equipment-slot__level {
+  position: absolute;
+  z-index: 4;
+  right: 3px;
+  bottom: 3px;
+  min-width: 20px;
+  padding: 3px 5px;
+  border: 1px solid rgba(243, 190, 58, 0.55);
+  border-radius: 5px;
+  color: #ffd35a;
+  background: rgba(3, 5, 3, 0.90);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.72);
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  pointer-events: none;
+}
+
+@media (max-width: 699px) {
+  .equipment-slot__level {
+    right: 2px;
+    bottom: 2px;
+    min-width: 18px;
+    padding: 2px 4px;
+    font-size: 9px;
+  }
+}

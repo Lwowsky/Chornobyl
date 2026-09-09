@@ -1,0 +1,688 @@
+/* ================================================================
+   v0.37 — CLEAN REST ROOM SHELL
+   One authoritative layout for the room screen.
+   Desktop: left scene is static; only the right information column
+   can scroll. No percentage-height cards and no overlapping sectors.
+   Mobile/tablet: right column becomes an independent slide drawer.
+   ================================================================ */
+.game-shell.is-rest-room-screen {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.game-shell.is-rest-room-screen .top-hud,
+.game-shell.is-rest-room-screen .bottom-nav {
+  display: grid;
+}
+
+.game-shell.is-rest-room-screen .game-main {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.rest-room-view {
+  position: relative;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 10px;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: 8px;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 55% 0%, rgba(216, 167, 51, 0.045), transparent 34%),
+    #090b09;
+}
+
+.rest-room-view.is-owned {
+  grid-template-rows: auto minmax(0, 1fr) auto;
+}
+
+.rest-room-view.is-owned > .rest-room-main-offers {
+  display: none;
+}
+
+.rest-room-view__header {
+  min-width: 0;
+  min-height: 0;
+}
+
+.rest-room-view__title-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.rest-room-view__title-group {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rest-room-view__title-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  font-size: var(--font-size-heading);
+}
+
+.rest-room-view__title-row h1 {
+  font-size: var(--font-size-fluid-heading);
+  line-height: 1;
+}
+
+.rest-room-view__subtitle {
+  max-width: 920px;
+  margin-top: 4px;
+  font-size: var(--font-size-fluid-small);
+  line-height: 1.35;
+}
+
+.rest-room-back {
+  min-height: 38px;
+  padding-inline: 11px;
+  border-radius: 9px;
+  font-size: var(--font-size-small);
+}
+
+/* Main center area: the left and right columns share the same outer height. */
+.rest-room-view__body,
+.rest-room-view.is-owned .rest-room-view__body {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.52fr) minmax(328px, .82fr);
+  gap: 10px;
+  align-items: stretch;
+  overflow: hidden;
+}
+
+/* LEFT COLUMN — never scrolls independently. */
+.rest-room-view__main,
+.rest-room-view.is-owned .rest-room-view__main {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+  display: block;
+  overflow: hidden;
+}
+
+.rest-room-view__scene,
+.rest-room-view.is-owned .rest-room-view__scene {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: auto;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.rest-room-view__scene img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* RIGHT COLUMN — the only desktop scroll container. */
+.rest-room-view__sidebar {
+  position: relative;
+  inset: auto;
+  z-index: 2;
+  box-sizing: border-box;
+  width: auto;
+  max-width: none;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0 5px 2px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 10px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(216, 167, 51, .50) rgba(255, 255, 255, .025);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  transform: none;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.rest-room-view__sidebar::-webkit-scrollbar { width: 6px; }
+.rest-room-view__sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, .018);
+  border-radius: 999px;
+}
+.rest-room-view__sidebar::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: rgba(216, 167, 51, .50);
+  background-clip: padding-box;
+}
+
+/* Every right-side sector owns its natural height; no sector can sit on another. */
+.rest-room-view__sidebar .rest-room-side-card,
+.rest-room-view__sidebar .rest-room-side-card--current,
+.rest-room-view__sidebar .rest-room-side-card--daily,
+.rest-room-view__sidebar .rest-room-side-card--compact-upgrade {
+  position: relative;
+  z-index: auto;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  margin: 0;
+  padding: 12px 13px;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 12px;
+}
+
+.rest-room-side-card__heading {
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.rest-room-side-card__icon { font-size: var(--font-size-medium); }
+.rest-room-side-card__title { font-size: var(--font-size-small); }
+
+.rest-room-view__sidebar .rest-room-side-card > strong,
+.rest-room-view__sidebar .rest-room-compact-upgrade__body > strong {
+  font-size: var(--font-size-card-title);
+  line-height: 1.18;
+}
+
+.rest-room-view__sidebar .rest-room-side-card > p,
+.rest-room-view__sidebar .rest-room-compact-upgrade__body > p {
+  margin-top: 5px;
+  font-size: var(--font-size-small);
+  line-height: 1.4;
+}
+
+.rest-room-view__sidebar .rest-room-side-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+  margin-top: 9px;
+}
+
+.rest-room-view__sidebar .rest-room-side-list div {
+  display: grid;
+  gap: 4px;
+  padding: 7px 8px;
+  border: 1px solid rgba(255, 255, 255, .04);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .015);
+}
+
+.rest-room-view__sidebar .rest-room-side-list dt,
+.rest-room-view__sidebar .rest-room-side-list dd { margin: 0; }
+.rest-room-view__sidebar .rest-room-side-list dt {
+  font-size: var(--font-size-label);
+  line-height: 1.2;
+}
+.rest-room-view__sidebar .rest-room-side-list dd {
+  font-size: var(--font-size-body);
+  line-height: 1.2;
+}
+
+/* Passive farm card — compact, readable, no absolute/percentage heights. */
+.rest-room-view__sidebar .rest-room-side-card--daily {
+  display: block;
+  overflow: hidden;
+}
+
+.rest-room-view__sidebar .rest-room-daily-card__topline {
+  gap: 8px;
+  margin-bottom: 7px;
+}
+
+.rest-room-view__sidebar .rest-room-farm-vault { gap: 6px; }
+.rest-room-view__sidebar .rest-room-farm-vault__money,
+.rest-room-view__sidebar .rest-room-farm-vault__finds { padding: 7px 8px; }
+
+.rest-room-view__sidebar .rest-room-farm-vault__money span,
+.rest-room-view__sidebar .rest-room-farm-vault__finds span,
+.rest-room-view__sidebar .rest-room-farm-clock-row span,
+.rest-room-view__sidebar .rest-room-farm-meta span { font-size: var(--font-size-label); }
+
+.rest-room-view__sidebar .rest-room-farm-vault__money strong,
+.rest-room-view__sidebar .rest-room-farm-vault__finds strong { font-size: var(--font-size-large); }
+
+.rest-room-view__sidebar .rest-room-farm-clock-row {
+  margin-top: 6px;
+}
+.rest-room-view__sidebar .rest-room-farm-clock-row strong { font-size: var(--font-size-label); }
+.rest-room-view__sidebar .rest-room-farm-progress {
+  height: 6px;
+  margin-top: 4px;
+}
+
+.rest-room-view__sidebar .rest-room-farm-meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 6px;
+}
+.rest-room-view__sidebar .rest-room-farm-meta > div {
+  min-width: 0;
+  padding: 6px;
+}
+.rest-room-view__sidebar .rest-room-farm-meta strong { font-size: var(--font-size-label); }
+.rest-room-view__sidebar .rest-room-daily-claim {
+  position: static;
+  width: 100%;
+  min-height: 36px;
+  margin-top: 7px;
+  font-size: var(--font-size-label);
+}
+
+/* Next upgrade — always below the farm card in normal document flow. */
+.rest-room-view.is-owned .rest-room-side-card--compact-upgrade { display: block; }
+.rest-room-view__sidebar .rest-room-side-card--compact-upgrade {
+  display: block;
+  align-self: auto;
+  overflow: hidden;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: 98px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__thumb {
+  width: 98px;
+  height: 82px;
+  min-height: 0;
+  max-height: none;
+  object-fit: cover;
+  border-radius: 9px;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__body {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  align-content: start;
+  gap: 5px;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__body > strong {
+  font-size: var(--font-size-medium);
+  line-height: 1.18;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__body > p { display: none; }
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__delta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.rest-room-view__sidebar .rest-room-delta {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  padding: 5px 6px;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, .015);
+}
+.rest-room-view__sidebar .rest-room-delta small { font-size: var(--font-size-label); }
+.rest-room-view__sidebar .rest-room-delta b {
+  min-width: 0;
+  gap: 3px;
+  font-size: var(--font-size-label);
+  white-space: nowrap;
+}
+
+.rest-room-view__sidebar .rest-room-compact-upgrade__price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 6px;
+}
+.rest-room-view__sidebar .rest-room-compact-upgrade__price small { font-size: var(--font-size-label); }
+.rest-room-view__sidebar .rest-room-compact-upgrade__price span { font-size: var(--font-size-medium); }
+
+.rest-room-main-offers {
+  min-width: 0;
+  min-height: 0;
+  max-height: 96px;
+  margin: 0;
+  overflow: hidden;
+}
+
+.rest-room-view__actions {
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+.rest-room-action { min-height: 46px; padding: 6px 9px; }
+.rest-room-action__copy b { font-size: var(--font-size-button); }
+.rest-room-action__copy small { font-size: var(--font-size-button); }
+
+/* Drawer mode: the drawer itself scrolls, while the scene remains fixed. */
+@media (max-width: 900px) {
+  .rest-room-view {
+    padding: 8px;
+    gap: 7px;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+  }
+  .rest-room-view.is-owned { grid-template-rows: auto minmax(0, 1fr) auto; }
+
+  .rest-room-view__body,
+  .rest-room-view.is-owned .rest-room-view__body {
+    position: relative;
+    height: 100%;
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr);
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .rest-room-view__main,
+  .rest-room-view.is-owned .rest-room-view__main,
+  .rest-room-view__scene,
+  .rest-room-view.is-owned .rest-room-view__scene {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .rest-room-sidebar-toggle { display: inline-flex; }
+
+  .rest-room-view__sidebar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    z-index: 20;
+    width: min(390px, 94%);
+    max-width: none;
+    height: 100%;
+    min-height: 0;
+    max-height: 100%;
+    padding: 8px 8px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 8px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border: 1px solid rgba(216, 167, 51, .28);
+    border-radius: 12px 0 0 12px;
+    background:
+      linear-gradient(180deg, rgba(11, 14, 12, .98), rgba(6, 9, 7, .99)),
+      radial-gradient(circle at 100% 0%, rgba(216, 167, 51, .06), transparent 48%);
+    backdrop-filter: blur(12px);
+    box-shadow: -18px 0 34px rgba(0, 0, 0, .42);
+    transform: translateX(calc(100% + 14px));
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 220ms ease, opacity 180ms ease, visibility 180ms ease;
+  }
+
+  .rest-room-view__sidebar.is-open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .rest-room-sidebar-close {
+    position: sticky;
+    top: 0;
+    right: auto;
+    z-index: 8;
+    flex: 0 0 auto;
+    align-self: flex-end;
+    min-height: 36px;
+    margin: 0 0 2px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 10px;
+    border: 1px solid rgba(216, 167, 51, .46);
+    border-radius: 9px;
+    color: #fff0b4;
+    background: linear-gradient(180deg, rgba(76, 54, 13, .94), rgba(28, 22, 9, .98));
+    font-family: var(--font-display);
+    font-size: var(--font-size-small);
+    font-weight: 800;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .34);
+  }
+
+  .rest-room-sidebar-toggle.is-open {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .rest-room-view__sidebar .rest-room-side-card,
+  .rest-room-view__sidebar .rest-room-side-card--current,
+  .rest-room-view__sidebar .rest-room-side-card--daily,
+  .rest-room-view__sidebar .rest-room-side-card--compact-upgrade {
+    flex: 0 0 auto;
+    min-height: max-content;
+    height: auto;
+    max-height: none;
+  }
+
+  .rest-room-view__sidebar .rest-room-compact-upgrade {
+    height: auto;
+    grid-template-columns: 100px minmax(0, 1fr);
+  }
+  .rest-room-view__sidebar .rest-room-compact-upgrade__thumb {
+    width: 100px;
+    height: 88px;
+  }
+
+  .rest-room-main-offers { max-height: 82px; }
+  .rest-room-action__copy small { display: none; }
+}
+
+@media (max-width: 560px) {
+  .rest-room-view { padding: 7px; gap: 6px; }
+  .rest-room-view__title-row { gap: 7px; }
+  .rest-room-view__title-icon { display: none; }
+  .rest-room-view__title-row h1 { font-size: var(--font-size-card-title); }
+  .rest-room-view__subtitle { display: none; }
+  .rest-room-back { min-height: 32px; padding-inline: 8px; font-size: var(--font-size-label); }
+  .rest-room-view__sidebar { width: 100%; border-radius: 0; padding: 7px 7px 12px; }
+  .rest-room-sidebar-close { min-height: 34px; }
+  .rest-room-view__actions { gap: 5px; }
+  .rest-room-action { min-height: 40px; gap: 4px; padding: 4px 5px; }
+  .rest-room-action__icon { font-size: var(--font-size-large); }
+  .rest-room-action__copy b { font-size: var(--font-size-button); line-height: 1.1; text-align: center; }
+}
+
+.rest-room-offer__body p,
+.rest-room-action__copy small,
+.rest-room-side-card > p,
+.rest-room-side-list dt,
+.rest-room-side-list dd,
+.rest-room-farm-meta span,
+.rest-room-farm-meta strong,
+.rest-room-level-card__farm-info span,
+.rest-room-level-card__farm-info strong {
+  overflow-wrap: anywhere;
+}
+
+/* ================================================================
+   v0.57 — unowned room + responsive drawer cleanup
+   Keeps the scene stable before purchase and prevents purchase UI
+   from squeezing the center area on 430–900px screens.
+   ================================================================ */
+
+/* Respect semantic hidden state even when a component has a display rule. */
+.rest-room-view [hidden] {
+  display: none;
+}
+
+/* Before purchase there is no passive farm yet, so hide only the farm card.
+   Keep the next-room preview visible in the drawer. */
+.rest-room-view.is-unowned .rest-room-side-card--daily {
+  display: none;
+}
+
+.rest-room-view.is-unowned .rest-room-view__sidebar {
+  align-content: start;
+}
+
+/* The purchase strip is allowed to use its natural compact height. */
+.rest-room-view.is-unowned > .rest-room-main-offers {
+  max-height: none;
+  overflow: visible;
+}
+
+@media (max-width: 900px) {
+  .rest-room-view.is-unowned {
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+  }
+
+  .rest-room-view.is-unowned > .rest-room-main-offers {
+    max-height: none;
+    padding: 8px 9px;
+  }
+
+  .rest-room-view.is-unowned .rest-room-main-offers__header {
+    margin-bottom: 6px;
+  }
+
+  .rest-room-view.is-unowned .rest-room-offer-list--main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .rest-room-view.is-unowned .rest-room-offer {
+    min-height: 54px;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 7px;
+    padding: 8px 9px;
+  }
+
+  .rest-room-view.is-unowned .rest-room-offer p {
+    display: none;
+  }
+
+  .rest-room-view.is-unowned .rest-room-offer strong,
+  .rest-room-view.is-unowned .rest-room-offer__price {
+    font-size: var(--font-size-small);
+  }
+
+  /* Compact info drawer before purchase: current-room card + next-room preview. */
+  .rest-room-view.is-unowned .rest-room-view__sidebar {
+    bottom: auto;
+    height: auto;
+    max-height: calc(100% - 10px);
+    padding-bottom: 8px;
+    border-radius: 12px 0 0 12px;
+  }
+}
+
+@media (max-width: 560px) {
+  .rest-room-view.is-unowned > .rest-room-main-offers {
+    padding: 7px;
+  }
+
+  .rest-room-view.is-unowned .rest-room-main-offers__header {
+    margin-bottom: 5px;
+  }
+
+  .rest-room-view.is-unowned .rest-room-main-offers__header .rest-room-section-title {
+    font-size: var(--font-size-label);
+  }
+
+  .rest-room-view.is-unowned .rest-room-offer-list--main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .rest-room-view.is-unowned .rest-room-offer {
+    min-height: 48px;
+    padding: 6px 7px;
+    align-items: center;
+  }
+
+  .rest-room-view.is-unowned .rest-room-offer strong {
+    font-size: var(--font-size-label);
+    line-height: 1.15;
+  }
+
+  .rest-room-view.is-unowned .rest-room-offer__price {
+    font-size: var(--font-size-label);
+  }
+
+  .rest-room-view.is-unowned .rest-room-view__sidebar {
+    top: 6px;
+    right: 6px;
+    bottom: auto;
+    width: calc(100% - 12px);
+    height: auto;
+    max-height: calc(100% - 12px);
+    border-radius: 12px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, .62);
+  }
+
+  .rest-room-view.is-unowned .rest-room-sidebar-close {
+    position: sticky;
+    top: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .rest-room-view.is-unowned .rest-room-offer {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .rest-room-view.is-unowned .rest-room-offer__price {
+    justify-self: start;
+  }
+}

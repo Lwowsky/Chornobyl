@@ -1,62 +1,62 @@
-# THE 1037 SIGNAL — Project Status
+# THE 1037 SIGNAL — v0.56
 
-## Version
-v0.42 — Bar clean hero + isolated right-column scroll
+## Added
+- Full equipment rarity promotion chain: white → green → blue → purple → gold → red.
+- Promotion is available only after the current item reaches +25.
+- Promoted item starts at +1 of the next rarity.
+- Existing rolled stats are preserved; the next rarity adds only the required new unique stats.
+- White equipment now gets 2 random unique stats on first acquisition; the saved roll persists across reloads.
+- Promotion carries the same roll seed forward, so the item keeps its original stats.
+- Unified stat power curve keeps found and promoted items of the same rarity/level equally strong.
+- Promotion uses real inventory resources.
+- Added `mythic_core` for gold → red.
+- Item popup now previews the next rarity, highlights newly-added stats, shows required resources and provides the promotion action.
 
-## Що змінено
-- Повністю прибрано стек shell-патчів Rest Room v0.33–v0.36 і замінено одним авторитетним блоком v0.37.
-- Видалено застарілі shell-правила v0.31, які все ще могли впливати на нову верстку.
-- Права колонка кімнати тепер є єдиним desktop scroll-контейнером; ліва сцена не скролиться.
-- Картки «Твоя кімната», «Запаси кімнати» та «Наступне покращення» мають природну висоту та не можуть накладатися одна на одну.
-- Прибрано процентні/розтягувальні висоти з «Наступного покращення».
-- Старі Bar v0.29/v0.30 CSS-блоки об’єднано в один canonical Bar block без дублювання двох версій стилів.
-- По всіх CSS-файлах видалено byte-equivalent дублікати правил.
+## Stat counts
+- White: 2
+- Green: 3
+- Blue: 4
+- Purple: 5
+- Gold: 7
+- Red: all 9
 
-## Перевірки
-Див. CODE_AUDIT.md.
+## Power continuity example
+Attack: white +25 = 10; green +1 = 11. A found green +1 and a promoted green +1 therefore use the same Attack value.
 
+## v0.57 — Rest Room responsive cleanup
+- HUD metric labels/values no longer overflow their cards at intermediate and small widths.
+- Added explicit unowned/rented room state classes.
+- Hidden inactive farm/upgrade cards before room purchase.
+- Purchase offers use a compact two-card strip on tablet/mobile instead of squeezing the scene.
+- Unowned info drawer is now a compact overlay rather than a full-height panel.
+- Fixed `[hidden]` behavior for Rest Room components so hidden upgrade content cannot reappear through CSS.
 
-## v0.38 — Rest Room Readability
-- increased muted/gray text sizes across Rest Room cards, caption text, meta rows, and upgrade card;
-- increased action button secondary text size to stay within the requested 10–12px range;
-- enabled safer text wrapping to avoid overflow outside card bounds;
-- kept scroll behavior only for the right column.
+## v0.58 — Available room info restored
+- Restored the visible “Доступна кімната / Базова кімната” information before the room is purchased.
+- On screens up to 900px, the unowned room card is now always visible under the scene instead of being hidden inside the Info drawer.
+- The compact card keeps HP, energy and radiation bonuses visible without covering the room image.
+- Purchased-room responsive drawer behaviour remains unchanged.
 
+## v0.59 — Sidebar restored exactly
+- Reverted the v0.58 compact inline-room-card redesign.
+- Restored the original Rest Room sidebar behavior from v0.57: desktop keeps the right sidebar; compact screens use the side Info drawer with Close button.
+- No room information was moved below the scene and no new layout was introduced.
 
-## v0.39 — Global Typography Variables
-- centralized site-wide font sizes in `css/core/variables.css`;
-- removed scattered hard-coded pixel `font-size` values from component/layout/screen/responsive CSS;
-- minimum compact UI text is now 10px; muted/body/button copy is standardized around 10–12px;
-- Rest Room action buttons now use the same `--font-size-button` token for primary and secondary copy;
-- profile slot labels now use the same global label-size token.
-## v0.40 — Bar NPC Scene
-- replaced the dedicated Bar hero artwork with the new 1672×941 scene containing 1 bartender and 4 seated NPC visitors;
-- added optimized WEBP asset `assets/hub/bar-main-npcs.webp`;
-- kept the existing Bar/Casino hub map artwork unchanged.
+## v0.60 — Level 1 sidebar info + XP text restore
+- Restored the Level 1 passive-farm information in the room sidebar before purchase (income/min, capacity, find chance and inactive status).
+- The compact unowned-room drawer now uses the available height so that information is visible instead of being cut away.
+- Restored a larger, readable player XP value on phone layouts; other HUD text sizes were not changed.
 
-
-
-## v0.41 — Bar Clean Hero + Right Scroll
-- прибрано через CSS весь технічний текст, який сайт накладав поверх картинки бару (`БАР «1037»`, `Тепло в Зоні`, опис і нижні пункти);
-- сама картинка `bar-main-npcs.webp` не змінювалась;
-- права колонка Бару тепер має власний вертикальний скрол, якщо текст не влазить;
-- картки правої колонки більше не обрізають текст через фіксовані дробові висоти;
-- таймери та довгий текст можуть переноситися без виходу за рамки.
-
-
-## v0.42 — Rotating Bar Menu + Temporary Buffs
-- меню бару тепер реальна механіка: 4 позиції (2 їжі + 2 напої) оновлюються кожні 4 години;
-- усі бонуси відсоткові та тимчасові (45–60 хв), тому залишаються корисними на високих рівнях;
-- одночасно активна 1 їжа + 1 напій, нова позиція тієї ж категорії замінює стару;
-- рівні 10/20/30/40/50 відкривають нові категорії та комбінації, а не безкінечно збільшують %;
-- пропозиція дня оновлюється раз на 24 години, діє 90 хв і замінює окрему їжу/напій;
-- ціни плавно масштабуються по 10-рівневих діапазонах;
-- активні бафи, таймери та баланс грошей оновлюються у HUD;
-- доступний API window.GameBar.getModifier(key) для підключення бонусів до бою/EXP/луту.
+## v0.61 — Rest Room sidebar behavior restored
+- Removed the extra inactive “Запаси кімнати” block from the sidebar before the room is purchased.
+- Before purchase, the compact Info drawer again contains only the available Level 1 room card, exactly like the earlier intended layout.
+- After purchase, the sidebar keeps the full owned-room structure: current room, room supplies/passive farm, and next upgrade.
+- Opening the compact Info drawer now resets it to the top, so the current/available room information is never opened half-scrolled or clipped.
+- Kept the restored larger player XP text from v0.60 unchanged.
 
 
-## v0.43 — Bar menu purchase lock
-- Кожну позицію 4-годинного меню можна купити лише один раз за поточну ротацію.
-- Після покупки кнопка стає недоступною і показує «Куплено · до оновлення».
-- Після автоматичного оновлення меню ліміт скидається.
-- Пропозицію дня можна купити один раз за її 24-годинний цикл.
+## v0.70 — Warehouse footer / viewport fix
+- Warehouse modal keeps a visible bottom margin inside the viewport.
+- Inventory grid is the scrolling region; action buttons are a normal footer below it.
+- Removed sticky/floating behavior that could visually overlap item cards.
+- Bag / Storage tabs and their filtering logic are unchanged.

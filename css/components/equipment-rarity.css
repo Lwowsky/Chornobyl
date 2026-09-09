@@ -1,0 +1,57 @@
+
+/* Equipment rarity visuals: one source of truth for profile slots and item popup. */
+:where(.rarity-white) { --rarity-color:#d7d7cf; --rarity-glow:rgba(215,215,207,.20); }
+:where(.rarity-green) { --rarity-color:#63d96d; --rarity-glow:rgba(99,217,109,.24); }
+:where(.rarity-blue) { --rarity-color:#55a7ff; --rarity-glow:rgba(85,167,255,.25); }
+:where(.rarity-purple) { --rarity-color:#c873ff; --rarity-glow:rgba(200,115,255,.26); }
+:where(.rarity-gold) { --rarity-color:#ffc641; --rarity-glow:rgba(255,198,65,.28); }
+:where(.rarity-red) { --rarity-color:#ff4e4e; --rarity-glow:rgba(255,78,78,.31); }
+
+.equipment-slot[class*="rarity-"] > div {
+  border-color: var(--rarity-color);
+  box-shadow: inset 0 0 18px var(--rarity-glow), 0 0 0 1px color-mix(in srgb, var(--rarity-color) 54%, transparent), 0 0 12px var(--rarity-glow);
+}
+.equipment-slot[class*="rarity-"] > div::after { border-color: color-mix(in srgb, var(--rarity-color) 35%, transparent); }
+.equipment-slot[class*="rarity-"] > span { color: var(--rarity-color); }
+
+.profile-item-popup[class*="rarity-"] { --item-accent: var(--rarity-color); }
+.profile-item-popup[class*="rarity-"] .profile-item-popup__art {
+  border-color: var(--rarity-color);
+  box-shadow: inset 0 0 18px var(--rarity-glow), 0 0 13px var(--rarity-glow);
+}
+.profile-item-popup[class*="rarity-"] .profile-item-popup__title h4,
+.profile-item-popup[class*="rarity-"] .profile-item-popup__rarity { color: var(--rarity-color); }
+.profile-item-popup[class*="rarity-"] .profile-item-popup__section { border-color: color-mix(in srgb, var(--rarity-color) 28%, transparent); }
+.profile-item-popup[class*="rarity-"] .profile-item-popup__actions button:not(.ghost) { border-color: color-mix(in srgb, var(--rarity-color) 62%, transparent); color: var(--rarity-color); }
+.profile-item-popup[class*="rarity-"] .profile-item-popup__actions button.primary { background: color-mix(in srgb, var(--rarity-color) 14%, transparent); }
+.profile-item-candidate[class*="rarity-"] { border-color: color-mix(in srgb, var(--rarity-color) 42%, transparent); box-shadow: inset 3px 0 0 var(--rarity-color); }
+.profile-item-candidate[class*="rarity-"] img { filter: drop-shadow(0 0 7px var(--rarity-glow)); }
+.profile-item-candidate[class*="rarity-"] strong { color: var(--rarity-color); }
+
+.profile-equipment-picker__dialog.is-item-mode {
+  width: min(455px, calc(100vw - 24px));
+  max-height: min(660px, calc(100vh - 24px));
+  border-color: rgba(143,113,48,.86);
+}
+.profile-equipment-picker__dialog.is-item-mode .profile-equipment-picker__hint { display:none; }
+.profile-equipment-picker__dialog.is-item-mode .profile-equipment-picker__list { padding:12px; }
+.profile-equipment-picker__dialog.is-item-mode .profile-item-popup { gap:9px; }
+.profile-equipment-picker__dialog.is-item-mode .profile-item-popup__hero { grid-template-columns:76px minmax(0,1fr); gap:10px; padding-bottom:9px; border-bottom:1px solid rgba(255,255,255,.07); }
+.profile-equipment-picker__dialog.is-item-mode .profile-item-popup__art { width:76px; height:76px; }
+.profile-equipment-picker__dialog.is-item-mode .profile-item-popup__art img { width:68px; height:68px; }
+.profile-item-popup__badges { display:flex; flex-wrap:wrap; gap:5px; }
+.profile-item-popup__meta--compact > div { padding:7px 8px; }
+.profile-item-popup__upgrade-table { display:grid; gap:4px; }
+.profile-item-upgrade-row { display:grid; grid-template-columns:minmax(0,1fr) auto auto auto; align-items:center; gap:7px; padding:5px 7px; border-radius:6px; background:rgba(0,0,0,.22); font-size:var(--font-size-label); }
+.profile-item-upgrade-row span { color:var(--color-text-muted); }
+.profile-item-upgrade-row b { color:#8fd877; }
+.profile-item-upgrade-row em { color:var(--color-text); font-style:normal; }
+.profile-item-upgrade-row strong { color:var(--color-gold-bright); font-size:var(--font-size-label); }
+.profile-item-popup__section.compact-upgrade { padding:8px; }
+.profile-item-popup__actions.old-style-actions { position:sticky; bottom:-1px; padding-top:7px; background:linear-gradient(180deg,transparent 0,#090c09 28%); }
+
+@media (max-width:520px) {
+  .profile-equipment-picker__dialog.is-item-mode { width:calc(100vw - 12px); max-height:calc(100dvh - 12px); }
+  .profile-item-upgrade-row { grid-template-columns:minmax(0,1fr) auto auto; }
+  .profile-item-upgrade-row strong { grid-column:2 / 4; justify-self:end; }
+}

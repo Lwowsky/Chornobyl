@@ -17,9 +17,23 @@
   <link rel="stylesheet" href="css/components/hud.css">
   <link rel="stylesheet" href="css/components/navigation.css">
   <link rel="stylesheet" href="css/components/profile-modal.css">
+  <link rel="stylesheet" href="css/components/profile-equipment-picker.css">
+  <link rel="stylesheet" href="css/components/equipment-rarity.css">
   <link rel="stylesheet" href="css/components/rest-room.css">
+  <link rel="stylesheet" href="css/components/rest-room-farm.css">
+  <link rel="stylesheet" href="css/components/rest-room-levels.css">
+  <link rel="stylesheet" href="css/components/rest-room-layout.css">
+  <link rel="stylesheet" href="css/components/rest-room-shell.css">
+  <link rel="stylesheet" href="css/components/warehouse.css">
   <!-- Current screen -->
   <link rel="stylesheet" href="css/screens/world.css">
+  <link rel="stylesheet" href="css/screens/bar.css">
+  <link rel="stylesheet" href="css/screens/bar-menu.css">
+  <link rel="stylesheet" href="css/screens/bar-rumors.css">
+  <link rel="stylesheet" href="css/screens/bar-dialogue.css">
+  <link rel="stylesheet" href="css/screens/inventory.css">
+  <link rel="stylesheet" href="css/screens/inventory-responsive.css">
+  <link rel="stylesheet" href="css/screens/bunker.css">
   <!-- Responsive layers -->
   <link rel="stylesheet" href="css/responsive/mobile.css">
   <link rel="stylesheet" href="css/responsive/mobile-small.css">
@@ -34,7 +48,6 @@
       <button class="player-card" id="profileAvatarButton" type="button" data-i18n-aria-label="profile.open">
         <span class="player-avatar">
           <img src="assets/stalker-avatar.webp" alt="">
-          <span class="player-level-badge" id="playerLevelBadge">5</span>
         </span>
         <span class="player-copy">
           <strong id="hudNickname">Test</strong>
@@ -304,12 +317,13 @@
 
             <article class="bar-side-card">
               <div class="bar-side-card__header">
-                <strong>Свіжа чутка</strong>
-                <span>оновиться через 02:15:33</span>
+                <strong>Чутки бару</strong>
+                <span id="barRumorTimer">перевіряємо...</span>
               </div>
               <div class="bar-side-card__body">
-                <p>Кажуть, у Рудому лісі сьогодні частіше знаходять матеріали. Перевір це перед нічною вилазкою.</p>
-                <div class="bar-rumor-bonus">+10% шанс матеріалів на 2 год</div>
+                <h3 id="barRumorTitle">Підслухати розмови</h3>
+                <p id="barRumorDescription">Раз на 6 годин у барі можна безкоштовно почути одну випадкову чутку.</p>
+                <div class="bar-rumor-bonus" id="barRumorBonus">1 чутка · безкоштовно</div>
               </div>
             </article>
           </aside>
@@ -328,7 +342,7 @@
               <span class="bar-action-card__icon" aria-hidden="true">💬</span>
               <span class="bar-action-card__body">
                 <strong>Чутки</strong>
-                <small>Дізнатись про бонуси в зонах</small>
+                <small>Підслухати розмови та відкрити журнал</small>
               </span>
               <span class="bar-action-card__arrow" aria-hidden="true">›</span>
             </button>
@@ -679,12 +693,163 @@
     </section>
 
 
+
+    <section class="warehouse-modal" id="warehouseModal" hidden aria-modal="true" role="dialog" aria-labelledby="warehouseTitle">
+      <button class="warehouse-modal__backdrop" id="warehouseBackdrop" type="button" data-i18n-aria-label="warehouse.close"></button>
+      <div class="warehouse-modal__dialog">
+        <header class="warehouse-modal__header">
+          <div class="warehouse-modal__title-wrap">
+            <span class="warehouse-modal__icon" aria-hidden="true">▣</span>
+            <div>
+              <span class="screen-kicker" data-i18n="warehouse.kicker">БЕЗПЕЧНА ЗОНА</span>
+              <h2 id="warehouseTitle" data-i18n="warehouse.title">Склад</h2>
+              <p data-i18n="warehouse.subtitle">Тут зберігаються твої ресурси. Розвивай склад, щоб збільшити його можливості.</p>
+            </div>
+          </div>
+          <button class="warehouse-modal__close" id="warehouseClose" type="button" data-i18n-aria-label="warehouse.close">×</button>
+        </header>
+
+        <nav class="warehouse-tabs" data-i18n-aria-label="warehouse.tabsLabel">
+          <button class="warehouse-tab is-active" type="button" data-warehouse-tab="bag" aria-selected="true"><span aria-hidden="true">◫</span><b data-i18n="warehouse.tabs.bag">Сумка</b></button>
+          <button class="warehouse-tab" type="button" data-warehouse-tab="stash" aria-selected="false"><span aria-hidden="true">▦</span><b data-i18n="warehouse.tabs.stash">Сховище</b></button>
+        </nav>
+
+        <div class="warehouse-layout">
+          <section class="warehouse-main">
+            <div class="warehouse-panel" data-warehouse-panel="stash">
+              <div class="warehouse-panel__head">
+                <h3 data-i18n="warehouse.itemsTitle">Ваші предмети</h3>
+                <div class="warehouse-capacity-mini"><span aria-hidden="true">▰</span><b id="warehouseCapacityMini">0 / 80</b></div>
+              </div>
+              <div class="warehouse-filters" id="warehouseFilters" data-i18n-aria-label="warehouse.filtersLabel"></div>
+              <div class="warehouse-selection" id="warehouseSelection" data-i18n="warehouse.selectedHint">Оберіть предмет, щоб переміщати його між рюкзаком і складом.</div>
+              <div class="warehouse-grid" id="warehouseGrid"></div>
+              <div class="warehouse-empty" id="warehouseEmpty" hidden data-i18n="warehouse.noItems">У цій категорії поки немає предметів.</div>
+            </div>
+
+            <div class="warehouse-panel warehouse-info-panel" data-warehouse-panel="workshop" hidden>
+              <div class="warehouse-info-panel__icon" aria-hidden="true">⚒</div>
+              <h3 data-i18n="warehouse.workshop.title">Майстерня складу</h3>
+              <p data-i18n="warehouse.workshop.text">Тут буде швидкий розбір предметів і базові рецепти з ресурсів, що лежать на складі.</p>
+              <strong id="warehouseWorkshopStatus"></strong>
+            </div>
+
+            <div class="warehouse-panel warehouse-info-panel" data-warehouse-panel="containers" hidden>
+              <div class="warehouse-info-panel__icon" aria-hidden="true">▥</div>
+              <h3 data-i18n="warehouse.containers.title">Контейнери</h3>
+              <p data-i18n="warehouse.containers.text">Ящики та контейнери зберігаються разом з іншими предметами.</p>
+              <strong id="warehouseCrateCount"></strong>
+            </div>
+
+            <div class="warehouse-panel warehouse-info-panel" data-warehouse-panel="upgrades" hidden>
+              <div class="warehouse-info-panel__icon" aria-hidden="true">⬆</div>
+              <h3 data-i18n="warehouse.upgrades.title">Покращення складу</h3>
+              <p data-i18n="warehouse.upgrades.text">Підвищуй рівень, щоб збільшувати місткість і відкривати нові можливості.</p>
+              <div class="warehouse-upgrade-summary" id="warehouseUpgradeSummary"></div>
+            </div>
+
+            <footer class="warehouse-actions">
+              <button class="warehouse-action warehouse-action--crate" id="warehouseOpenCrate" type="button"><span aria-hidden="true">▣</span><b data-i18n="warehouse.actions.openCrate">Відкрити ящик</b></button>
+              <button class="warehouse-action" id="warehouseStore" type="button"><span aria-hidden="true">↓</span><b data-i18n="warehouse.actions.store">Покласти</b></button>
+              <button class="warehouse-action" id="warehouseTake" type="button"><span aria-hidden="true">↑</span><b data-i18n="warehouse.actions.take">Забрати</b></button>
+            </footer>
+          </section>
+
+          <aside class="warehouse-level-card">
+            <div class="warehouse-level-card__title-row">
+              <h3 data-i18n="warehouse.levelPanel.title">Рівень складу</h3>
+              <strong id="warehouseLevelLabel">Рівень 1</strong>
+            </div>
+            <div class="warehouse-level-card__hero">
+              <img src="assets/hub/warehouse-preview.webp" alt="" draggable="false">
+              <div>
+                <div class="warehouse-level-progress"><span id="warehouseLevelProgress"></span></div>
+                <small><span data-i18n="warehouse.levelPanel.occupied">Зайнято комірок</span>: <b id="warehouseOccupied">0 / 80</b></small>
+              </div>
+            </div>
+
+            <section class="warehouse-bonuses">
+              <h4 data-i18n="warehouse.levelPanel.currentBonuses">Поточні бонуси</h4>
+              <ul id="warehouseCurrentBonuses"></ul>
+            </section>
+
+            <section class="warehouse-next" id="warehouseNextUpgrade">
+              <div class="warehouse-next__head"><h4 data-i18n="warehouse.levelPanel.nextUpgrade">Наступне покращення</h4><strong id="warehouseNextLevelLabel">Рівень 2</strong></div>
+              <div class="warehouse-next__preview">
+                <img src="assets/hub/warehouse-preview.webp" alt="" draggable="false">
+                <ul id="warehouseNextBonuses"></ul>
+              </div>
+              <div class="warehouse-requirements">
+                <span data-i18n="warehouse.levelPanel.required">Потрібно:</span>
+                <div id="warehouseRequirements"></div>
+              </div>
+              <button class="warehouse-upgrade-button" id="warehouseUpgrade" type="button"><span aria-hidden="true">⬆</span><b data-i18n="warehouse.actions.upgrade">Покращити</b></button>
+            </section>
+
+            <section class="warehouse-max" id="warehouseMaxLevel" hidden>
+              <h4 data-i18n="warehouse.levelPanel.maxTitle">Максимальний рівень</h4>
+              <p data-i18n="warehouse.levelPanel.maxText">Усі покращення складу вже відкриті.</p>
+            </section>
+          </aside>
+        </div>
+
+        <div class="warehouse-message" id="warehouseMessage" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="inventory-screen" id="inventoryView" data-game-screen aria-labelledby="inventoryTitle" aria-hidden="true">
+      <div class="inventory-shell">
+        <header class="inventory-header">
+          <div class="inventory-header__copy">
+            <span data-i18n="inventory.kicker">СПОРЯДЖЕННЯ</span>
+            <h1 id="inventoryTitle" data-i18n="inventory.title">Інвентар</h1>
+          </div>
+          <div class="inventory-header__tools">
+            <label class="inventory-search">
+              <span>⌕</span>
+              <input id="inventorySearch" type="search" autocomplete="off" data-i18n-placeholder="inventory.searchPlaceholder" placeholder="Пошук предмета...">
+            </label>
+            <button class="inventory-tool-button" id="inventorySort" type="button"><span>⇅</span> <span id="inventorySortLabel" data-i18n="inventory.sortModes.category">Категорія</span></button>
+          </div>
+        </header>
+
+        <nav class="inventory-categories" id="inventoryCategories" aria-label="Категорії інвентарю" data-i18n-aria-label="inventory.aria.categories"></nav>
+
+        <div class="inventory-content">
+          <section class="inventory-list-panel">
+            <div class="inventory-section-title">
+              <strong data-i18n="inventory.title">Інвентар</strong>
+              <small><b id="inventoryVisibleCount">0</b> <span data-i18n="inventory.itemsCount">позицій</span></small>
+            </div>
+            <div class="inventory-grid" id="inventoryGrid"></div>
+          </section>
+          <aside class="inventory-details" id="inventoryDetails" role="dialog" aria-label="Опис предмета" data-i18n-aria-label="inventory.details.panelLabel" aria-hidden="false"></aside>
+          <button class="inventory-details-backdrop" id="inventoryDetailsBackdrop" type="button" aria-label="Закрити опис предмета" data-i18n-aria-label="inventory.details.close" hidden></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="bunker-screen" id="bunkerView" data-game-screen aria-labelledby="bunkerTitle" aria-hidden="true">
+      <div class="bunker-shell">
+        <header class="bunker-header">
+          <div>
+            <span data-i18n="bunker.kicker">ТЕСТОВИЙ БУНКЕР</span>
+            <h1 id="bunkerTitle" data-i18n="bunker.title">Бункер спорядження</h1>
+            <p data-i18n="bunker.subtitle">Безкоштовні тестові сети від найпростішого до найсильнішого.</p>
+          </div>
+        </header>
+        <div class="bunker-free-note" data-i18n="bunker.info">Усі речі тут тестові та безкоштовні. Вони потрібні для перевірки інвентарю, профілю, рівнів і характеристик.</div>
+        <div class="bunker-status" id="bunkerStatus" hidden></div>
+        <div class="bunker-set-grid" id="bunkerSetGrid"></div>
+      </div>
+    </section>
+
     <nav class="bottom-nav" aria-label="Основна навігація">
       <button class="nav-button is-active" type="button" data-route="world">
         <span class="nav-button__icon"><img src="assets/nav/map.webp" alt=""></span>
         <span data-i18n="nav.map">Карта</span>
       </button>
-      <button class="nav-button" type="button" data-route="inventory" aria-disabled="true">
+      <button class="nav-button" type="button" data-route="inventory">
         <span class="nav-button__icon"><img src="assets/nav/inventory.webp" alt=""></span>
         <span data-i18n="nav.inventory">Інвентар</span>
       </button>
@@ -696,7 +861,7 @@
         <span class="nav-button__icon"><img src="assets/nav/tasks.webp" alt=""></span>
         <span data-i18n="nav.quests">Завдання</span>
       </button>
-      <button class="nav-button" type="button" data-route="bunker" aria-disabled="true">
+      <button class="nav-button" type="button" data-route="bunker">
         <span class="nav-button__icon"><img src="assets/nav/tradepost.webp" alt=""></span>
         <span data-i18n="nav.bunker">Бункер</span>
       </button>
@@ -819,7 +984,8 @@
             </section>
           </section>
 
-          <section class="profile-panel" data-profile-panel="stats" hidden>
+          <section class="profile-panel profile-panel--stats" data-profile-panel="stats" hidden>
+            <div class="profile-progression-card" id="profileProgressionCard"></div>
             <div class="stats-grid" id="profileStatsGrid"></div>
           </section>
 
@@ -837,15 +1003,70 @@
         </div>
       </div>
     </section>
+
+    <section class="profile-equipment-picker" id="profileEquipmentPicker" hidden aria-modal="true" role="dialog" aria-labelledby="profileEquipmentPickerTitle">
+      <button class="profile-equipment-picker__backdrop" id="profileEquipmentPickerBackdrop" type="button" aria-label="Закрити вибір спорядження"></button>
+      <div class="profile-equipment-picker__dialog">
+        <header class="profile-equipment-picker__header">
+          <div>
+            <span data-i18n="profile.equipmentPicker.kicker">СПОРЯДЖЕННЯ</span>
+            <h3 id="profileEquipmentPickerTitle">Вибір спорядження</h3>
+          </div>
+          <button class="profile-equipment-picker__close" id="profileEquipmentPickerClose" type="button" data-i18n-aria-label="profile.equipmentPicker.close">×</button>
+        </header>
+        <p class="profile-equipment-picker__hint" id="profileEquipmentPickerHint"></p>
+        <div class="profile-equipment-picker__list" id="profileEquipmentPickerList"></div>
+      </div>
+    </section>
   </div>
 
-  <script src="i18n/uk.js" defer></script>
   <script src="i18n/core.js" defer></script>
+  <script src="i18n/uk.js" defer></script>
+  <script src="i18n/uk/items.js" defer></script>
+  <script src="i18n/uk/inventory.js" defer></script>
+  <script src="i18n/uk/progression.js" defer></script>
+  <script src="i18n/uk/profile-equipment.js" defer></script>
+  <script src="i18n/uk/room-rewards.js" defer></script>
+  <script src="i18n/uk/bunker.js" defer></script>
+  <script src="i18n/uk/warehouse.js" defer></script>
+
+  <script src="js/data/inventory/registry.js" defer></script>
+  <script src="js/data/inventory/categories.js" defer></script>
+  <script src="js/data/inventory/supplies.js" defer></script>
+  <script src="js/data/inventory/resources.js" defer></script>
+  <script src="js/data/inventory/equipment.js" defer></script>
+  <script src="js/data/inventory/tools.js" defer></script>
+  <script src="js/data/inventory/quest-items.js" defer></script>
+  <script src="js/data/inventory/misc.js" defer></script>
+  <script src="js/data/inventory/room-rewards.js" defer></script>
+  <script src="js/data/inventory/backpacks.js" defer></script>
+  <script src="js/data/inventory/starter-kit.js" defer></script>
+  <script src="js/data/bar-data.js" defer></script>
+  <script src="js/data/rest-room-data.js" defer></script>
+  <script src="js/data/warehouse-data.js" defer></script>
+  <script src="js/core/equipment-rarity.js" defer></script>
+  <script src="js/data/bunker-test-sets.js" defer></script>
+
   <script src="js/core/state.js" defer></script>
+  <script src="js/core/inventory-store.js" defer></script>
+  <script src="js/core/equipment.js" defer></script>
+  <script src="js/core/progression.js" defer></script>
+  <script src="js/core/equipment-upgrades.js" defer></script>
+  <script src="js/core/equipment-promotion.js" defer></script>
+  <script src="js/core/vitals.js" defer></script>
+  <script src="js/core/rewards.js" defer></script>
+  <script src="js/core/bar-runtime.js" defer></script>
   <script src="js/ui/hud.js" defer></script>
   <script src="js/ui/profile-modal.js" defer></script>
+  <script src="js/ui/profile-equipment-picker.js" defer></script>
+  <script src="js/ui/inventory-details.js" defer></script>
+  <script src="js/ui/inventory.js" defer></script>
   <script src="js/ui/navigation.js" defer></script>
+  <script src="js/ui/bunker.js" defer></script>
+  <script src="js/ui/bar-dialogue.js" defer></script>
+  <script src="js/ui/bar-ui.js" defer></script>
   <script src="js/ui/rest-room.js" defer></script>
+  <script src="js/ui/warehouse.js" defer></script>
   <script src="js/ui/hub-map.js" defer></script>
   <script src="js/core/app.js" defer></script></body>
 </html>

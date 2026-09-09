@@ -3,7 +3,6 @@
     "shop",
     "hospital",
     "workshop",
-    "storage",
     "arena",
     "expeditions",
     "questBoard"
@@ -384,356 +383,6 @@
     };
   }
 
-  const BAR_STATE_KEY = "the1037.bar.v1";
-  const BAR_MENU_REFRESH_MS = 4 * 60 * 60 * 1000;
-  const BAR_DAILY_REFRESH_MS = 24 * 60 * 60 * 1000;
-  const BAR_TICK_MS = 1000;
-
-  const BAR_MENU_ITEMS = [
-    { id: "stew", category: "food", rarity: "common", minLevel: 1, name: "Тушонка", icon: "🥫", basePrice: 70, duration: 45, description: "Проста гаряча їжа перед короткою вилазкою.", effects: [{ key: "hpRegen", label: "Відновлення HP", value: 8 }] },
-    { id: "porridge", category: "food", rarity: "common", minLevel: 1, name: "Гаряча каша", icon: "🍲", basePrice: 80, duration: 45, description: "Ситна порція, що допомагає довше тримати темп.", effects: [{ key: "energyRegen", label: "Відновлення енергії", value: 10 }] },
-    { id: "coffee", category: "drink", rarity: "common", minLevel: 1, name: "Міцна кава", icon: "☕", basePrice: 55, duration: 45, description: "Швидкий заряд перед виходом із безпечної зони.", effects: [{ key: "energyRegen", label: "Відновлення енергії", value: 10 }] },
-    { id: "herbalTea", category: "drink", rarity: "common", minLevel: 1, name: "Чай з травами", icon: "🍵", basePrice: 90, duration: 60, description: "Теплий настій, який трохи полегшує вплив Зони.", effects: [{ key: "radiationTaken", label: "Отримана радіація", value: -7 }] },
-    { id: "meatPlate", category: "food", rarity: "improved", minLevel: 10, name: "М'ясна тарілка", icon: "🍖", basePrice: 130, duration: 60, description: "Більш поживна страва для довгих боїв.", effects: [{ key: "attack", label: "Атака", value: 5 }] },
-    { id: "fieldSoup", category: "food", rarity: "improved", minLevel: 10, name: "Польовий суп", icon: "🥣", basePrice: 120, duration: 60, description: "Гаряча їжа з медичними травами.", effects: [{ key: "medkit", label: "Ефективність аптечок", value: 8 }] },
-    { id: "blackTea", category: "drink", rarity: "improved", minLevel: 10, name: "Чорний чай", icon: "🫖", basePrice: 85, duration: 60, description: "Підтримує концентрацію та витривалість.", effects: [{ key: "energyCost", label: "Витрати енергії", value: -5 }] },
-    { id: "stalkerDinner", category: "food", rarity: "rare", minLevel: 20, name: "Вечеря сталкера", icon: "🍛", basePrice: 190, duration: 60, description: "Рідкісна ситна страва з двома помірними бонусами.", effects: [{ key: "attack", label: "Атака", value: 4 }, { key: "radiationTaken", label: "Отримана радіація", value: -5 }] },
-    { id: "zoneCoffee", category: "drink", rarity: "rare", minLevel: 20, name: "Кава «Зона»", icon: "☕", basePrice: 155, duration: 60, description: "Міцний напій для тих, хто полює за досвідом.", effects: [{ key: "exp", label: "EXP", value: 5 }, { key: "energyRegen", label: "Відновлення енергії", value: 6 }] },
-    { id: "hunterMeal", category: "food", rarity: "rare", minLevel: 30, name: "Обід мисливця", icon: "🥘", basePrice: 230, duration: 60, description: "Для тих, хто йде в Зону за здобиччю.", effects: [{ key: "materials", label: "Шанс матеріалів", value: 6 }, { key: "money", label: "Гроші з боїв", value: 5 }] },
-    { id: "focusBrew", category: "drink", rarity: "rare", minLevel: 30, name: "Настій концентрації", icon: "🧉", basePrice: 210, duration: 60, description: "Гіркий напій перед складною сутичкою.", effects: [{ key: "crit", label: "Крит. шанс", value: 3 }, { key: "attack", label: "Атака", value: 3 }] },
-    { id: "veteranDinner", category: "food", rarity: "special", minLevel: 40, name: "Вечеря ветерана", icon: "🍽️", basePrice: 300, duration: 60, description: "Сильна комбінація без надмірного росту відсотків.", effects: [{ key: "attack", label: "Атака", value: 5 }, { key: "radiationTaken", label: "Отримана радіація", value: -5 }] },
-    { id: "scavengerPlate", category: "food", rarity: "special", minLevel: 50, name: "Тарілка шукача", icon: "🥩", basePrice: 340, duration: 60, description: "Елітна страва для високорівневих вилазок.", effects: [{ key: "materials", label: "Шанс матеріалів", value: 7 }, { key: "money", label: "Гроші з боїв", value: 6 }] },
-    { id: "signalBrew", category: "drink", rarity: "special", minLevel: 50, name: "Напій «1037»", icon: "🥤", basePrice: 320, duration: 60, description: "Фірмовий напій бару для досвідчених сталкерів.", effects: [{ key: "exp", label: "EXP", value: 6 }, { key: "crit", label: "Крит. шанс", value: 3 }] }
-  ];
-
-  const BAR_DAILY_OFFERS = [
-    { id: "dailyStalker", name: "Тушонка + міцна кава", description: "Класичний комплект перед довгою вилазкою.", basePrice: 180, duration: 90, effects: [{ key: "hpRegen", label: "Відновлення HP", value: 10 }, { key: "energyRegen", label: "Відновлення енергії", value: 12 }, { key: "exp", label: "EXP", value: 5 }] },
-    { id: "dailyHunter", name: "Вечеря мисливця", description: "Для фарму матеріалів і грошей у небезпечних зонах.", basePrice: 230, duration: 90, effects: [{ key: "materials", label: "Шанс матеріалів", value: 6 }, { key: "money", label: "Гроші з боїв", value: 6 }] },
-    { id: "dailyGuard", name: "Гаряча страва + трав'яний чай", description: "Збалансований комплект для важких радіаційних маршрутів.", basePrice: 210, duration: 90, effects: [{ key: "radiationTaken", label: "Отримана радіація", value: -8 }, { key: "medkit", label: "Ефективність аптечок", value: 8 }] },
-    { id: "dailyVeteran", name: "Комплект ветерана", description: "Рідкісна пропозиція з двома бойовими бонусами.", basePrice: 280, duration: 90, effects: [{ key: "attack", label: "Атака", value: 5 }, { key: "crit", label: "Крит. шанс", value: 3 }] }
-  ];
-
-  let barState = loadBarState();
-  let barTimerId = null;
-
-  function createDefaultBarState() {
-    return {
-      activeFood: null,
-      activeDrink: null,
-      activeDaily: null,
-      menuPurchaseSlot: null,
-      purchasedMenuItems: [],
-      dailyPurchaseSlot: null,
-      dailyPurchased: false
-    };
-  }
-
-  function loadBarState() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(BAR_STATE_KEY) || "null");
-      if (!saved || typeof saved !== "object") return createDefaultBarState();
-      return {
-        ...createDefaultBarState(),
-        ...saved,
-        purchasedMenuItems: Array.isArray(saved.purchasedMenuItems) ? saved.purchasedMenuItems : []
-      };
-    } catch {
-      return createDefaultBarState();
-    }
-  }
-
-  function saveBarState() {
-    localStorage.setItem(BAR_STATE_KEY, JSON.stringify(barState));
-  }
-
-  function syncBarPurchaseLocks() {
-    const menuSlot = getRefreshSlot(BAR_MENU_REFRESH_MS);
-    const dailySlot = getRefreshSlot(BAR_DAILY_REFRESH_MS);
-    let changed = false;
-
-    if (barState.menuPurchaseSlot !== menuSlot) {
-      barState.menuPurchaseSlot = menuSlot;
-      barState.purchasedMenuItems = [];
-      changed = true;
-    }
-
-    if (barState.dailyPurchaseSlot !== dailySlot) {
-      barState.dailyPurchaseSlot = dailySlot;
-      barState.dailyPurchased = false;
-      changed = true;
-    }
-
-    if (changed) saveBarState();
-  }
-
-  function hasPurchasedMenuItem(itemId) {
-    syncBarPurchaseLocks();
-    return barState.purchasedMenuItems.includes(itemId);
-  }
-
-  function seededRandom(seed) {
-    let value = Math.sin(seed * 12.9898 + 78.233) * 43758.5453;
-    return value - Math.floor(value);
-  }
-
-  function getPriceMultiplier(level = window.GameState?.player?.level || 1) {
-    return 1 + Math.min(5, Math.floor(Math.max(0, level - 1) / 10)) * 0.25;
-  }
-
-  function getBarPrice(basePrice) {
-    const level = window.GameState?.player?.level || 1;
-    return Math.round((basePrice * getPriceMultiplier(level)) / 5) * 5;
-  }
-
-  function getRefreshSlot(ms) {
-    return Math.floor(Date.now() / ms);
-  }
-
-  function getTimeUntilNext(ms) {
-    const remainder = ms - (Date.now() % ms);
-    return Math.max(0, remainder);
-  }
-
-  function formatCountdown(ms) {
-    const total = Math.max(0, Math.ceil(ms / 1000));
-    const hours = Math.floor(total / 3600);
-    const minutes = Math.floor((total % 3600) / 60);
-    const seconds = total % 60;
-    return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
-  }
-
-  function formatEffect(effect) {
-    const value = Number(effect.value) || 0;
-    const sign = value > 0 ? "+" : value < 0 ? "−" : "";
-    return `${effect.label} ${sign}${Math.abs(value)}%`;
-  }
-
-  function rarityLabel(rarity) {
-    return ({ common: "Звичайна", improved: "Покращена", rare: "Рідкісна", special: "Особлива" })[rarity] || rarity;
-  }
-
-  function getMenuItems() {
-    const level = window.GameState?.player?.level || 1;
-    const slot = getRefreshSlot(BAR_MENU_REFRESH_MS);
-    const eligible = BAR_MENU_ITEMS.filter((item) => item.minLevel <= level);
-    const foods = eligible.filter((item) => item.category === "food");
-    const drinks = eligible.filter((item) => item.category === "drink");
-    const pick = (pool, count, salt) => {
-      const copy = [...pool];
-      const result = [];
-      for (let i = 0; i < count && copy.length; i += 1) {
-        const index = Math.floor(seededRandom(slot + salt + i * 17.31) * copy.length);
-        result.push(copy.splice(index, 1)[0]);
-      }
-      return result;
-    };
-    return [...pick(foods, 2, 11), ...pick(drinks, 2, 97)];
-  }
-
-  function getDailyOffer() {
-    const slot = getRefreshSlot(BAR_DAILY_REFRESH_MS);
-    return BAR_DAILY_OFFERS[Math.floor(seededRandom(slot + 301) * BAR_DAILY_OFFERS.length)];
-  }
-
-  function cleanupExpiredBuffs() {
-    const now = Date.now();
-    let changed = false;
-    ["activeFood", "activeDrink", "activeDaily"].forEach((key) => {
-      if (barState[key]?.expiresAt && barState[key].expiresAt <= now) {
-        barState[key] = null;
-        changed = true;
-      }
-    });
-    if (changed) saveBarState();
-  }
-
-  function getActiveBarBuffs() {
-    cleanupExpiredBuffs();
-    return [barState.activeFood, barState.activeDrink, barState.activeDaily].filter(Boolean);
-  }
-
-  function getBarModifier(key) {
-    return getActiveBarBuffs().reduce((sum, buff) => {
-      return sum + buff.effects.filter((effect) => effect.key === key).reduce((sub, effect) => sub + effect.value, 0);
-    }, 0);
-  }
-
-  function buyBarItem(itemId) {
-    syncBarPurchaseLocks();
-    const item = BAR_MENU_ITEMS.find((candidate) => candidate.id === itemId);
-    const player = window.GameState?.player;
-    if (!item || !player) return { ok: false, message: "Не вдалося знайти позицію меню." };
-    if (player.level < item.minLevel) return { ok: false, message: `Потрібен рівень ${item.minLevel}.` };
-    if (hasPurchasedMenuItem(item.id)) {
-      return { ok: false, message: `Цю позицію вже куплено. Повторна покупка стане доступна після оновлення меню через ${formatCountdown(getTimeUntilNext(BAR_MENU_REFRESH_MS))}.` };
-    }
-    const price = getBarPrice(item.basePrice);
-    if (player.money < price) return { ok: false, message: `Недостатньо грошей. Потрібно ₴ ${price}.` };
-    player.money = Math.round((player.money - price) * 100) / 100;
-    const buff = { id: item.id, name: item.name, category: item.category, effects: item.effects, expiresAt: Date.now() + item.duration * 60 * 1000 };
-    if (item.category === "food") barState.activeFood = buff;
-    else barState.activeDrink = buff;
-    barState.purchasedMenuItems.push(item.id);
-    saveBarState();
-    window.GameHud?.render?.();
-    renderBarSideCards();
-    return { ok: true, message: `${item.name}: бонус активний ${item.duration} хв. Цю позицію вже не можна купити до наступного оновлення меню.` };
-  }
-
-  function buyDailyOffer() {
-    syncBarPurchaseLocks();
-    const offer = getDailyOffer();
-    const player = window.GameState?.player;
-    if (!player) return { ok: false, message: "Гравця не знайдено." };
-    if (barState.dailyPurchased) {
-      return { ok: false, message: `Пропозицію дня вже куплено. Наступна стане доступна через ${formatCountdown(getTimeUntilNext(BAR_DAILY_REFRESH_MS))}.` };
-    }
-    const price = getBarPrice(offer.basePrice);
-    if (player.money < price) return { ok: false, message: `Недостатньо грошей. Потрібно ₴ ${price}.` };
-    player.money = Math.round((player.money - price) * 100) / 100;
-    barState.activeFood = null;
-    barState.activeDrink = null;
-    barState.activeDaily = { id: offer.id, name: offer.name, category: "daily", effects: offer.effects, expiresAt: Date.now() + offer.duration * 60 * 1000 };
-    barState.dailyPurchased = true;
-    saveBarState();
-    window.GameHud?.render?.();
-    renderBarSideCards();
-    return { ok: true, message: `${offer.name}: комплект активний ${offer.duration} хв. Пропозицію дня вже не можна купити повторно до її оновлення.` };
-  }
-
-  function renderBarSideCards() {
-    cleanupExpiredBuffs();
-    syncBarPurchaseLocks();
-    const offer = getDailyOffer();
-    const dailyName = document.getElementById("barDailyName");
-    const dailyDescription = document.getElementById("barDailyDescription");
-    const dailyEffects = document.getElementById("barDailyEffects");
-    const dailyTimer = document.getElementById("barDailyTimer");
-    const dailyBuy = document.getElementById("barDailyBuy");
-    if (dailyName) dailyName.textContent = offer.name;
-    if (dailyDescription) dailyDescription.textContent = `${offer.description} · ${offer.duration} хв`;
-    if (dailyEffects) dailyEffects.innerHTML = offer.effects.map((effect) => `<li>${formatEffect(effect)}</li>`).join("");
-    if (dailyTimer) dailyTimer.textContent = `оновиться через ${formatCountdown(getTimeUntilNext(BAR_DAILY_REFRESH_MS))}`;
-    if (dailyBuy) {
-      dailyBuy.disabled = Boolean(barState.dailyPurchased);
-      dailyBuy.classList.toggle("is-purchased", Boolean(barState.dailyPurchased));
-      dailyBuy.textContent = barState.dailyPurchased ? "Куплено · до оновлення" : `Купити · ₴ ${getBarPrice(offer.basePrice)}`;
-    }
-
-    const buffs = getActiveBarBuffs();
-    const body = document.getElementById("barActiveBuffBody");
-    const timer = document.getElementById("barBuffTimer");
-    if (!body || !timer) return;
-    if (!buffs.length) {
-      timer.textContent = "немає";
-      body.innerHTML = `<h3>Немає активних бонусів</h3><p>Купи їжу або напій у меню бару. Одночасно працює одна їжа та один напій.</p>`;
-      return;
-    }
-    const nearest = Math.min(...buffs.map((buff) => buff.expiresAt));
-    timer.textContent = `мін. ${formatCountdown(nearest - Date.now())}`;
-    body.innerHTML = `<div class="bar-active-buffs">${buffs.map((buff) => `
-      <div class="bar-active-buff">
-        <div><strong>${buff.name}</strong><span>${formatCountdown(buff.expiresAt - Date.now())}</span></div>
-        <small>${buff.effects.map(formatEffect).join(" · ")}</small>
-      </div>`).join("")}</div>`;
-  }
-
-  function renderBarMenuModal(message = "") {
-    syncBarPurchaseLocks();
-    const title = document.getElementById("hubModalTitle");
-    const description = document.getElementById("hubModalDescription");
-    const status = document.getElementById("hubModalStatus");
-    const extra = document.getElementById("hubModalExtra");
-    if (!title || !description || !status || !extra) return;
-    const level = window.GameState?.player?.level || 1;
-    const items = getMenuItems();
-    title.textContent = "Меню бару";
-    description.textContent = `4 позиції оновлюються кожні 4 години. Кожну позицію можна купити лише 1 раз за поточну ротацію. Одночасно активна 1 їжа + 1 напій.`;
-    status.textContent = message || `Нове меню через ${formatCountdown(getTimeUntilNext(BAR_MENU_REFRESH_MS))} · Рівень героя ${level} · ціни масштабуються кожні 10 рівнів.`;
-    extra.innerHTML = `
-      <div class="bar-menu-toolbar">
-        <span>Нове меню через <strong>${formatCountdown(getTimeUntilNext(BAR_MENU_REFRESH_MS))}</strong></span>
-        <span>1 покупка кожної позиції · Їжа 1/1 · Напій 1/1</span>
-      </div>
-      <div class="bar-menu-grid">
-        ${items.map((item) => {
-          const purchased = hasPurchasedMenuItem(item.id);
-          return `
-          <article class="bar-menu-item bar-menu-item--${item.rarity}${purchased ? " is-purchased" : ""}">
-            <div class="bar-menu-item__top">
-              <span class="bar-menu-item__icon">${item.icon}</span>
-              <div><span class="bar-menu-item__rarity">${rarityLabel(item.rarity)}</span><h3>${item.name}</h3></div>
-              <span class="bar-menu-item__duration">${item.duration} хв</span>
-            </div>
-            <p>${item.description}</p>
-            <ul>${item.effects.map((effect) => `<li>${formatEffect(effect)}</li>`).join("")}</ul>
-            <button class="bar-menu-item__buy${purchased ? " is-purchased" : ""}" type="button" data-bar-buy="${item.id}" ${purchased ? "disabled" : ""}>${purchased ? "Куплено · до оновлення" : `Купити · ₴ ${getBarPrice(item.basePrice)}`}</button>
-          </article>`;
-        }).join("")}
-      </div>
-      <div class="bar-menu-unlocks">
-        <strong>Прогрес меню</strong>
-        <span>10 рівень — покращені страви · 20 — рідкісні комбінації · 30 — фарм/крит · 40 — ветеранські · 50+ — елітні позиції.</span>
-      </div>`;
-    extra.classList.add("is-visible");
-    extra.querySelectorAll("[data-bar-buy]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const result = buyBarItem(button.dataset.barBuy);
-        renderBarMenuModal(result.message);
-      });
-    });
-  }
-
-  function getBarActionContent(actionId) {
-    if (actionId === "rumors") {
-      return {
-        title: "Чутки",
-        description: "Чутки тимчасово підсилюють конкретну локацію або тип знахідок. Одночасно активна одна свіжа чутка.",
-        status: "Сьогодні: Рудий ліс · підвищений шанс матеріалів на 2 години.",
-        extra: `
-          <div class="hub-modal__grid">
-            <div class="hub-modal__card"><strong>Рудий ліс</strong><span>+10% шанс матеріалів на 2 год</span></div>
-            <div class="hub-modal__card"><strong>Янів</strong><span>Наступна чутка може відкрити бонус до технічного луту.</span></div>
-          </div>`
-      };
-    }
-
-    return {
-      title: "Контакти",
-      description: "Тут з’являтимуться NPC, короткі діалоги, персональні квести й особливі пропозиції.",
-      status: "Першими можна додати медика, механіка та контрабандиста.",
-      extra: `
-        <div class="hub-modal__actions">
-          <div class="hub-modal__action">Медик<small>лікування та медичні завдання</small></div>
-          <div class="hub-modal__action">Механік<small>ремонт і технічні квести</small></div>
-          <div class="hub-modal__action">Контрабандист<small>рідкісні пропозиції</small></div>
-        </div>`
-    };
-  }
-
-  function openBarAction(actionId) {
-    const modal = document.getElementById("hubModal");
-    const title = document.getElementById("hubModalTitle");
-    const description = document.getElementById("hubModalDescription");
-    const status = document.getElementById("hubModalStatus");
-    const extra = document.getElementById("hubModalExtra");
-    if (!modal || !title || !description || !status || !extra) return;
-
-    modal.dataset.mode = actionId === "menu" ? "bar-menu" : "bar-action";
-    modal.hidden = false;
-    if (actionId === "menu") {
-      renderBarMenuModal();
-      return;
-    }
-
-    const content = getBarActionContent(actionId);
-    title.textContent = content.title;
-    description.textContent = content.description;
-    status.textContent = content.status;
-    extra.innerHTML = content.extra;
-    extra.classList.add("is-visible");
-  }
-
   function openModal(pointId) {
     const modal = document.getElementById("hubModal");
     const title = document.getElementById("hubModalTitle");
@@ -777,7 +426,7 @@
   function openBarView() {
     showScreen("barView");
     clearActivePoint();
-    renderBarSideCards();
+    window.GameBar?.render?.();
   }
 
   function closeBarView() {
@@ -822,6 +471,11 @@
 
     if (pointId === "barCasino") {
       openBarCasino();
+      return;
+    }
+
+    if (pointId === "storage") {
+      window.GameWarehouse?.open?.();
       return;
     }
 
@@ -884,23 +538,7 @@
     });
 
 
-    document.querySelectorAll("[data-bar-action]").forEach((button) => {
-      button.addEventListener("click", () => openBarAction(button.dataset.barAction));
-    });
-    document.getElementById("barDailyBuy")?.addEventListener("click", () => {
-      const result = buyDailyOffer();
-      const status = document.getElementById("hubModalStatus");
-      if (!result.ok) {
-        openBarAction("menu");
-        if (status) status.textContent = result.message;
-      }
-    });
-    renderBarSideCards();
-    if (!barTimerId) barTimerId = window.setInterval(() => {
-      renderBarSideCards();
-      const modal = document.getElementById("hubModal");
-      if (modal && !modal.hidden && modal.dataset.mode === "bar-menu") renderBarMenuModal();
-    }, BAR_TICK_MS);
+    window.GameBar?.bind?.();
   }
 
   function bind() {
@@ -920,6 +558,12 @@
 
     document.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
+
+      const warehouse = document.getElementById("warehouseModal");
+      if (warehouse && !warehouse.hidden) {
+        window.GameWarehouse?.close?.();
+        return;
+      }
 
       const modal = document.getElementById("hubModal");
       if (modal && !modal.hidden) {
@@ -958,15 +602,6 @@
     });
   }
 
-
-  window.GameBar = {
-    getActiveBuffs: getActiveBarBuffs,
-    getModifier: getBarModifier,
-    getMenuItems,
-    getDailyOffer,
-    hasPurchasedMenuItem,
-    render: renderBarSideCards
-  };
 
   window.GameHub = {
     bind,
