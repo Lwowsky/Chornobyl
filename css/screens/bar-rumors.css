@@ -400,3 +400,75 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* v0.73 — iPhone-safe Rumors + Contacts modals */
+@media (max-width: 680px) {
+  .hub-modal[data-mode="bar-rumors"],
+  .hub-modal[data-mode="bar-contacts"] {
+    padding: 6px;
+  }
+
+  .hub-modal[data-mode="bar-rumors"] .hub-modal__dialog,
+  .hub-modal[data-mode="bar-contacts"] .hub-modal__dialog {
+    width: calc(100vw - 12px);
+    max-width: 540px;
+    max-height: calc(100dvh - 12px);
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .hub-modal[data-mode="bar-rumors"] .hub-modal__body,
+  .hub-modal[data-mode="bar-contacts"] .hub-modal__body {
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .bar-rumors-shell,
+  .bar-rumors-tabpanel,
+  .bar-rumor-active,
+  .bar-rumor-journal__item,
+  .bar-contacts-grid,
+  .bar-contact-card,
+  .bar-contact-card__content,
+  .bar-contacts-rule {
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .bar-rumors-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bar-rumors-tabs button {
+    min-width: 0;
+    padding-inline: 4px;
+  }
+
+  .bar-rumors-tabs button span,
+  .bar-contact-card__top span,
+  .bar-contact-card__top strong,
+  .bar-contact-card p,
+  .bar-contacts-rule span {
+    overflow-wrap: anywhere;
+  }
+
+  .bar-contact-card {
+    grid-template-columns: 40px minmax(0, 1fr);
+    gap: 8px;
+    padding: 9px;
+  }
+
+  .bar-contact-card__avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .bar-contact-card button {
+    width: 100%;
+    justify-self: stretch;
+  }
+}
